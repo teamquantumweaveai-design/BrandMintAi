@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { fadeIn, staggerContainer, heroWordVariant, heroWordReduced, sectionRevealVariant, sectionRevealReduced, gradientBackgroundVariant, gradientBackgroundReduced, useReducedMotionVariant } from "@/lib/motion";
-import {GradientText} from "@/components/ui/GradientText";
+import GradientText from "@/components/ui/GradientText";
 import { STATS } from "@/lib/constants";
 
 interface HeroProps {

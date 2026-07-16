@@ -4,7 +4,7 @@
 import { Variants, useReducedMotion } from "framer-motion";
 
 // Helper hook to provide reduced-motion fallback variants
-export function useReducedMotionVariant<T>(variant: T, reduced: T): T {
+export function useReducedMotionVariant<T, R>(variant: T, reduced: R): T | R {
   const shouldReduce = useReducedMotion();
   return shouldReduce ? reduced : variant;
 }
@@ -51,7 +51,7 @@ export const sectionRevealVariant: Variants = {
  * Button bounce on tap/click.
  * Scales down then overshoots back.
  */
-export const buttonTapVariant: Variants = {
+export const buttonTapVariant = {
   tap: {
     scale: 0.96,
     transition: { type: "spring", stiffness: 500, damping: 20 },
@@ -61,7 +61,7 @@ export const buttonTapVariant: Variants = {
     scale: 1.02,
     transition: { type: "spring", stiffness: 300, damping: 15 },
   },
-};
+} satisfies Variants;
 
 /**
  * Slow‑moving animated gradient background.
@@ -77,7 +77,7 @@ export const gradientBackgroundVariant: Variants = {
 /**
  * Card hover – lift + soft glow border.
  */
-export const cardHoverVariant: Variants = {
+export const cardHoverVariant = {
   hover: {
     y: -4,
     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
@@ -85,7 +85,7 @@ export const cardHoverVariant: Variants = {
     // Gradient border will be handled via CSS `border-image` animation.
     transition: { type: "spring", stiffness: 300, damping: 25 },
   },
-};
+} satisfies Variants;
 
 /**
  * Navbar link underline animation (center‑out).
