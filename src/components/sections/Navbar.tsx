@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HEADER_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,8 @@ export default function Navbar() {
   const pathname = location.pathname;
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,6 +90,55 @@ export default function Navbar() {
                 : "text-[#516F90] hover:text-[#2E384D] hover:bg-black/5"
             );
 
+            if (link.children) {
+              return (
+                <div
+                  key={link.href}
+                  className="relative"
+                  onMouseEnter={() => setOpenDropdown(link.label)}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                >
+                  <div className="flex items-center">
+                    <Link to={link.href} className={linkClasses}>
+                      {link.label}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setOpenDropdown(openDropdown === link.label ? null : link.label)}
+                      className="-ml-1 mr-1 p-1 text-[#516F90] hover:text-[#FF5C35]"
+                      aria-label={`Open ${link.label} menu`}
+                      aria-expanded={openDropdown === link.label}
+                    >
+                      <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", openDropdown === link.label && "rotate-180")} />
+                    </button>
+                  </div>
+                  <AnimatePresence>
+                    {openDropdown === link.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.16 }}
+                        className="absolute left-0 top-full mt-2 min-w-52 rounded-xl border border-[#CBD6E2] bg-white p-2 shadow-xl"
+                      >
+                        {link.children.map((child) => (
+                          <a
+                            key={child.href}
+                            href={child.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block rounded-lg px-3 py-2 text-sm font-medium text-[#516F90] transition-colors hover:bg-[#FF5C35]/10 hover:text-[#DF441F]"
+                          >
+                            {child.label}
+                          </a>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            }
+
             if (isExternal) {
               return (
                 <a
@@ -156,6 +207,55 @@ export default function Navbar() {
                       ? "text-[#FF5C35] border-[#FF5C35]"
                       : "text-[#516F90] border-transparent hover:text-[#2E384D] hover:border-[#CBD6E2]"
                   );
+
+                  if (link.children) {
+                    const isExpanded = openMobileDropdown === link.label;
+                    return (
+                      <motion.div key={link.href} variants={itemVariants}>
+                        <div className="flex items-center justify-between border-l-2 border-transparent pl-3">
+                          <Link
+                            to={link.href}
+                            onClick={() => setIsOpen(false)}
+                            className="py-2 text-base font-semibold font-display text-[#516F90] hover:text-[#2E384D]"
+                          >
+                            {link.label}
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => setOpenMobileDropdown(isExpanded ? null : link.label)}
+                            className="p-2 text-[#516F90] hover:text-[#FF5C35]"
+                            aria-label={`Open ${link.label} menu`}
+                            aria-expanded={isExpanded}
+                          >
+                            <ChevronDown className={cn("w-4 h-4 transition-transform", isExpanded && "rotate-180")} />
+                          </button>
+                        </div>
+                        <AnimatePresence>
+                          {isExpanded && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="ml-4 overflow-hidden border-l border-[#CBD6E2]"
+                            >
+                              {link.children.map((child) => (
+                                <a
+                                  key={child.href}
+                                  href={child.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={() => setIsOpen(false)}
+                                  className="block py-2 pl-4 text-sm font-medium text-[#516F90] hover:text-[#FF5C35]"
+                                >
+                                  {child.label}
+                                </a>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    );
+                  }
 
                   return (
                     <motion.div key={link.href} variants={itemVariants}>

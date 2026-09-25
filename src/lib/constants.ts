@@ -2,6 +2,7 @@ export interface NavLink {
   label: string;
   href: string;
   isExternal?: boolean;
+  children?: NavLink[];
 }
 
 export const NAV_LINKS: NavLink[] = [
@@ -15,7 +16,34 @@ export const NAV_LINKS: NavLink[] = [
   { label: "Contact", href: "/contact" },
 ];
 
-export const HEADER_LINKS: NavLink[] = [...NAV_LINKS];
+export const HEADER_LINKS: NavLink[] = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  {
+    label: "Solutions",
+    href: "/solutions",
+    children: [
+      { label: "Cashflow Copy", href: "http://brandmintai.io/cashflowcopy.in", isExternal: true },
+      { label: "Freemium", href: "http://brandmintai.io/freemium", isExternal: true },
+      { label: "Film Success", href: "http://brandmintai.io/filmsuccess", isExternal: true },
+    ],
+  },
+  { label: "Business Growth", href: "/business-growth" },
+  { label: "Quantum Weave", href: "/quantum-weave" },
+  { label: "Ventures", href: "/ventures" },
+  {
+    label: "Academy",
+    href: "/academy",
+    children: [
+      { label: "IGR Academy", href: "http://brandmintai.io/igr.academy", isExternal: true },
+      { label: "Appu AI", href: "http://brandmintai.io/appuai", isExternal: true },
+      { label: "Insta Skills", href: "http://brandmintai.io/instaskills", isExternal: true },
+      { label: "AI Filmmaking", href: "http://brandmintai.io/aifilmmaking", isExternal: true },
+      { label: "Full AI", href: "http://brandmintai.io/fullai", isExternal: true },
+    ],
+  },
+  { label: "Contact", href: "/contact" },
+];
 
 export const SITE_METADATA = {
   name: "BrandMint AI",
