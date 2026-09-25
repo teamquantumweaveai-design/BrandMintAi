@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-subtle: var(--color-surface-subtle);
+  --color-text: var(--color-text);
+  --color-muted: var(--color-muted);
+  --color-accent-from: var(--color-accent-from);
+  --color-accent-to: var(--color-accent-to);
+  --color-accent-mid: var(--color-accent-mid);
+  --color-teal-banner: var(--color-teal-banner);
+  --color-footer-bg: var(--color-footer-bg);
+  --color-border-subtle: var(--color-border-subtle);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+}
+
+:root {
+  /* HubSpot Official Theme Colors */
+  --color-bg: #F8F9FA;                  /* Warm crisp off-white canvas */
+  --color-surface: #FFFFFF;             /* Pure white for cards & nav */
+  --color-surface-subtle: #F5F5F5;      /* Soft neutral container background */
+  --color-text: #2E384D;                /* HubSpot Charcoal Navy for Headings/Text */
+  --color-muted: #516F90;               /* HubSpot Slate Gray for subtitles & helper text */
+  --color-accent-from: #FF5C35;         /* HubSpot Signature Orange */
+  --color-accent-mid: #FF7A59;          /* HubSpot Coral */
+  --color-accent-to: #DF441F;           /* HubSpot Deep Orange (hover) */
+  --color-teal-banner: #0D3330;         /* HubSpot Deep Forest Teal CTA banner */
+  --color-footer-bg: #2D3E50;           /* HubSpot Navy Slate footer */
+  --color-border-subtle: #CBD6E2;       /* HubSpot Card & Divider border */
+  
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* Base resets & layouts */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+footer h1, footer h2, footer h3, footer h4, footer h5, footer h6,
+.bg-\[\#0D3330\] h1, .bg-\[\#0D3330\] h2, .bg-\[\#0D3330\] h3, .bg-\[\#0D3330\] h4 {
+  color: #FFFFFF !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F3F5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD6E2;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-from);
+}
+
+/* HubSpot Gradient text utility */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-accent-from) 0%, var(--color-accent-mid) 50%, var(--color-accent-to) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* HubSpot AI Agent Sunrise Section Gradient */
+.hubspot-sunrise-gradient {
+  background: linear-gradient(135deg, #FADAE5 0%, #F7C4A5 100%);
+}
+
+/* Subtle glass effect for light theme */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(203, 214, 226, 0.6);
+}
+
+/* Grid background pattern for light theme */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(46, 56, 77, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46, 56, 77, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center;
+}
+
+/* Subtle warm sun glow overlay */
+.mesh-glow {
+  background: radial-gradient(circle at 50% -20%, rgba(255, 92, 53, 0.08) 0%, rgba(255, 122, 89, 0.04) 40%, rgba(248, 249, 250, 0) 70%);
+}
