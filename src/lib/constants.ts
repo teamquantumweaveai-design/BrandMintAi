@@ -23,7 +23,7 @@ export const HEADER_LINKS: NavLink[] = [
     label: "Solutions",
     href: "/solutions",
     children: [
-      { label: "Cashflow Copy", href: "http://brandmintai.io/cashflowcopy.in", isExternal: true },
+      { label: "Cashflow Copy", href: "https://cashflowcopy.in/", isExternal: true },
       { label: "Freemium", href: "http://brandmintai.io/freemium", isExternal: true },
       { label: "Film Success", href: "http://brandmintai.io/filmsuccess", isExternal: true },
     ],
