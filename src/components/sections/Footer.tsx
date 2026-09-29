@@ -179,6 +179,22 @@ export default function Footer() {
 
         {/* Column 4: Newsletter Integration */}
         <div className="flex flex-col gap-5">
+          <a
+            href="https://hybridai.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group rounded-xl border border-[#FF7A59]/40 bg-[#FF5C35]/10 p-4 transition-colors hover:bg-[#FF5C35]/20"
+          >
+            <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.18em] text-[#FFB19C]">
+              AI Campus Newsletter
+            </span>
+            <span className="mt-1 block text-sm font-semibold text-white group-hover:text-[#FFB19C] transition-colors">
+              Learn, build and grow with practical AI.
+            </span>
+            <span className="mt-1 block text-xs text-[#CBD6E2]">
+              Explore Hybrid AI →
+            </span>
+          </a>
           <h4 className="font-display font-semibold !text-white tracking-wider text-sm uppercase">
             Executive AI Briefing
           </h4>

@@ -13,6 +13,10 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -65,7 +69,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 group shrink-0">
+        <Link to="/" onClick={scrollToTop} className="flex items-center gap-3 group shrink-0">
           <div className="relative flex items-center justify-center w-9 h-9 overflow-hidden rounded-lg border border-[#CBD6E2]/80 bg-white transition-transform group-hover:scale-95 duration-200 shadow-xs">
             <img
               src="/BrandMint_AI_Logo_Final.png"
@@ -99,7 +103,7 @@ export default function Navbar() {
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <div className="flex items-center">
-                    <Link to={link.href} className={linkClasses}>
+                    <Link to={link.href} onClick={scrollToTop} className={linkClasses}>
                       {link.label}
                     </Link>
                     <button
@@ -157,6 +161,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
+                onClick={scrollToTop}
                 className={linkClasses}
               >
                 {link.label}
@@ -215,7 +220,10 @@ export default function Navbar() {
                         <div className="flex items-center justify-between border-l-2 border-transparent pl-3">
                           <Link
                             to={link.href}
-                            onClick={() => setIsOpen(false)}
+                            onClick={() => {
+                              scrollToTop();
+                              setIsOpen(false);
+                            }}
                             className="py-2 text-base font-semibold font-display text-[#516F90] hover:text-[#2E384D]"
                           >
                             {link.label}
@@ -272,7 +280,10 @@ export default function Navbar() {
                       ) : (
                         <Link
                           to={link.href}
-                          onClick={() => setIsOpen(false)}
+                          onClick={() => {
+                            scrollToTop();
+                            setIsOpen(false);
+                          }}
                           className={mobileLinkClasses}
                         >
                           {link.label}
@@ -286,7 +297,10 @@ export default function Navbar() {
               <motion.div variants={itemVariants} className="pt-4 border-t border-[#CBD6E2]/40">
                 <Link
                   to="/contact"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    scrollToTop();
+                    setIsOpen(false);
+                  }}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#FF5C35] hover:bg-[#DF441F] text-white font-semibold text-sm shadow-sm hover:opacity-95"
                 >
                   <span>Inquiry Portal</span>
