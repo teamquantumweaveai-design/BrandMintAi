@@ -1,5 +1,6 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  RewriteBase /
 
   # Do not rewrite real files or directories
   RewriteCond %{REQUEST_FILENAME} -f [OR]
