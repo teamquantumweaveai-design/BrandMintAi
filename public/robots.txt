@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://brandmintai.io/sitemap.xml
