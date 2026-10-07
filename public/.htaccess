@@ -1,11 +1,11 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Never rewrite existing files or directories
+  # Do not rewrite real files or directories
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # React/Vite application fallback
-  RewriteRule ^ /index.html [L]
+  # React/Vite SPA fallback
+  RewriteRule ^ index.html [L]
 </IfModule>
