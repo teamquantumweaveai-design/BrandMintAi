@@ -260,16 +260,16 @@ export default function Footer() {
               <a
                 href="https://hybridai.in/"
                 target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-block"
-              >
-                <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#FFB19C]">
-                  AI Campus Newsletter
-                </span>
-                <h4 className="mt-2 font-display text-2xl font-bold !text-white sm:text-3xl group-hover:text-[#FFB19C] transition-colors">
-                  Learn AI. Build Skills. Get Ahead.
-                </h4>
-              </a>
+              rel="noopener noreferrer"
+              className="group inline-block"
+            >
+              <h4 className="font-display text-2xl font-bold !text-white sm:text-3xl group-hover:text-[#FFB19C] transition-colors">
+                AI Campus Newsletter
+              </h4>
+              <span className="mt-2 block text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#FFB19C]">
+                Learn AI. Build Skills. Get Ahead.
+              </span>
+            </a>
               <p className="mt-2 text-sm leading-relaxed text-[#CBD6E2] sm:text-base">
                 Get practical AI news, tools, skills, projects and career opportunities from AI Campus.
               </p>
