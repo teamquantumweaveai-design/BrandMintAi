@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { NAV_LINKS, SITE_METADATA, SOCIAL_LINKS, BRANDMINT_PROGRAMS } from "@/lib/constants";
-import { subscribeToNewsletter } from "@/lib/newsletter";
+import { subscribeToAiCampus, subscribeToNewsletter } from "@/lib/newsletter";
 import { ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 // Social Media SVGs
@@ -39,6 +39,9 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ success: boolean; message: string } | null>(null);
+  const [aiCampusEmail, setAiCampusEmail] = useState("");
+  const [aiCampusLoading, setAiCampusLoading] = useState(false);
+  const [aiCampusStatus, setAiCampusStatus] = useState<{ success: boolean; message: string } | null>(null);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +56,20 @@ export default function Footer() {
 
     if (result.success) {
       setEmail("");
+    }
+  };
+
+  const handleAiCampusSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAiCampusLoading(true);
+    setAiCampusStatus(null);
+
+    const result = await subscribeToAiCampus(aiCampusEmail);
+    setAiCampusStatus(result);
+    setAiCampusLoading(false);
+
+    if (result.success) {
+      setAiCampusEmail("");
     }
   };
 
@@ -179,22 +196,6 @@ export default function Footer() {
 
         {/* Column 4: Newsletter Integration */}
         <div className="flex flex-col gap-5">
-          <a
-            href="https://hybridai.in/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group rounded-xl border border-[#FF7A59]/40 bg-[#FF5C35]/10 p-4 transition-colors hover:bg-[#FF5C35]/20"
-          >
-            <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.18em] text-[#FFB19C]">
-              AI Campus Newsletter
-            </span>
-            <span className="mt-1 block text-sm font-semibold text-white group-hover:text-[#FFB19C] transition-colors">
-              Learn, build and grow with practical AI.
-            </span>
-            <span className="mt-1 block text-xs text-[#CBD6E2]">
-              Explore Hybrid AI →
-            </span>
-          </a>
           <h4 className="font-display font-semibold !text-white tracking-wider text-sm uppercase">
             Executive AI Briefing
           </h4>
@@ -250,6 +251,59 @@ export default function Footer() {
         </div>
 
       </div>
+
+      {/* AI Campus Newsletter */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+        <div className="rounded-2xl border border-[#FF7A59]/40 bg-gradient-to-r from-[#FF5C35]/20 via-[#FF7A59]/10 to-[#0D3330] px-6 py-9 sm:px-10 sm:py-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <a
+                href="https://hybridai.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-block"
+              >
+                <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#FFB19C]">
+                  AI Campus Newsletter
+                </span>
+                <h4 className="mt-2 font-display text-2xl font-bold !text-white sm:text-3xl group-hover:text-[#FFB19C] transition-colors">
+                  Learn AI. Build Skills. Get Ahead.
+                </h4>
+              </a>
+              <p className="mt-2 text-sm leading-relaxed text-[#CBD6E2] sm:text-base">
+                Get practical AI news, tools, skills, projects and career opportunities from AI Campus.
+              </p>
+            </div>
+
+            <div className="w-full max-w-xl lg:shrink-0">
+              <form onSubmit={handleAiCampusSubscribe} className="flex flex-col gap-3 sm:flex-row">
+                <input
+                  type="email"
+                  value={aiCampusEmail}
+                  onChange={(e) => setAiCampusEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  required
+                  aria-label="Email address for AI Campus newsletter"
+                  className="min-w-0 flex-1 rounded-xl border border-white/25 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-[#CBD6E2]/60 focus:outline-none focus:border-[#FF7A59] focus:ring-2 focus:ring-[#FF5C35]/30"
+                />
+                <button
+                  type="submit"
+                  disabled={aiCampusLoading}
+                  className="rounded-xl bg-[#FF5C35] px-6 py-3 text-sm font-bold text-white transition-all hover:bg-[#DF441F] hover:shadow-[0_4px_16px_rgba(255,92,53,0.35)] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {aiCampusLoading ? "Joining..." : "Subscribe"}
+                </button>
+              </form>
+              {aiCampusStatus && (
+                <p className={`mt-3 text-sm font-medium ${aiCampusStatus.success ? "text-emerald-200" : "text-red-200"}`}>
+                  {aiCampusStatus.message}
+                </p>
+              )}
+              <p className="mt-3 text-xs text-[#CBD6E2]/75">Free AI Campus updates. Unsubscribe anytime.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Bottom Row */}
       <div className="max-w-7xl mx-auto px-6 border-t border-[#3E4D5E] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#CBD6E2]/80">

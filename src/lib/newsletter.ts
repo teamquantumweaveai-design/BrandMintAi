@@ -8,9 +8,44 @@ export const newsletterSchema = z.object({
 export interface NewsletterSubscriptionResult {
   success: boolean;
   message: string;
+  alreadySubscribed?: boolean;
 }
 
 const LOCAL_STORAGE_KEY = "brandmint_newsletter_subscribers";
+
+export async function subscribeToAiCampus(
+  rawEmail: string
+): Promise<NewsletterSubscriptionResult> {
+  const email = rawEmail.trim().toLowerCase();
+  const parseResult = newsletterSchema.safeParse({ email });
+
+  if (!parseResult.success) {
+    return {
+      success: false,
+      message: parseResult.error.issues[0]?.message || "Please enter a valid email address.",
+    };
+  }
+
+  try {
+    const response = await fetch("/api/subscribe.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const result = await response.json().catch(() => null);
+
+    return {
+      success: Boolean(result?.success),
+      alreadySubscribed: Boolean(result?.alreadySubscribed),
+      message: result?.message || "Unable to subscribe right now. Please try again later.",
+    };
+  } catch {
+    return {
+      success: false,
+      message: "Unable to subscribe right now. Please try again later.",
+    };
+  }
+}
 
 /**
  * Save subscriber to localStorage as a resilient offline backup
