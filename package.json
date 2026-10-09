@@ -5,7 +5,16 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "voice:prepare": "node scripts/voice-replies.mjs",
+    "voice:doctor": "node scripts/voice-doctor.mjs",
+    "prebuild": "npm run voice:prepare",
+    "voice:server": "npm run voice:prepare && node server/local.mjs",
+    "test:voice-proxy": "npm test",
+    "start": "npm run voice:prepare && node server/local.mjs",
+    "test": "npm run voice:prepare && node --test scripts/test-openai-voice-audit.mjs tests/voice-audio-review.test.cjs tests/widget-behavior.test.cjs tests/production-preservation.test.cjs tests/built-server.test.cjs tests/proxy-identity.test.mjs",
+    "voice:smoke": "npm run voice:prepare && node scripts/voice-smoke.mjs",
+    "check:production-assets": "node scripts/check-production-assets.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.3",
@@ -15,8 +24,9 @@
     "lucide-react": "^1.24.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-router-dom": "^6.22.3",
+    "react-router-dom": "^7.18.4",
     "tailwind-merge": "^3.6.0",
+    "ws": "^8.22.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -24,8 +34,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react": "5.2.0",
     "typescript": "^5",
-    "vite": "^5.2.0"
+    "vite": "^8.3.3"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

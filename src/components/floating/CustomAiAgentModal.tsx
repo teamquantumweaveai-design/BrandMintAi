@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { resolveVoiceContactNavigation } from "./contactNavigation";
+import { createBrowserVoice, type VoiceState } from "./browserVoice";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bot,
   X,
   Send,
+  Mic,
+  Square,
   Sparkles,
   RotateCcw,
   ArrowRight,
@@ -129,20 +133,56 @@ export default function CustomAiAgentModal({
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const mountedRef = useRef(true);
+  const responseTimers = useRef(new Set<ReturnType<typeof setTimeout>>());
+  const voiceRef = useRef<ReturnType<typeof createBrowserVoice> | null>(null);
+  const sendRef = useRef<(text: string, speakReply: (reply: string) => void, signal: AbortSignal) => void>(() => {});
+  const [voice, setVoice] = useState<VoiceState>({ status: "idle", supported: false, message: "", transcript: "" });
+
+  const cancelPendingReplies = () => {
+    responseTimers.current.forEach(clearTimeout);
+    responseTimers.current.clear();
+  };
 
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 150);
-    }
-  }, [isOpen]);
+    mountedRef.current = true;
+    const controller = createBrowserVoice(setVoice, (text, speakReply, signal) => sendRef.current(text, speakReply, signal));
+    voiceRef.current = controller;
+    const stopForPageHide = () => controller.stop();
+    const stopWhenHidden = () => { if (document.hidden) controller.stop(); };
+    window.addEventListener("pagehide", stopForPageHide);
+    document.addEventListener("visibilitychange", stopWhenHidden);
+    return () => {
+      window.removeEventListener("pagehide", stopForPageHide);
+      document.removeEventListener("visibilitychange", stopWhenHidden);
+      mountedRef.current = false;
+      controller.dispose();
+      voiceRef.current = null;
+      cancelPendingReplies();
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsTyping(false);
+    const focusTimer = isOpen ? setTimeout(() => inputRef.current?.focus(), 150) : undefined;
+    return () => {
+      clearTimeout(focusTimer);
+      voiceRef.current?.stop();
+      cancelPendingReplies();
+    };
+  }, [isOpen, location.key]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  const handleSendMessage = (textToSend?: string) => {
+  const handleSendMessage = (textToSend?: string, speakReply?: (reply: string) => void, signal?: AbortSignal) => {
     const text = (textToSend || inputValue).trim();
-    if (!text) return;
+    if (!text || !isOpen || signal?.aborted) return;
+    // Typed messages and quick prompts use the same answer path and remain silent.
+    if (!speakReply) voiceRef.current?.stop();
 
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -156,7 +196,10 @@ export default function CustomAiAgentModal({
     setIsTyping(true);
 
     // Simulate thoughtful AI response
-    setTimeout(() => {
+    const responseTimer = setTimeout(() => {
+      responseTimers.current.delete(responseTimer);
+      signal?.removeEventListener("abort", cancelVoiceReply);
+      if (signal?.aborted) return;
       const lower = text.toLowerCase();
       let matchedResponse = KNOWLEDGE_RESPONSES.find((item) =>
         item.keywords.some((kw) => lower.includes(kw))
@@ -187,11 +230,42 @@ export default function CustomAiAgentModal({
       };
 
       setMessages((prev) => [...prev, agentMsg]);
-      setIsTyping(false);
+      setIsTyping(responseTimers.current.size > 0);
+      // Voice-only explicit commands use the existing destination and keep the
+      // exact existing answer/history. This opens Contact; it never books a call.
+      const voiceDestination = speakReply ? resolveVoiceContactNavigation(text) : null;
+      if (voiceDestination) {
+        handleClose();
+        if (location.pathname !== voiceDestination) navigate(voiceDestination);
+        return;
+      }
+      speakReply?.(agentMsg.text);
     }, 650);
+    const cancelVoiceReply = () => {
+      clearTimeout(responseTimer);
+      responseTimers.current.delete(responseTimer);
+      if (mountedRef.current) setIsTyping(responseTimers.current.size > 0);
+    };
+    signal?.addEventListener("abort", cancelVoiceReply, { once: true });
+    responseTimers.current.add(responseTimer);
+  };
+  sendRef.current = handleSendMessage;
+
+  const handleStopVoice = () => {
+    voiceRef.current?.stop();
+  };
+
+  const handleClose = () => {
+    handleStopVoice();
+    cancelPendingReplies();
+    setIsTyping(false);
+    onClose();
   };
 
   const handleResetChat = () => {
+    handleStopVoice();
+    cancelPendingReplies();
+    setIsTyping(false);
     setMessages([
       {
         ...INITIAL_MESSAGE,
@@ -250,7 +324,7 @@ export default function CustomAiAgentModal({
                 <RotateCcw className="w-4 h-4" />
               </button>
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 title="Close chat"
                 aria-label="Close chat"
                 className="p-1.5 rounded-lg hover:bg-white/10 hover:text-white transition-colors"
@@ -321,7 +395,7 @@ export default function CustomAiAgentModal({
                           <Link
                             key={bIdx}
                             to={btn.href}
-                            onClick={onClose}
+                            onClick={handleClose}
                             className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#2E384D] text-white hover:bg-[#FF5C35] transition-all shadow-xs"
                           >
                             {btn.label}
@@ -376,6 +450,17 @@ export default function CustomAiAgentModal({
             </div>
           </div>
 
+          {/* One opt-in mic click starts continuous, interruptible voice. */}
+          <div className="px-3 pt-2 bg-white text-[11px] text-[#516F90]">
+            <p id="agent-voice-help">{voice.supported
+              ? "Tap the mic for hands-free conversation. Audio is sent to OpenAI; replies use an AI-generated OpenAI voice. Speak to interrupt; use headphones to reduce echo."
+              : "Voice input is unavailable in this browser. Text chat still works."}</p>
+            <p role="status" aria-live="polite" aria-atomic="true" className="mt-1">
+              {voice.message}
+            </p>
+            {voice.transcript && <p className="mt-1 truncate">Heard: {voice.transcript}</p>}
+          </div>
+
           {/* Input Bar */}
           <form
             onSubmit={(e) => {
@@ -390,8 +475,20 @@ export default function CustomAiAgentModal({
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Ask our AI Agent anything..."
-              className="flex-1 px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-[#CBD6E2] focus:outline-hidden focus:ring-2 focus:ring-[#FF5C35]/40 focus:border-[#FF5C35] bg-[#F8F9FA] text-[#2E384D] placeholder:text-[#516F90]/60 transition-all"
+              className="min-w-0 flex-1 px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-[#CBD6E2] focus:outline-hidden focus:ring-2 focus:ring-[#FF5C35]/40 focus:border-[#FF5C35] bg-[#F8F9FA] text-[#2E384D] placeholder:text-[#516F90]/60 transition-all"
             />
+            <button
+              type="button"
+              onClick={() => voice.status === "idle" ? voiceRef.current?.start() : handleStopVoice()}
+              disabled={voice.status === "idle" && (!voice.supported || isTyping)}
+              aria-label={voice.status === "idle" ? "Start voice input" : "Stop voice"}
+              aria-describedby="agent-voice-help"
+              aria-pressed={voice.status !== "idle"}
+              title={voice.status === "idle" ? "Ask by voice" : "Stop voice"}
+              className="flex items-center justify-center gap-1 h-9 min-w-9 px-2 rounded-xl border border-[#CBD6E2] text-[#FF5C35] hover:bg-[#FF5C35]/10 disabled:opacity-40 disabled:cursor-not-allowed transition-all shrink-0"
+            >
+              {voice.status === "idle" ? <Mic className="w-4 h-4" /> : <><Square className="w-3 h-3" /><span className="text-xs">Stop</span></>}
+            </button>
             <button
               type="submit"
               disabled={!inputValue.trim()}

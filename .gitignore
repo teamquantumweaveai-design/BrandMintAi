@@ -42,3 +42,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Voice API server-only configuration and generated UI reply allowlist
+!.env.server.example
+/server/generated-replies.mjs
+
+/server/generated-speech-text.mjs
