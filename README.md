@@ -10,8 +10,9 @@ The Hostinger workflow still publishes static assets and PHP. Full voice needs a
 persistent Node service with WebSocket support routed through the same origin;
 merging static files alone cannot enable voice. The Node development/built
 servers do not execute PHP. Keep the existing newsletter endpoint on Hostinger.
-Do not merge or deploy until Hostinger-only marketing changes and backend hosting
-have been reconciled. The instructions below describe the imported voice layer.
+The uploaded Hostinger snapshot matches the deployed GitHub files; that comparison
+is complete. Do not merge or deploy until backend hosting and production voice
+checks are complete. The instructions below describe the imported voice layer.
 
 ## OpenAI voice hotfix
 

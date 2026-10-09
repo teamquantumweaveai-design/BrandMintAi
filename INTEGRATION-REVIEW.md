@@ -12,12 +12,35 @@ explicit release decision. No deployment was performed in preparing this branch.
   `3369efa40ee81433933a3ba3674b01cff4697842`.
 - Production deployment branch observed:
   `8754fcfbd96bfb5fd0898f0089d705c311233adc`, matching the supplied Hostinger
-  screenshot. This does not establish the current Hostinger filesystem contents.
+  screenshot and all website files in the uploaded Hostinger snapshot.
 - Review branch: `integration/brandmint-live-preserve-seo`.
 
 These are separate repositories. This change transfers selected files onto the
 production history instead of merging unrelated histories or copying the entire
 incoming tree. The incoming checkout remains unchanged.
+
+## Hostinger snapshot comparison completed
+
+The user supplied the current `public_html.zip` after downloading the live
+directory. Its SHA-256 is
+`b9e3e0a74b2e9d4868caf41147f72cae31e1ee65a90219d9274d45487cd828ae`.
+All 17 website files match deploy commit
+`8754fcfbd96bfb5fd0898f0089d705c311233adc` byte for byte: no changed,
+live-only or deployment-only website files were found. This includes the
+compiled homepage, four existing JS/CSS assets, logo, Apache redirects, robots,
+sitemap, static article and PHP newsletter endpoint.
+
+All 12 existing public assets also match the integration checkout byte for byte;
+the voice worklet is the one added public asset. Compiled homepage marketing
+metadata, JSON-LD and analytics are verified by `check:production-assets`.
+The archive also contains 28 Git metadata files; these were excluded from the
+website comparison and were not copied into the repository. No application
+source changes were needed to reconcile the uploaded snapshot.
+
+This clears the Hostinger-only website-file comparison for this snapshot. It
+does not validate hosting settings, databases, provider credentials, runtime
+PHP behavior or changes made after the download. Direct live-site inspection
+was previously blocked by the environment's network proxy (HTTP 403).
 
 ## Production work retained byte for byte
 
@@ -84,26 +107,24 @@ must not be treated as evidence of production acceptance for this branch.
 
 ## Outstanding checks before any release
 
-1. Obtain a current Hostinger `public_html` backup or exact marketing change list,
-   including hidden `.htaccess`, homepage, robots/sitemap, articles and redirects.
-   Compare those against GitHub before merging. GitHub cannot reveal manual
-   Hostinger edits. Direct live-site inspection was blocked by the environment's
-   network proxy (HTTP 403); screenshots are the available hosting evidence.
-2. Confirm the Node/WebSocket hosting path. Keep Apache serving the website,
+1. Confirm the Node/WebSocket hosting path. Keep Apache serving the website,
    articles and PHP newsletter; proxy only `/api/voice/*` to the persistent Node
    service on the same HTTPS origin. Configure trusted proxy identity, access
    controls, secrets, allowed origins and usage limits. The existing Hostinger
    static deployment does not deploy or start this backend.
-3. Test OpenAI model/account access, microphone permission, playback and
+2. Test OpenAI model/account access, microphone permission, playback and
    interruption using authorized credentials. The key was absent in onboarding;
    offline tests and synthetic providers do not establish live voice readiness.
-4. Have marketing confirm the existing social/schema logo URL
+3. Have marketing confirm the existing social/schema logo URL
    `/assets/BrandMint_AI_Logo_Final.png`: the tracked logo is emitted at
-   `/BrandMint_AI_Logo_Final.png`. This pre-existing mismatch was preserved so
-   marketing can reconcile it with any Hostinger-only asset before release.
-5. Verify the PHP newsletter and Supabase forms in an approved staging context;
+   `/BrandMint_AI_Logo_Final.png`. The uploaded live snapshot also lacks the
+   `/assets/` logo path. This pre-existing mismatch was preserved rather than
+   silently changing marketing's metadata during the voice integration.
+4. Verify the PHP newsletter and Supabase forms in an approved staging context;
    preserve existing service configuration. Review the branch without merging
    into `main` or altering Hostinger's tracked `deploy` branch.
+5. Recheck the Hostinger snapshot comparison if marketing makes further direct
+   file edits before release.
 
 No auto-deployment, merge or production credential changes are part of this
 review branch. Publication of a branch is separate from acceptance for release.
