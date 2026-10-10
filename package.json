@@ -12,7 +12,8 @@
     "voice:server": "npm run voice:prepare && node server/local.mjs",
     "test:voice-proxy": "npm test",
     "start": "npm run voice:prepare && node server/local.mjs",
-    "test": "npm run voice:prepare && node --test scripts/test-openai-voice-audit.mjs tests/voice-audio-review.test.cjs tests/widget-behavior.test.cjs tests/production-preservation.test.cjs tests/built-server.test.cjs tests/proxy-identity.test.mjs",
+    "start:backend": "node server/render.mjs",
+    "test": "npm run voice:prepare && node --test scripts/test-openai-voice-audit.mjs tests/voice-audio-review.test.cjs tests/widget-behavior.test.cjs tests/production-preservation.test.cjs tests/built-server.test.cjs tests/proxy-identity.test.mjs tests/backend-deployment.test.mjs tests/voice-endpoints.test.cjs",
     "voice:smoke": "npm run voice:prepare && node scripts/voice-smoke.mjs",
     "check:production-assets": "node scripts/check-production-assets.mjs"
   },

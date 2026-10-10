@@ -4,7 +4,7 @@
 
 - The microphone is captured with browser echo cancellation/noise suppression
   requested, then genuinely resampled to mono 24 kHz PCM16.
-- The same-origin Node WebSocket relay sends audio to OpenAI's transcription-only
+- The Node WebSocket relay sends audio to OpenAI's transcription-only
   `gpt-live-transcribe` session. The project key stays on the server. No browser
   credential or ephemeral provider token is returned.
 - Partial recognized words provide speech evidence. A 180 ms confirmation timer
@@ -64,7 +64,12 @@ reset, navigation, hidden pages and typed/quick-prompt input release the voice p
 Development: `npm run dev` owns HTTP and WebSocket voice routes on the same port.
 Built site: `npm run build`, then `npm start`. Put that Node process behind your
 HTTPS reverse proxy, forwarding `/api/voice/realtime` WebSocket upgrades and normal
-requests to it. Keep the backend same-origin with the website.
+requests to it. Alternatively, [RENDER-STAGING.md](RENDER-STAGING.md) describes a
+separate Render backend: set the public frontend build variable
+`VITE_VOICE_BACKEND_URL` to its HTTPS origin and allow the exact Hostinger frontend
+origin with `VOICE_ALLOWED_ORIGINS`. HTTP CORS and WebSocket origin validation both
+use this allowlist. `npm run start:backend` starts only the backend, with `/healthz`
+and Render's supplied `PORT`, listening on `0.0.0.0`; no `dist/` folder is needed.
 
 Server-only environment values:
 

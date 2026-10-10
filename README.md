@@ -6,10 +6,11 @@ SEO article, robots/sitemap, Apache redirects, PHP AI Campus newsletter and
 navigation improvements. See [INTEGRATION-REVIEW.md](INTEGRATION-REVIEW.md) for
 the exact baselines, validation and outstanding production checks.
 
-The Hostinger workflow still publishes static assets and PHP. Full voice needs a
-persistent Node service with WebSocket support routed through the same origin;
-merging static files alone cannot enable voice. The Node development/built
-servers do not execute PHP. Keep the existing newsletter endpoint on Hostinger.
+The staging setup keeps the frontend and PHP newsletter on Hostinger and runs
+the voice backend as a Render Web Service. The frontend uses Render's HTTPS and
+WebSocket endpoints; no VPS or Hostinger Web App purchase is needed for this test.
+Follow [RENDER-STAGING.md](RENDER-STAGING.md) using this integration branch.
+The Node development/built servers do not execute PHP.
 The uploaded Hostinger snapshot matches the deployed GitHub files; that comparison
 is complete. Do not merge or deploy until backend hosting and production voice
 checks are complete. The instructions below describe the imported voice layer.
@@ -95,3 +96,25 @@ authentication, usage limits, endpoint behavior and deployment requirements.
 See [VOICE-TESTING.md](VOICE-TESTING.md) for verified checks and the remaining
 real-microphone test checklist. Existing Supabase forms retain their separate
 configuration and were not submitted or changed.
+
+## Repository structure
+
+```text
+src/                 React frontend and existing agent knowledge
+public/              PHP newsletter, SEO article, robots/sitemap, Apache files
+index.html           Production marketing metadata, analytics and structured data
+server/              Server-only OpenAI voice, security, HTTP and WebSocket handlers
+  render.mjs         Backend-only Render startup (PORT on 0.0.0.0)
+  backend.mjs        Health check, CORS HTTP routes and WebSocket relay
+  local.mjs          Local combined website + backend server
+scripts/             Reply preparation, voice audit and asset verification
+tests/               Audio/controller, security and deployment regressions
+render.yaml          Optional backend staging Blueprint
+.env.frontend.example Public Render URL template; contains no credentials
+.env.server.example  Server-only configuration template; API key is blank
+dist/                Generated Hostinger upload; excluded from Git
+```
+
+Frontend and backend share the root lockfile. Run Render commands from the
+repository root: `server/` has no separate `package.json`. This keeps the generated
+exact-reply allowlist tied to the frontend answers without moving marketing files.

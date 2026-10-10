@@ -239,7 +239,8 @@ test('audit: production enablement and exact origins fail closed', () => {
   for (const value of ['', 'null', 'https://evil.example', 'https://brand.example.evil.test', 'https://brand.example/']) {
     assert.throws(() => checkOrigin(new Headers(value ? { origin: value } : {}), config), { status: 403 });
   }
-  assert.throws(() => checkOrigin(new Headers({ origin: 'https://brand.example', 'sec-fetch-site': 'cross-site' }), config), { status: 403 });
+  assert.doesNotThrow(() => checkOrigin(new Headers({ origin: 'https://brand.example', 'sec-fetch-site': 'cross-site' }), config));
+  assert.throws(() => checkOrigin(new Headers({ origin: 'https://evil.example', 'sec-fetch-site': 'cross-site' }), config), { status: 403 });
   assert.doesNotThrow(() => checkOrigin(new Headers({ origin: 'https://brand.example' }), config));
   assert.equal(configuration({}).configured, false);
   assert.equal(configuration({ OPENAI_API_KEY: 'fake\nkey' }).configured, false);

@@ -2,6 +2,9 @@ import { playPcmStream } from "./components/floating/voiceAudio";
 import { createBrowserVoice } from "./components/floating/browserVoice";
 import { voiceFailureCode, voiceFailureMessage } from "./components/floating/voiceDiagnostics";
 import replies from "../server/generated-replies.mjs";
+import { browserVoiceEndpoints } from "./components/floating/voiceEndpoints";
+
+const endpoints = browserVoiceEndpoints();
 
 const loopback = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
 const logElement = document.querySelector<HTMLPreElement>("#log")!;
@@ -44,8 +47,8 @@ async function play(kind: "tone" | "readout") {
       body = new ReadableStream({ start(controller) { controller.enqueue(bytes.slice(0, 731)); controller.enqueue(bytes.slice(731)); controller.close(); } });
       log("offline.pcm", `${bytes.byteLength} bytes, 24000 Hz, 0.5 seconds; no network or microphone`);
     } else {
-      log("readout.requested", "/api/voice/speak (one existing allowlisted reply)");
-      const response = await fetch("/api/voice/speak", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: publicReply }), signal });
+      log("readout.requested", `${endpoints.speak} (one existing allowlisted reply)`);
+      const response = await fetch(endpoints.speak, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: publicReply }), signal });
       if (signal.aborted || token !== generation) return;
       log("readout.http", String(response.status));
       if (!response.ok) {
@@ -89,11 +92,11 @@ buttons[2].onclick = () => {
 document.getElementById("stop")!.onclick = () => { stop(); log("stopped"); };
 window.addEventListener("pagehide", stop);
 document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); });
-document.getElementById("connection")!.textContent = `Browser origin: ${location.origin}. WebSocket: ${location.protocol === "https:" ? "wss:" : "ws:"}//${location.host}/api/voice/realtime.`;
+document.getElementById("connection")!.textContent = `Browser origin: ${location.origin}. WebSocket: ${endpoints.realtime}.`;
 document.getElementById("reply")!.textContent = `Readout will speak this existing reply: ${publicReply}`;
 buttons.forEach(button => button.disabled = !loopback);
 if (!loopback) log("unavailable", "This diagnostic page runs on localhost only.");
-else void fetch("/api/voice/status").then(async response => {
+else void fetch(endpoints.status).then(async response => {
   const status = await response.json();
   if (status.service !== "brandmint-openai-voice") throw new Error("wrong_backend");
   log("backend.status", `HTTP ${response.status}; enabled ${status.enabled === true}; configured ${status.configured === true}; realtime ${status.realtime === true}; voice ${["cedar", "marin"].includes(status.voice) ? status.voice : "unavailable"}; model ${status.output_model === "gpt-realtime-2.1-mini" ? status.output_model : "unexpected"}`);

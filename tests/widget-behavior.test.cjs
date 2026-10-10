@@ -24,6 +24,7 @@ const speechText = loadSource('src/components/floating/speechText.ts');
 const navigation = loadSource('src/components/floating/contactNavigation.ts');
 const voiceSource = loadSource('src/components/floating/browserVoice.ts', {
   './voiceDiagnostics': loadSource('src/components/floating/voiceDiagnostics.ts'), './voiceActivity': activity, './voiceAudio': {}, './speechText': speechText,
+  './voiceEndpoints': loadSource('src/components/floating/voiceEndpoints.ts', {}, { URL }),
 });
 const flush = async () => { for (let i = 0; i < 15; i++) await Promise.resolve(); };
 const deferred = () => { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; };

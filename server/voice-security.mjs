@@ -18,8 +18,9 @@ export function configuration(env) {
 export function checkOrigin(headers, config, statusOnly = false) {
   const origin = headers.get('origin');
   if (statusOnly && !origin) return;
-  if (headers.get('sec-fetch-site') === 'cross-site' || !origin || origin === 'null') throw new VoiceError(403, 'origin_not_allowed', 'Voice requests must come from this website.');
+  if (!origin || origin === 'null') throw new VoiceError(403, 'origin_not_allowed', 'Voice requests must come from this website.');
   if (config.origins.has(origin)) return;
+  if (headers.get('sec-fetch-site') === 'cross-site') throw new VoiceError(403, 'origin_not_allowed', 'Voice requests must come from an allowed website.');
   if (!config.production && !config.origins.size) {
     try { const u = new URL(origin); if (u.origin === origin && u.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(u.hostname)) return; } catch { /* deny */ }
   }

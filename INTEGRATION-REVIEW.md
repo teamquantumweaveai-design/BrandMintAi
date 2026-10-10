@@ -79,6 +79,10 @@ from being overwritten during a later deployment.
 - Restrict the deploy job to `refs/heads/main`, including manual dispatches.
   Integration branch pushes and PRs run a separate validation workflow with
   read-only repository permissions; that workflow never publishes to `deploy`.
+- Add a backend-only Render startup and `/healthz`, exact-origin CORS/preflight
+  handling and configurable frontend HTTP/WebSocket endpoints. The static site
+  and PHP remain on Hostinger. See `RENDER-STAGING.md` and the repository tree
+  in `README.md`; no source files were moved to implement the split deployment.
 
 ## Validation
 
@@ -102,16 +106,22 @@ Browser/local functional checks exercised homepage, contact route, article,
 AI Campus footer and a typed assistant reply. Browser external requests were
 blocked, and no forms, paid provider calls or real microphone tests were made.
 Build warnings about the future Vite config loader and large chunks are nonfatal.
+The current suite has 121 passing tests. The compiled frontend also passed a
+separate-backend browser voice test with Chromium's synthetic microphone and a
+local synthetic provider, including WebSocket PCM input, mock transcription,
+cross-origin readout, playback start and stop, with no page errors. This does not
+validate live Render, OpenAI credentials/model access or audible real speech.
 Imported historical verification documents describe the upstream delivery and
 must not be treated as evidence of production acceptance for this branch.
 
 ## Outstanding checks before any release
 
-1. Confirm the Node/WebSocket hosting path. Keep Apache serving the website,
-   articles and PHP newsletter; proxy only `/api/voice/*` to the persistent Node
-   service on the same HTTPS origin. Configure trusted proxy identity, access
-   controls, secrets, allowed origins and usage limits. The existing Hostinger
-   static deployment does not deploy or start this backend.
+1. Complete the split staging setup in [RENDER-STAGING.md](RENDER-STAGING.md):
+   Hostinger serves the website, articles and PHP newsletter; Render runs the
+   persistent Node voice service. Configure the frontend's Render URL, exact
+   allowed frontend origin, server secrets and usage limits. The existing
+   Hostinger static deployment does not deploy or start this backend. Verify
+   proxy identity before multi-user production use.
 2. Test OpenAI model/account access, microphone permission, playback and
    interruption using authorized credentials. The key was absent in onboarding;
    offline tests and synthetic providers do not establish live voice readiness.

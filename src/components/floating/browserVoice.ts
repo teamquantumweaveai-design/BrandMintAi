@@ -1,6 +1,7 @@
 import { openVoiceAudio, supportsVoiceAudio, type VoiceAudioSession } from "./voiceAudio";
 import { browserVoiceDiagnostics, voiceFailureMessage, voiceFailureCode } from "./voiceDiagnostics";
 import { VoiceActivityDetector } from "./voiceActivity";
+import { browserVoiceEndpoints, type VoiceEndpoints } from "./voiceEndpoints";
 
 export type VoiceStatus = "idle" | "listening" | "processing" | "speaking" | "interrupted";
 export interface VoiceState { status: VoiceStatus; supported: boolean; message: string; transcript: string; }
@@ -19,6 +20,7 @@ export interface VoiceDependencies {
   fetchImpl: typeof fetch;
   createSocket: () => VoiceSocket;
   openAudio: typeof openVoiceAudio;
+  endpoints?: VoiceEndpoints;
   diagnostic?: (stage: string, data?: Record<string, string | number | boolean>) => void;
 }
 export const CONFIRM_SPEECH_MS = 180;
@@ -32,11 +34,13 @@ export function hasSpeechEvidence(text: string): boolean {
   return /\p{L}{2}|\p{N}{2}/u.test(clean);
 }
 function browserDependencies(): VoiceDependencies {
+  const endpoints = browserVoiceEndpoints();
   return {
     supported: supportsVoiceAudio() && typeof WebSocket !== "undefined",
     fetchImpl: (...args) => fetch(...args),
-    createSocket: () => new WebSocket(`${location.protocol === "https:" ? "wss:" : "ws:"}//${location.host}/api/voice/realtime`) as unknown as VoiceSocket,
+    createSocket: () => new WebSocket(endpoints.realtime) as unknown as VoiceSocket,
     openAudio: openVoiceAudio,
+    endpoints,
     diagnostic: browserVoiceDiagnostics(),
   };
 }
@@ -94,7 +98,7 @@ export function createBrowserVoice(
     try {
       // Send the exact existing answer. The server allowlist owns sanitization.
       diagnose("readout.requested");
-      const response = await deps.fetchImpl("/api/voice/speak", {
+      const response = await deps.fetchImpl(deps.endpoints?.speak || "/api/voice/speak", {
         method: "POST", headers: { "content-type": "application/json" },
         body: JSON.stringify({ text: reply }), signal,
       });
@@ -212,8 +216,8 @@ export function createBrowserVoice(
     update("listening", "Starting OpenAI voice… Allow microphone access if asked.");
     armIdle(); sessionTimer = setTimeout(() => stop("This voice session reached 10 minutes. Tap the mic to start another."), 600000);
     const initialize = async () => {
-      diagnose("status.requested", typeof location !== "undefined" ? { origin: location.origin, websocket: `${location.protocol === "https:" ? "wss:" : "ws:"}//${location.host}/api/voice/realtime` } : {});
-      const response = await deps.fetchImpl("/api/voice/status", { signal: abort.signal });
+      diagnose("status.requested", typeof location !== "undefined" ? { origin: location.origin, websocket: deps.endpoints?.realtime || `${location.protocol === "https:" ? "wss:" : "ws:"}//${location.host}/api/voice/realtime` } : {});
+      const response = await deps.fetchImpl(deps.endpoints?.status || "/api/voice/status", { signal: abort.signal });
       if (!active() || session !== token) throw new Error("Voice setup cancelled.");
       if (!response.ok) {
         const error = await response.json().catch(() => null);

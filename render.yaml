@@ -1,0 +1,24 @@
+# Optional Render Blueprint. Manual Web Service settings are in RENDER-STAGING.md.
+services:
+  - type: web
+    name: brandmint-voice-staging
+    runtime: node
+    plan: free
+    branch: integration/brandmint-live-preserve-seo
+    autoDeploy: false
+    buildCommand: npm ci --include=dev && npm run voice:prepare
+    startCommand: npm run start:backend
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 24.19.0
+      - key: NODE_ENV
+        value: production
+      - key: VOICE_PROXY_ENABLED
+        value: "true"
+      - key: OPENAI_VOICE
+        value: cedar
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: VOICE_ALLOWED_ORIGINS
+        sync: false

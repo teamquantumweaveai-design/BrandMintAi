@@ -6,7 +6,23 @@ The hotfix adds current `output_audio` final-item and both documented content-pa
 variants, delta-only omitted `content_index`, safe handshake categories, bounded
 redacted logs, explicit no-key smoke refusal, setup-error display, strict mismatch
 messages, and stale status/readout responses across Stop/restart. The original
-89 tests remain covered; the current suite has 101 passing checks.
+89 tests remain covered; the current integration suite has 121 passing checks,
+including production preservation, proxy identity and Render staging regressions.
+
+## Render staging verification
+
+The split deployment has been tested locally with the compiled frontend on one
+port and a backend-only service on another. Chromium's synthetic microphone sent
+PCM over the configured WebSocket; a synthetic provider supplied a transcription,
+the unchanged agent selected its answer, and the cross-origin readout request
+returned mock PCM. Browser playback started and stopping voice returned to idle,
+without page errors. No OpenAI network calls or real microphone recordings were
+used. Tests also cover production HTTPS origin allowlists, CORS preflight and
+audio header exposure, unknown route/origin rejection, missing credentials,
+Render's `PORT`, and clean SIGTERM shutdown.
+
+See [RENDER-STAGING.md](RENDER-STAGING.md) to configure the actual two hosting
+URLs and perform the remaining live Render/OpenAI/audible-voice checks.
 
 Use the new local `/voice-diagnostics.html` page to isolate offline PCM playback,
 provider readout and microphone input. OpenAI buttons may incur API charges.
