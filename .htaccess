@@ -1,5 +1,17 @@
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # Redirect www HTTPS to the preferred non-www domain
+  RewriteCond %{HTTP_HOST} ^www\.brandmintai\.io$ [NC]
+  RewriteRule ^ https://brandmintai.io%{REQUEST_URI} [R=301,L,NE]
+
+  # Redirect HTTP to HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteRule ^ https://brandmintai.io%{REQUEST_URI} [R=301,L,NE]
+
+  # Preserve existing React application routing
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
