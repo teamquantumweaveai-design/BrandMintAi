@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,7 +78,11 @@
       --line: #e2e7ef;
       --surface: #f6f8fb;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
@@ -86,27 +90,105 @@
       background: #fff;
       line-height: 1.75;
     }
+
     header, main, footer {
       width: min(100% - 36px, 860px);
       margin-inline: auto;
     }
-    header { padding: 24px 0; border-bottom: 1px solid var(--line); }
-    header a, footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
-    .eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; }
-    h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.15; letter-spacing: -.035em; }
-    h2 { margin-top: 2.2rem; line-height: 1.3; }
-    h3 { line-height: 1.35; }
-    p, li { font-size: 1.04rem; }
-    .intro { font-size: 1.16rem; color: var(--muted); }
-    .article-meta { color: var(--muted); font-size: .9rem; }
-    .table-wrap { overflow-x: auto; margin: 20px 0; }
-    table { width: 100%; border-collapse: collapse; min-width: 560px; }
-    th, td { text-align: left; vertical-align: top; padding: 12px; border: 1px solid var(--line); }
-    th { background: var(--surface); }
-    blockquote { margin: 16px 0; padding: 16px 20px; border-left: 4px solid var(--accent); background: var(--surface); }
-    .callout { padding: 20px; border: 1px solid var(--line); border-radius: 12px; margin: 24px 0; }
-    .related a { color: var(--accent); }
-    footer { margin-top: 48px; padding: 24px 0 40px; border-top: 1px solid var(--line); }
+
+    header {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    header a, footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .8rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      line-height: 1.15;
+      letter-spacing: -.035em;
+    }
+
+    h2 {
+      margin-top: 2.2rem;
+      line-height: 1.3;
+    }
+
+    h3 {
+      line-height: 1.35;
+    }
+
+    p, li {
+      font-size: 1.04rem;
+    }
+
+    .intro {
+      font-size: 1.16rem;
+      color: var(--muted);
+    }
+
+    .article-meta {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 560px;
+    }
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 12px;
+      border: 1px solid var(--line);
+    }
+
+    th {
+      background: var(--surface);
+    }
+
+    blockquote {
+      margin: 16px 0;
+      padding: 16px 20px;
+      border-left: 4px solid var(--accent);
+      background: var(--surface);
+    }
+
+    .callout {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      margin: 24px 0;
+    }
+
+    .related a {
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: 48px;
+      padding: 24px 0 40px;
+      border-top: 1px solid var(--line);
+    }
   </style>
 </head>
 
@@ -120,7 +202,9 @@
 <main>
   <article>
     <p class="eyebrow">Business Automation Guide</p>
+
     <h1>How to Build a WhatsApp Lead Follow Up System for a Small Business</h1>
+
     <p class="article-meta">Published 13 October 2026 · BrandMint AI</p>
 
     <p class="intro">A reliable WhatsApp lead follow up system does more than send automatic messages. It connects the first enquiry to a shared lead record, a defined sales stage, a useful next action, and a clear human owner.</p>
@@ -130,20 +214,49 @@
     <p>The details of what can be automated depend on the WhatsApp product, provider, account eligibility, message category, customer consent, and current platform rules. Design the journey first. Then verify that the selected setup can support it.</p>
 
     <h2>Define the Lead Stages Before Writing Messages</h2>
+
     <p>Use a small number of stages that reflect real decisions.</p>
 
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Stage</th><th>Meaning</th><th>Required next action</th></tr>
+          <tr>
+            <th>Stage</th>
+            <th>Meaning</th>
+            <th>Required next action</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td>New enquiry</td><td>Contact received but not reviewed</td><td>Acknowledge and assign</td></tr>
-          <tr><td>Contacted</td><td>A useful first response was sent</td><td>Wait for or prompt a reply</td></tr>
-          <tr><td>Qualified</td><td>Need, fit, timing, and next step are clear</td><td>Book, quote, or route to sales</td></tr>
-          <tr><td>Nurture</td><td>Relevant but not ready</td><td>Schedule permission-based follow-up</td></tr>
-          <tr><td>Closed won</td><td>Customer completed the target action</td><td>Begin onboarding or fulfilment</td></tr>
-          <tr><td>Closed lost</td><td>Lead declined, opted out, or is not a fit</td><td>Record reason and stop promotion</td></tr>
+          <tr>
+            <td>New enquiry</td>
+            <td>Contact received but not reviewed</td>
+            <td>Acknowledge and assign</td>
+          </tr>
+          <tr>
+            <td>Contacted</td>
+            <td>A useful first response was sent</td>
+            <td>Wait for or prompt a reply</td>
+          </tr>
+          <tr>
+            <td>Qualified</td>
+            <td>Need, fit, timing, and next step are clear</td>
+            <td>Book, quote, or route to sales</td>
+          </tr>
+          <tr>
+            <td>Nurture</td>
+            <td>Relevant but not ready</td>
+            <td>Schedule permission-based follow-up</td>
+          </tr>
+          <tr>
+            <td>Closed won</td>
+            <td>Customer completed the target action</td>
+            <td>Begin onboarding or fulfilment</td>
+          </tr>
+          <tr>
+            <td>Closed lost</td>
+            <td>Lead declined, opted out, or is not a fit</td>
+            <td>Record reason and stop promotion</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -151,7 +264,9 @@
     <p>Do not create more stages than the team can maintain. A stage is useful only when it changes what happens next.</p>
 
     <h2>Capture Enough Context to Continue the Conversation</h2>
+
     <p>Every lead should have a shared record outside the chat history. Capture only what the process needs, such as:</p>
+
     <ul>
       <li>Name and preferred contact details</li>
       <li>Source or campaign</li>
@@ -166,27 +281,37 @@
     <p>The record prevents a common problem: a customer replies to one employee, but nobody else can see what was promised. It also allows the business to stop follow-up when the customer has already booked, declined, or opted out.</p>
 
     <h2>Design a Short, Useful Follow-Up Sequence</h2>
+
     <p>Every message should help the customer make the next decision. Avoid repeating “just following up” without adding information.</p>
 
     <h3>Message 1: Immediate acknowledgement</h3>
+
     <p>Confirm that the enquiry arrived, set an honest response expectation, and ask only the most useful qualifying question.</p>
+
     <blockquote>Thanks for contacting [Business]. We have received your enquiry about [service]. To help the right person respond, could you share your preferred timing and location? A team member will review this by [time].</blockquote>
 
     <h3>Message 2: Contextual follow-up</h3>
+
     <p>Use the information already provided. Offer a relevant next step rather than asking the customer to start again.</p>
+
     <blockquote>Based on your request for [need], the next step is a [call, visit, quotation, or demo]. We have availability on [options]. Which works better for you?</blockquote>
 
     <h3>Message 3: Useful reminder</h3>
+
     <p>If the customer has not replied, remind them once with a useful detail, answer, example, or choice.</p>
+
     <blockquote>A quick note in case it helps: [brief answer to a common decision question]. I can keep [option] available until [time]. Reply here if you would like to continue, or tell us if now is not the right time.</blockquote>
 
     <h3>Message 4: Human handoff</h3>
+
     <p>When the lead is qualified or the question needs judgment, pass the conversation with its context.</p>
+
     <blockquote>I am connecting you with [name or team], who can help with [specific need]. They can see the details you have already shared, so you will not need to repeat them.</blockquote>
 
     <p>Adapt these examples to the business, applicable law, consent basis, and current WhatsApp policies. Do not treat them as universal templates.</p>
 
     <h2>Set the Stop Rules Before Launch</h2>
+
     <p>A follow-up system needs clear reasons to stop or escalate.</p>
 
     <p>Stop automated promotional follow-up when the customer opts out, says they are not interested, completes the intended action, makes a complaint, or enters a sensitive discussion.</p>
@@ -196,7 +321,9 @@
     <p>The handoff should include the lead record, conversation summary, current question, previous promises, and recommended next action. A transfer without context simply moves the burden to the customer.</p>
 
     <h2>Connect the Workflow</h2>
+
     <p>The practical flow is:</p>
+
     <ol>
       <li>A lead arrives from an advertisement, form, referral, or direct message.</li>
       <li>The system creates or updates one lead record.</li>
@@ -211,7 +338,9 @@
     <p>Add alerts for failed record creation, undelivered messages, unassigned leads, overdue actions, and duplicate contacts. These controls are less visible than the message copy, but they make the system dependable.</p>
 
     <h2>Measure the Journey</h2>
+
     <p>Track measures that show whether the workflow is helping customers and the sales team.</p>
+
     <ul>
       <li><strong>First-response time:</strong> How long a new lead waits for a meaningful acknowledgement.</li>
       <li><strong>Qualification rate:</strong> The percentage of enquiries that reach a defined qualified stage.</li>
@@ -224,22 +353,35 @@
     <p>Review a sample of conversations, not only the totals. A fast response is not useful if it ignores the customer's question.</p>
 
     <h2>Start With One Lead Source</h2>
+
     <p>Pilot the system with one campaign, service, or location. Test common enquiries, missing information, replies outside working hours, duplicate leads, opt-outs, changed appointments, and questions that require a person. Keep the manual process available while reliability is being proven.</p>
 
     <p>Meta announced Business AI within the WhatsApp Business app for eligible small businesses in India in May 2026, including features such as responding to common questions, lead capture, booking, product recommendations, and human takeover. Availability and eligibility can change, so verify the current product and account requirements before publishing or implementing a specific recommendation.</p>
 
+    <!-- Official Meta source added -->
+    <p><strong>Official source:</strong>
+      <a href="https://about.fb.com/news/2026/05/introducing-business-ai-on-whatsapp-for-small-businesses-in-india/amp/"
+         target="_blank"
+         rel="noopener noreferrer">Meta — Introducing Business AI on WhatsApp for Small Businesses in India</a>.
+    </p>
+
     <h2>Make Every Follow-Up Move the Journey Forward</h2>
+
     <p>The best WhatsApp lead follow up system feels coherent to the customer and visible to the team. It remembers context, respects preferences, gives a clear next step, and brings in a person at the right moment.</p>
 
     <div class="callout">
       <h3>Plan Your Lead Follow-Up Workflow</h3>
+
       <p>Use a Lead Follow Up Flow Template to map your stages, messages, stop rules, and ownership.</p>
+
       <p>To design a connected WhatsApp-led journey around your existing sales process, explore BrandMint AI or book a consultation.</p>
+
       <p><a href="https://brandmintai.io/contact">Contact BrandMint AI</a></p>
     </div>
 
     <section class="related" aria-labelledby="related-heading">
       <h2 id="related-heading">Related Guides</h2>
+
       <ul>
         <li><a href="https://brandmintai.io/ai-business-faq/">AI Business Automation FAQs</a></li>
         <li><a href="https://brandmintai.io/small-business-automation-ideas/">7 Small Business Automation Ideas That Save Time</a></li>
@@ -248,6 +390,7 @@
     </section>
 
     <h2>Sources Referenced</h2>
+
     <ul>
       <li>Meta's introduction of Business AI on WhatsApp for small businesses in India, announced May 2026. Product eligibility applies.</li>
       <li>Meta business engagement and support updates for current WhatsApp Business App and Platform context in India.</li>
@@ -257,8 +400,15 @@
 
 <footer>
   <p><a href="https://brandmintai.io/">BrandMint AI</a> — Personalised AI solutions, automation, and business growth systems.</p>
-  <p><a href="https://brandmintai.io/contact">Contact</a> · <a href="https://brandmintai.io/solutions">AI Solutions</a> · <a href="https://brandmintai.io/ai-business-faq/">AI Business FAQs</a></p>
+
+  <p>
+    <a href="https://brandmintai.io/contact">Contact</a> ·
+    <a href="https://brandmintai.io/solutions">AI Solutions</a> ·
+    <a href="https://brandmintai.io/ai-business-faq/">AI Business FAQs</a>
+  </p>
+
   <p>© 2026 BrandMint AI</p>
 </footer>
 </body>
 </html>
+```
