@@ -1,13 +1,13 @@
 # Social Growth System page and Razorpay checkout
 
 The Quantum Weave Social Growth System landing page is a static page served at
-`https://brandmintai.io/social-growth/`, separate from the React app (same pattern as `/ai-business-faq/`).
+`https://brandmintai.io/meta-growth/`, separate from the React app (same pattern as `/ai-business-faq/`).
 
 | Path | What it is |
 |---|---|
-| `public/social-growth/index.html` | The landing page (plans, calendar, checkout buttons) |
-| `public/social-growth/assets/clients/` | Client logos for the scrolling strip |
-| `public/social-growth/thank-you/index.html` | Shown after a verified payment |
+| `public/meta-growth/index.html` | The landing page (plans, calendar, checkout buttons) |
+| `public/meta-growth/assets/clients/` | Client logos for the scrolling strip |
+| `public/meta-growth/thank-you/index.html` | Shown after a verified payment |
 | `public/api/razorpay/create-order.php` | Creates a Razorpay order for the chosen plan |
 | `public/api/razorpay/verify-payment.php` | Verifies Razorpay's signature, returns the plan |
 | `public/api/razorpay/lib.php` | Shared helpers and the price table |
@@ -43,7 +43,7 @@ Customers pay the first month online. Later months are collected with Razorpay p
 
    Because it sits outside `public_html`, it can't be downloaded from the web.
    If your site lives somewhere else, set the `RAZORPAY_CONFIG` environment variable to the file's full path.
-4. Open `/social-growth/`, click a plan's **Pay** button and complete a test payment with
+4. Open `/meta-growth/`, click a plan's **Pay** button and complete a test payment with
    Razorpay's test UPI ID `success@razorpay` or a test card.
 5. When test payments work, replace the test keys with **Live** keys in the same file.
 
