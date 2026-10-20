@@ -154,8 +154,22 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   .chips span{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:#fff;box-shadow:0 8px 20px -10px rgba(0,0,0,.18);border:1px solid var(--line)}
   .hero-visual{position:relative;isolation:isolate;display:flex;justify-content:center;padding:24px 0}
   .hero-visual::before{content:"";position:absolute;z-index:-1;inset:4% 8%;border-radius:50%;background:radial-gradient(circle at 55% 45%,rgba(225,48,108,.42),rgba(131,58,180,.22) 38%,rgba(247,119,55,.18) 55%,transparent 72%);filter:blur(28px)}
-  .hero-visual .ig{left:6%;top:44%}
-  .hero-visual .fb{right:8%;top:40%;animation-delay:-2s}
+  .hero-visual .ig{left:6%;top:44%;color:#e1306c}
+  .hero-visual .fb{right:8%;top:40%;color:#1877f2;animation-duration:5.2s;animation-delay:-2s}
+  .hero-visual .x{width:52px;height:52px;border-radius:15px;left:14%;top:12%;color:#111;animation-duration:5.8s;animation-delay:-1s}
+  .hero-visual .threads{width:52px;height:52px;border-radius:15px;right:12%;top:70%;color:#111;animation-duration:4.8s;animation-delay:-3s}
+  .hero-visual .heart{left:4%;top:72%;color:var(--pink);animation-duration:4s;animation-delay:-.5s}
+  .hero-visual .fb::after,.final .fb::after{animation-delay:.8s}
+  .hero-visual .x::after{animation-delay:1.4s}
+  .hero-visual .threads::after{animation-delay:2s}
+  .ig-nums b{transition:color .3s}
+  .ig-nums b.bump,.tile em.bump{animation:bump .6s cubic-bezier(.34,1.56,.64,1)}
+  .ig-nums b.bump{color:#22a06b}
+  @keyframes bump{40%{transform:scale(1.25)}}
+  .ig-nums b,.tile em{display:inline-block}
+  .ig-nums b{display:block}
+  .notif{position:absolute;z-index:4;pointer-events:none;background:#fff;color:var(--ink);font-size:12.5px;font-weight:700;padding:7px 12px;border-radius:999px;box-shadow:0 12px 26px -10px rgba(0,0,0,.35);white-space:nowrap;animation:notif 2.6s cubic-bezier(.16,1,.3,1) forwards}
+  @keyframes notif{0%{opacity:0;transform:translateY(14px) scale(.8)}15%{opacity:1;transform:translateY(0) scale(1)}75%{opacity:1;transform:translateY(-16px)}100%{opacity:0;transform:translateY(-30px)}}
   .hero-visual .trend{position:absolute;z-index:2;right:12%;top:2%;width:84px;height:56px;color:var(--pink)}
   .hero-cta{display:grid;gap:12px;max-width:560px;margin:clamp(24px,3vw,36px) auto 0}
   .hero .micro{justify-content:center}
@@ -361,8 +375,8 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   .reel-hearts i svg{width:100%;height:100%;fill:#ff3b6b;stroke:none}
   .reel-hearts i:nth-child(2){left:0;animation-delay:1.1s}.reel-hearts i:nth-child(3){left:12px;animation-delay:2.2s}
   /* badges around the phone: each floats on its own rhythm with a soft halo */
-  .final .badge{animation:bob 4.5s ease-in-out infinite}
-  .final .badge::after{content:"";position:absolute;inset:-6px;border-radius:inherit;border:2px solid currentColor;opacity:0;animation:halo 3s ease-out infinite}
+  .final .badge,.hero-visual .badge{animation:bob 4.5s ease-in-out infinite}
+  .final .badge::after,.hero-visual .badge::after{content:"";position:absolute;inset:-6px;border-radius:inherit;border:2px solid currentColor;opacity:0;animation:halo 3s ease-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
   @keyframes halo{0%{opacity:.5;transform:scale(.9)}100%{opacity:0;transform:scale(1.35)}}
   .final .ig{left:9%;top:34%;color:#e1306c}
@@ -394,6 +408,9 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
     .vvis{height:220px}
     .hero-grid,.ba,.month{grid-template-columns:1fr}
     .hero-visual{padding-top:8px;width:100%;max-width:440px;margin:0 auto}
+    .hero-visual .x{left:0;top:4%}
+    .hero-visual .threads{right:0}
+    .hero-visual .heart{left:0}
     .plans-grid{grid-template-columns:1fr;max-width:520px;margin:0 auto}
     .month > div:last-child{display:flex;flex-direction:column;align-items:center}
     .mosaic{width:100%}
@@ -427,7 +444,11 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
     .marquee-track{gap:40px;padding-right:40px}
     .follow-card{left:4%}
     .final .fb{left:10%}
-    .final .x,.final .threads{width:44px;height:44px;border-radius:12px}
+    .final .x,.final .threads,.hero-visual .x,.hero-visual .threads{width:42px;height:42px;border-radius:12px}
+    .hero-visual .heart{font-size:12px;padding:7px 10px}
+    .hero-visual .threads,.hero-visual .fb{right:6px}
+    .hero-visual .x,.hero-visual .ig,.hero-visual .heart{left:6px}
+    .notif{font-size:11px;padding:5px 10px}
     .final .x{right:12%}
     .final .threads{right:2%}
     .final .ig{left:2%}
@@ -445,7 +466,7 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
     .ba-phones .phone{width:240px}
   }
   @media (prefers-reduced-motion:reduce){
-    .badge,.follow-card,.dots i,.mosaic .reel img,.marquee-track,.vflow::before,.mini-phone .g img,.deck *,.grow *,.hearts i,.reel *,.reel-bars i::after,.reel-hearts i,.reel-side .like,.final .badge::after,.final .visual::before,.final .sparks{animation:none}
+    .notif,.hero-visual .badge::after,.badge,.follow-card,.dots i,.mosaic .reel img,.marquee-track,.vflow::before,.mini-phone .g img,.deck *,.grow *,.hearts i,.reel *,.reel-bars i::after,.reel-hearts i,.reel-side .like,.final .badge::after,.final .visual::before,.final .sparks{animation:none}
     .reel img:first-child{opacity:1}
     .grow .vline{stroke-dashoffset:0}
     .grow .toast{opacity:1}
@@ -529,6 +550,9 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
             <svg class="trend" viewBox="0 0 84 56" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 50c12-2 20-12 28-22s16-8 24-14 14-9 22-10"/><path d="M64 4h14v14"/></svg>
             <span class="badge ig"><svg><use href="#logo-ig"/></svg></span>
             <span class="badge fb"><svg><use href="#logo-fb"/></svg></span>
+            <span class="badge x"><svg><use href="#logo-x"/></svg></span>
+            <span class="badge threads"><svg><use href="#logo-threads"/></svg></span>
+            <span class="badge heart"><svg><use href="#i-heart"/></svg>Liked</span>
             <div class="phone"><div class="screen"><div class="ig-head"><span class="ig-avatar"><span>B&amp;B</span></span><div class="ig-name">brewandbloom.cafe<small>Café · Bengaluru</small></div></div><div class="ig-nums"><span><b>142</b>posts</span><span><b>3,850</b>followers</span><span><b>412</b>avg. likes</span></div><span class="ig-follow">Follow</span><div class="ig-tabs"><svg class="i"><use href="#i-image"/></svg><svg class="i"><use href="#i-play"/></svg><svg class="i"><use href="#i-users"/></svg></div><div class="grid9"><span class="tile"><img src="/social-growth/assets/feed/01-latte-pour.webp" alt="" loading="eager" decoding="async"><em><svg class="i"><use href="#i-play"/></svg>8.6K</em></span><span class="tile"><img src="/social-growth/assets/feed/02-croissant.webp" alt="" loading="eager" decoding="async"><em><svg class="i"><use href="#i-play"/></svg>5.2K</em></span><span class="tile"><img src="/social-growth/assets/feed/03-customer.webp" alt="" loading="eager" decoding="async"><em><svg class="i"><use href="#i-play"/></svg>12.4K</em></span><span class="tile"><img src="/social-growth/assets/feed/04-iced-coffee.webp" alt="" loading="eager" decoding="async"><em><svg class="i"><use href="#i-play"/></svg>3.9K</em></span><span class="tile"><img src="/social-growth/assets/feed/05-diya.webp" alt="" loading="eager" decoding="async"><em><svg class="i"><use href="#i-play"/></svg>7.1K</em></span><span class="tile"><img src="/social-growth/assets/feed/06-two-cups.webp" alt="" loading="eager" decoding="async"><em><svg class="i"><use href="#i-play"/></svg>4.4K</em></span><span class="tile"><img src="/social-growth/assets/feed/07-roasting.webp" alt="" loading="eager" decoding="async"><em><svg class="i"><use href="#i-play"/></svg>6.8K</em></span><span class="tile"><img src="/social-growth/assets/feed/08-reel-pour.webp" alt="" loading="eager" decoding="async"><em><svg class="i"><use href="#i-play"/></svg>15.2K</em></span><span class="tile"><img src="/social-growth/assets/feed/09-chai-milk.webp" alt="" loading="eager" decoding="async"><em><svg class="i"><use href="#i-play"/></svg>5.7K</em></span></div></div></div>
           </div>
         </div>
@@ -1002,6 +1026,61 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
     gsap.from('.final .visual .badge, .final .follow-card, .final .sparks', { scale: 0.5, autoAlpha: 0, stagger: 0.1, ease: 'back.out(2)', duration: 0.8, scrollTrigger: { trigger: '.final .visual', start: 'top 80%' } });
     addEventListener('load', function(){ ScrollTrigger.refresh(); });
   }
+
+  // Hero phone: the sample account "grows" live. Counts rise from a low start, then keep ticking up with
+  // small pop-ups (+followers, likes, views). Fictional demo numbers; nothing here is a client result.
+  (function liveGrowth(){
+    var vis = document.querySelector('.hero-visual');
+    if(!vis || reduce) return;
+    var nums = vis.querySelectorAll('.ig-nums b'), views = vis.querySelectorAll('.tile em');
+    if(nums.length < 3) return;
+    var parse = function(t){ t = t.replace(/,/g, ''); return /K$/i.test(t) ? parseFloat(t) * 1000 : parseFloat(t); };
+    var fmtK = function(n){ return n >= 10000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : n >= 1000 ? (n / 1000).toFixed(1) + 'K' : String(Math.round(n)); };
+    var fmtN = function(n){ return Math.round(n).toLocaleString('en-IN'); };
+    var setEm = function(em, v){ em.lastChild.nodeValue = fmtK(v); };
+    var stats = [].map.call(nums, function(b){ return { el: b, end: parse(b.textContent), v: 0 }; });
+    var tiles = [].map.call(views, function(em){ if(em.lastChild.nodeType !== 3) em.appendChild(document.createTextNode('')); return { el: em, end: parse(em.lastChild.nodeValue || em.textContent), v: 0 }; });
+    function paint(){
+      stats.forEach(function(s){ s.el.textContent = fmtN(s.v); });
+      tiles.forEach(function(t){ setEm(t.el, t.v); });
+    }
+    function bump(el){ el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); setTimeout(function(){ el.classList.remove('bump'); }, 900); }
+    function pop(text){
+      var n = document.createElement('span');
+      n.className = 'notif'; n.textContent = text;
+      var spots = [[58, 30], [56, 54], [2, 22], [2, 64]];
+      var s = spots[Math.floor(Math.random() * spots.length)];
+      n.style.left = s[0] + '%'; n.style.top = s[1] + '%';
+      vis.appendChild(n);
+      setTimeout(function(){ n.remove(); }, 2600);
+    }
+    // 1) count up from about a tenth of the final numbers
+    var start = performance.now(), dur = 2600;
+    stats.forEach(function(s){ s.v = s.end * 0.1; }); tiles.forEach(function(t){ t.v = t.end * 0.08; });
+    function up(now){
+      var k = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - k, 3);
+      stats.forEach(function(s){ s.v = s.end * (0.1 + 0.9 * e); });
+      tiles.forEach(function(t){ t.v = t.end * (0.08 + 0.92 * e); });
+      paint();
+      if(k < 1) requestAnimationFrame(up); else setTimeout(tick, 1400);
+    }
+    // 2) then keep growing a little every couple of seconds while the hero is on screen
+    var onScreen = true;
+    if('IntersectionObserver' in window) new IntersectionObserver(function(es){ onScreen = es[0].isIntersecting; }).observe(vis);
+    function tick(){
+      if(onScreen && !document.hidden){
+        var r = Math.random(), add;
+        if(r < 0.4){ add = 1 + Math.floor(Math.random() * 4); stats[1].v += add; bump(stats[1].el); pop('+' + add + ' followers'); }
+        else if(r < 0.75){ add = 6 + Math.floor(Math.random() * 30); stats[2].v += Math.ceil(add / 10); bump(stats[2].el); pop('♥ +' + add + ' likes'); }
+        else { var t = tiles[Math.floor(Math.random() * tiles.length)]; add = 40 + Math.floor(Math.random() * 260); t.v += add; bump(t.el); pop('▶ +' + add + ' views'); }
+        if(Math.random() < 0.15){ stats[0].v += 1; bump(stats[0].el); }
+        paint();
+      }
+      setTimeout(tick, 1800 + Math.random() * 900);
+    }
+    paint();
+    setTimeout(function(){ start = performance.now(); requestAnimationFrame(up); }, 900);
+  })();
 
   // Mobile sticky button: only after the hero, hidden at the closing CTA.
   var sticky = document.getElementById('sticky');
