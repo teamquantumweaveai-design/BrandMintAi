@@ -185,29 +185,70 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   .quote{margin:32px auto 0;display:flex;gap:16px;align-items:center;padding:22px 28px;border-radius:var(--radius);background:#fdeef4;font-size:clamp(16px,1.6vw,19px);font-weight:500;color:#3a3a3c}
   .quote b{font-size:44px;line-height:.6;color:var(--pink);font-family:Georgia,serif}
 
-  /* 03 Value proposition */
-  .steps3{max-width:760px;margin:0 auto;display:grid;gap:8px}
-  .vcard{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;box-shadow:var(--shadow)}
+  /* 03 Value proposition: three animated step cards joined by a flowing line */
+  .vflow{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+  .vflow::before{content:"";position:absolute;z-index:0;left:12%;right:12%;top:118px;height:3px;border-radius:2px;background:linear-gradient(90deg,#e1306c,#2f6bff,#22a06b,#e1306c);background-size:300% 100%;animation:flow 6s linear infinite;opacity:.35}
+  @keyframes flow{to{background-position:300% 0}}
+  .vstep{position:relative;z-index:1;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);transition:translate .35s cubic-bezier(.16,1,.3,1),box-shadow .35s}
+  .vstep:hover{translate:0 -6px;box-shadow:0 26px 50px -24px rgba(0,0,0,.28)}
+  .vvis{position:relative;height:236px;overflow:hidden;display:grid;place-items:center}
+  .vstep:nth-child(1) .vvis{background:radial-gradient(70% 80% at 50% 100%,rgba(225,48,108,.18),transparent 70%),#fff7fa}
+  .vstep:nth-child(2) .vvis{background:radial-gradient(70% 80% at 50% 100%,rgba(47,107,255,.16),transparent 70%),#f5f8ff}
+  .vstep:nth-child(3) .vvis{background:radial-gradient(70% 80% at 50% 100%,rgba(34,160,107,.18),transparent 70%),#f3fbf7}
+  .vtxt{padding:20px 22px 24px}
+  .vtxt .num{margin-bottom:12px}
+  .vtxt small{display:block;font-size:13px;color:var(--ink-2)}
+  .vtxt strong{display:block;font-size:clamp(19px,1.8vw,22px);letter-spacing:-.02em;line-height:1.2;margin:2px 0 6px}
+  .vtxt p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.5}
   .num{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;font-weight:700;font-size:14px;color:var(--pink);background:rgba(225,48,108,.1)}
   .num.n2{color:var(--c-reel);background:rgba(47,107,255,.1)}
   .num.n3{color:var(--c-post);background:rgba(34,160,107,.12)}
-  .vcard small{display:block;font-size:13px;color:var(--ink-2)}
-  .vcard strong{display:block;font-size:clamp(17px,1.8vw,20px);letter-spacing:-.015em;line-height:1.25}
-  .vart{position:relative;width:170px;height:100px}
-  .vart .mini{position:absolute;right:14px;top:0;width:60px;height:100px;border-radius:12px;background:#111;padding:4px;box-shadow:var(--shadow)}
-  .vart .mini .grid9{border-radius:8px;overflow:hidden}
-  .vart .ig{width:40px;height:40px;border-radius:12px;left:30px;top:22px}
-  .vart .sparks{right:-4px;top:-8px;width:28px;height:28px}
-  .vart.video{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(2,minmax(0,1fr));gap:6px}
-  .vart.video img{width:100%;height:100%;min-height:0;object-fit:cover;border-radius:12px;grid-row:span 2}
-  .vart.video i{display:grid;place-items:center;height:100%;border-radius:12px;background:#111;color:#fff}
-  .vart.video i.reel{background:var(--ig-diag)}
-  .vart.video i svg{width:20px;height:20px}
-  .vart.chart{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
-  .vart.chart .pill{font-size:12px;padding:2px 9px}
-  .vart.chart svg{width:100%;flex:1}
-  .down{display:flex;justify-content:center;color:#b0b0b8}
-  .down svg{width:18px;height:18px;transform:rotate(90deg)}
+  /* step 1: a feed filling up */
+  .mini-phone{position:relative;width:118px;height:206px;margin-top:40px;border-radius:24px;background:#111;padding:6px;box-shadow:0 20px 40px -18px rgba(225,48,108,.6)}
+  .mini-phone .scr{height:100%;border-radius:19px;background:#fff;padding:18px 5px 5px;overflow:hidden}
+  .mini-phone .scr .row{display:flex;gap:5px;align-items:center;margin-bottom:6px}
+  .mini-phone .scr .row i{width:18px;height:18px;border-radius:50%;background:var(--ig-diag)}
+  .mini-phone .scr .row b{flex:1;height:5px;border-radius:3px;background:#ececf0}
+  .mini-phone .g{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+  .mini-phone .g img{background:#ececf0;width:100%;aspect-ratio:1;object-fit:cover;animation:tile-in 6s cubic-bezier(.34,1.56,.64,1) infinite both}
+  .mini-phone .g img:nth-child(2){animation-delay:.25s}.mini-phone .g img:nth-child(3){animation-delay:.5s}
+  .mini-phone .g img:nth-child(4){animation-delay:.75s}.mini-phone .g img:nth-child(5){animation-delay:1s}.mini-phone .g img:nth-child(6){animation-delay:1.25s}
+  .mini-phone .g img:nth-child(7){animation-delay:1.5s}.mini-phone .g img:nth-child(8){animation-delay:1.75s}.mini-phone .g img:nth-child(9){animation-delay:2s}
+  @keyframes tile-in{0%{opacity:0;transform:scale(.4)}12%,85%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.9)}}
+  .vvis .badge.ig{width:46px;height:46px;border-radius:13px;left:16%;top:30%}
+  .vvis .badge.fb{width:40px;height:40px;right:16%;top:22%;animation-delay:-2s}
+  .vvis .badge.heart{right:12%;bottom:18%;top:auto;font-size:12px;padding:6px 10px;animation-delay:-1s}
+  /* step 2: post + Reel cards */
+  .deck{position:relative;width:220px;height:190px}
+  .deck .post,.deck .reelc{position:absolute;border-radius:16px;overflow:hidden;box-shadow:0 18px 34px -16px rgba(0,0,0,.45);background:#000}
+  .deck .post{left:0;top:18px;width:120px;height:150px;rotate:-6deg;animation:sway 6s ease-in-out infinite}
+  .deck .reelc{right:0;top:0;width:118px;height:180px;rotate:5deg;animation:sway 6s ease-in-out infinite reverse}
+  .deck img{width:100%;height:100%;object-fit:cover}
+  .deck .reelc img{animation:kb 6s ease-in-out infinite alternate}
+  .deck .play{position:absolute;inset:0;display:grid;place-items:center}
+  .deck .play span{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;animation:pulse 1.8s ease-in-out infinite}
+  .deck .play span::after{content:"";margin-left:4px;border-left:13px solid var(--ink);border-top:8px solid transparent;border-bottom:8px solid transparent}
+  .deck .bar{position:absolute;left:8px;right:8px;top:8px;height:3px;border-radius:2px;background:rgba(255,255,255,.4);overflow:hidden}
+  .deck .bar::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:left;animation:fill 4s linear infinite}
+  .deck .chipset{position:absolute;left:50%;bottom:-6px;translate:-50% 0;display:flex;gap:6px}
+  .deck .chipset span{font-size:11.5px;font-weight:700;background:#fff;border-radius:999px;padding:4px 10px;box-shadow:0 6px 14px -8px rgba(0,0,0,.4);white-space:nowrap}
+  @keyframes sway{50%{translate:0 -8px}}
+  @keyframes pulse{50%{transform:scale(1.12);box-shadow:0 0 0 10px rgba(255,255,255,.25)}}
+  @keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  /* step 3: growth line, rising hearts, enquiry toast */
+  .grow{position:relative;width:240px;height:190px}
+  .grow svg{position:absolute;inset:auto 0 0 0;width:100%;height:140px}
+  .grow .vline{stroke-dasharray:320;stroke-dashoffset:320;animation:draw 5s ease-in-out infinite}
+  .grow .varea{animation:area 5s ease-in-out infinite}
+  @keyframes draw{0%{stroke-dashoffset:320}55%,90%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}
+  @keyframes area{0%,30%{opacity:0}60%,90%{opacity:1}100%{opacity:0}}
+  .grow .toast{position:absolute;left:0;top:6px;display:flex;align-items:center;gap:8px;background:#fff;border-radius:14px;padding:8px 12px;font-size:12px;font-weight:600;box-shadow:0 12px 26px -12px rgba(0,0,0,.35);animation:toast 5s cubic-bezier(.16,1,.3,1) infinite}
+  .grow .toast svg{width:18px;height:18px;color:var(--wa)}
+  @keyframes toast{0%,35%{opacity:0;translate:0 -10px}45%,90%{opacity:1;translate:0 0}100%{opacity:0}}
+  .hearts i{position:absolute;bottom:20px;width:18px;height:18px;opacity:0;animation:rise 4s ease-out infinite}
+  .hearts i svg{width:100%;height:100%;fill:var(--pink);stroke:none}
+  .hearts i:nth-child(1){right:22px}.hearts i:nth-child(2){right:52px;animation-delay:1.3s}.hearts i:nth-child(3){right:8px;animation-delay:2.6s}
+  @keyframes rise{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:1}100%{opacity:0;transform:translateY(-110px) scale(1.1)}}
 
   /* 04 Packages (template: compact cards with a chevron; tap the card to pay) */
   .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
@@ -291,17 +332,51 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   .process h3{margin:0;font-size:17px;font-weight:700}
   .process p{margin:0;font-size:14.5px;color:var(--ink-2)}
 
-  /* 08 Final CTA */
-  .final{text-align:center;background:#fff}
-  .final .visual{position:relative;isolation:isolate;display:flex;justify-content:center;margin:30px auto 30px;max-width:620px}
-  .final .visual::before{content:"";position:absolute;z-index:-1;inset:6% 10%;border-radius:50%;background:radial-gradient(circle,rgba(225,48,108,.35),rgba(131,58,180,.18) 45%,transparent 72%);filter:blur(30px)}
-  .final .phone{width:min(220px,58vw)}
-  .final .ig{left:10%;top:36%}
-  .final .fb{left:24%;top:8%;animation-delay:-1.5s}
-  .final .heart{right:8%;top:22%;animation-delay:-3s}
-  .final .sparks.l{left:4%;top:16%}
-  .final .sparks.r{right:4%;top:48%;transform:scaleX(-1)}
-  .follow-card{position:absolute;z-index:3;left:22%;bottom:12%;background:#fff;border-radius:14px;padding:10px 14px;box-shadow:0 16px 30px -12px rgba(0,0,0,.3);text-align:left;font-size:11px;color:var(--ink-2);animation:float 6s ease-in-out infinite;animation-delay:-2s}
+  /* 08 Final CTA: a live Reel in the phone, surrounded by animated platform badges */
+  .final{text-align:center;background:#fff;overflow:hidden}
+  .final .visual{position:relative;isolation:isolate;display:flex;justify-content:center;margin:30px auto 34px;max-width:680px;padding:10px 0}
+  .final .visual::before{content:"";position:absolute;z-index:-1;inset:4% 8%;border-radius:50%;background:radial-gradient(circle,rgba(225,48,108,.4),rgba(131,58,180,.2) 45%,transparent 72%);filter:blur(30px);animation:glow 6s ease-in-out infinite}
+  @keyframes glow{50%{transform:scale(1.08);opacity:.8}}
+  .final .phone{width:min(230px,56vw)}
+  .final .screen{padding:0;background:#000}
+  .reel{position:absolute;inset:0;overflow:hidden;border-radius:32px}
+  .reel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:slide 12s infinite}
+  .reel img:nth-child(2){animation-delay:3s}.reel img:nth-child(3){animation-delay:6s}.reel img:nth-child(4){animation-delay:9s}
+  @keyframes slide{0%{opacity:0;transform:scale(1.15)}4%{opacity:1}25%{opacity:1;transform:scale(1)}29%,100%{opacity:0;transform:scale(1)}}
+  .reel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 22%,transparent 60%,rgba(0,0,0,.65))}
+  .reel-bars{position:absolute;z-index:2;left:12px;right:12px;top:40px;display:flex;gap:4px}
+  .reel-bars i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden;position:relative}
+  .reel-bars i::after{content:"";position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:left;animation:bar 12s linear infinite}
+  .reel-bars i:nth-child(2)::after{animation-delay:3s}.reel-bars i:nth-child(3)::after{animation-delay:6s}.reel-bars i:nth-child(4)::after{animation-delay:9s}
+  @keyframes bar{0%{transform:scaleX(0)}25%{transform:scaleX(1)}25.01%,100%{transform:scaleX(0)}}
+  .reel-meta{position:absolute;z-index:2;left:12px;right:48px;bottom:16px;text-align:left;color:#fff;font-size:11px;line-height:1.35}
+  .reel-meta b{display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:4px}
+  .reel-meta b i{width:22px;height:22px;border-radius:50%;background:var(--ig-diag);border:2px solid #fff}
+  .reel-side{position:absolute;z-index:2;right:10px;bottom:22px;display:grid;gap:14px;color:#fff}
+  .reel-side svg{width:22px;height:22px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+  .reel-side .like{fill:#ff3b6b;stroke:#ff3b6b;animation:likepop 3s ease-in-out infinite}
+  @keyframes likepop{0%,70%,100%{transform:scale(1)}78%{transform:scale(1.35)}86%{transform:scale(.95)}}
+  .reel-hearts{position:absolute;z-index:2;right:14px;bottom:110px;width:30px;height:120px}
+  .reel-hearts i{position:absolute;bottom:0;left:6px;width:16px;height:16px;opacity:0;animation:rise 3.2s ease-out infinite}
+  .reel-hearts i svg{width:100%;height:100%;fill:#ff3b6b;stroke:none}
+  .reel-hearts i:nth-child(2){left:0;animation-delay:1.1s}.reel-hearts i:nth-child(3){left:12px;animation-delay:2.2s}
+  /* badges around the phone: each floats on its own rhythm with a soft halo */
+  .final .badge{animation:bob 4.5s ease-in-out infinite}
+  .final .badge::after{content:"";position:absolute;inset:-6px;border-radius:inherit;border:2px solid currentColor;opacity:0;animation:halo 3s ease-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+  @keyframes halo{0%{opacity:.5;transform:scale(.9)}100%{opacity:0;transform:scale(1.35)}}
+  .final .ig{left:9%;top:34%;color:#e1306c}
+  .final .fb{left:21%;top:4%;color:#1877f2;animation-duration:5.2s;animation-delay:-1.5s}
+  .final .fb::after{animation-delay:.8s}
+  .final .x{width:54px;height:54px;border-radius:15px;right:22%;top:2%;color:#111;animation-duration:5.8s;animation-delay:-2.5s}
+  .final .x::after{animation-delay:1.4s}
+  .final .threads{width:54px;height:54px;border-radius:15px;right:7%;top:58%;color:#111;animation-duration:4.8s;animation-delay:-.7s}
+  .final .threads::after{animation-delay:2s}
+  .final .heart{right:6%;top:24%;color:var(--pink);animation-duration:4s;animation-delay:-3s}
+  .final .sparks.l{left:3%;top:14%;animation:twinkle 2.4s ease-in-out infinite}
+  .final .sparks.r{right:3%;top:44%;transform:scaleX(-1);animation:twinkle 2.4s ease-in-out infinite .9s}
+  @keyframes twinkle{50%{opacity:.25}}
+  .follow-card{position:absolute;z-index:3;left:12%;bottom:10%;background:#fff;border-radius:14px;padding:10px 14px;box-shadow:0 16px 30px -12px rgba(0,0,0,.3);text-align:left;font-size:11px;color:var(--ink-2);animation:bob 6s ease-in-out infinite;animation-delay:-2s}
   .follow-card b{display:block;font-size:18px;color:var(--ink);line-height:1.2}
   .follow-card em{font-style:normal;color:var(--c-post);font-weight:600}
   .final .cta-stack{margin:0 auto;max-width:560px}
@@ -314,6 +389,9 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   .sticky{display:none}
 
   @media (max-width:980px){
+    .vflow{grid-template-columns:1fr;max-width:560px;margin:0 auto}
+    .vflow::before{left:50%;right:auto;top:6%;bottom:6%;width:3px;height:auto;translate:-50% 0}
+    .vvis{height:220px}
     .hero-grid,.ba,.month{grid-template-columns:1fr}
     .hero-visual{padding-top:8px;width:100%;max-width:440px;margin:0 auto}
     .plans-grid{grid-template-columns:1fr;max-width:520px;margin:0 auto}
@@ -330,9 +408,6 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   }
   @media (max-width:760px){
     .nav-links{display:none}
-    .vcard{grid-template-columns:auto 1fr;padding:18px}
-    .vart{grid-column:1/-1;width:100%;height:110px}
-    .vart:not(.video):not(.chart){width:170px;justify-self:center}
     .process li{grid-template-columns:36px 46px 1fr;row-gap:2px;padding:14px 0}
     .process .n,.process .ico{grid-row:span 2}
     .process h3,.process p{grid-column:3}
@@ -351,7 +426,13 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
     .ba-arrow{display:none}
     .marquee-track{gap:40px;padding-right:40px}
     .follow-card{left:4%}
-    .final .fb{left:14%}
+    .final .fb{left:10%}
+    .final .x,.final .threads{width:44px;height:44px;border-radius:12px}
+    .final .x{right:12%}
+    .final .threads{right:2%}
+    .final .ig{left:2%}
+    .final .heart{right:0;font-size:12px;padding:7px 10px}
+    .follow-card{left:2%}
     .sticky{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:20;transition:transform .35s cubic-bezier(.16,1,.3,1)}
     .sticky .btn{width:100%}
     .sticky.hide{transform:translateY(140%)}
@@ -364,7 +445,10 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
     .ba-phones .phone{width:240px}
   }
   @media (prefers-reduced-motion:reduce){
-    .badge,.follow-card,.dots i,.mosaic .reel img,.marquee-track{animation:none}
+    .badge,.follow-card,.dots i,.mosaic .reel img,.marquee-track,.vflow::before,.mini-phone .g img,.deck *,.grow *,.hearts i,.reel *,.reel-bars i::after,.reel-hearts i,.reel-side .like,.final .badge::after,.final .visual::before,.final .sparks{animation:none}
+    .reel img:first-child{opacity:1}
+    .grow .vline{stroke-dashoffset:0}
+    .grow .toast{opacity:1}
     .marquee-track[aria-hidden]{display:none}
     .marquee{justify-content:center;flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}
     .btn,.sticky,.plan{transition:none}
@@ -400,6 +484,8 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
   <symbol id="logo-ig" viewBox="0 0 48 48"><rect width="48" height="48" rx="14" fill="url(#igg)"/><rect x="12" y="12" width="24" height="24" rx="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="24" cy="24" r="5.5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="31.5" cy="16.5" r="1.8" fill="#fff"/></symbol>
+  <symbol id="logo-x" viewBox="0 0 48 48"><rect width="48" height="48" rx="14" fill="#111"/><path transform="translate(12 12)" fill="#fff" d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24H16.17l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25H8.08l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/></symbol>
+  <symbol id="logo-threads" viewBox="0 0 48 48"><rect width="48" height="48" rx="14" fill="#111"/><text x="24" y="33.5" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="29" font-weight="700" fill="#fff">@</text></symbol>
   <symbol id="logo-fb" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1877f2"/><path d="M26.6 38V26.4h3.9l.6-4.6h-4.5v-2.9c0-1.3.4-2.2 2.3-2.2h2.4v-4.1c-.4-.1-1.8-.2-3.5-.2-3.4 0-5.8 2.1-5.8 6v3.4h-3.9v4.6H22V38z" fill="#fff"/></symbol>
 </svg>
 
@@ -492,16 +578,37 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
         <div class="sec-head">
           <span class="pill">How it works</span>
           <h2 id="value-title" class="h2">A simple value<br>proposition</h2>
+          <p class="lead">Three steps between you and a social presence that works.</p>
         </div>
-        <div class="steps3">
-          <div class="vcard"><span class="num">01</span><div><small>What we do</small><strong>We do Social Media</strong></div>
-            <div class="vart" aria-hidden="true"><span class="badge ig"><svg><use href="#logo-ig"/></svg></span><div class="mini"><div class="grid9"><img src="/social-growth/assets/feed/01-latte-pour.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/02-croissant.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/03-customer.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/04-iced-coffee.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/05-diya.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/06-two-cups.webp" alt="" loading="lazy" decoding="async"></div></div><svg class="sparks" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M14 2v6M24 8l-4 4M26 18h-6"/></svg></div></div>
-          <div class="down" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></div>
-          <div class="vcard"><span class="num n2">02</span><div><small>How we do it</small><strong>Through Image +<br>Video Content</strong></div>
-            <div class="vart video" aria-hidden="true"><img src="/social-growth/assets/feed/06-two-cups.webp" alt="" loading="lazy"><i><svg class="i"><use href="#i-image"/></svg></i><i class="reel"><svg class="i"><use href="#i-play"/></svg></i></div></div>
-          <div class="down" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></div>
-          <div class="vcard"><span class="num n3">03</span><div><small>The result you get</small><strong>To help you grow<br>and get noticed</strong></div>
-            <div class="vart chart" aria-hidden="true"><span class="pill">Last 30 days ⌄</span><svg viewBox="0 0 170 70" preserveAspectRatio="none"><path d="M4 64 L30 56 L50 60 L72 46 L92 50 L114 32 L134 28 L166 6 L166 70 L4 70Z" fill="url(#trendfill)"/><path class="trend-line" d="M4 64 L30 56 L50 60 L72 46 L92 50 L114 32 L134 28 L166 6" fill="none" stroke="#22a06b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="166" cy="6" r="3.5" fill="#22a06b"/></svg></div></div>
+        <div class="vflow">
+          <article class="vstep">
+            <div class="vvis" aria-hidden="true">
+              <span class="badge ig"><svg><use href="#logo-ig"/></svg></span>
+              <span class="badge fb"><svg><use href="#logo-fb"/></svg></span>
+              <div class="mini-phone"><div class="scr"><div class="row"><i></i><b></b></div><div class="g"><img src="/social-growth/assets/feed/01-latte-pour.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/02-croissant.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/03-customer.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/04-iced-coffee.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/05-diya.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/06-two-cups.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/07-roasting.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/08-reel-pour.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/09-chai-milk.webp" alt="" loading="lazy" decoding="async"></div></div></div>
+            </div>
+            <div class="vtxt"><span class="num">01</span><small>What we do</small><strong>We do your Social Media</strong><p>Instagram and Facebook, planned and posted for you every month.</p></div>
+          </article>
+          <article class="vstep">
+            <div class="vvis" aria-hidden="true">
+              <div class="deck">
+                <div class="post"><img src="/social-growth/assets/feed/02-croissant.webp" alt="" loading="lazy" decoding="async"></div>
+                <div class="reelc"><img src="/social-growth/assets/feed/08-reel-pour.webp" alt="" loading="lazy" decoding="async"><span class="bar"></span><span class="play"><span></span></span></div>
+                <div class="chipset"><span>Designs</span><span>Reels</span><span>Captions</span></div>
+              </div>
+            </div>
+            <div class="vtxt"><span class="num n2">02</span><small>How we do it</small><strong>Through Image + Video Content</strong><p>Post designs, Reels and captions in one consistent style.</p></div>
+          </article>
+          <article class="vstep">
+            <div class="vvis" aria-hidden="true">
+              <div class="grow">
+                <span class="toast"><svg class="i"><use href="#i-chat"/></svg>New enquiry on WhatsApp</span>
+                <svg viewBox="0 0 240 140" preserveAspectRatio="none"><path class="varea" d="M6 128 L46 112 L80 118 L116 92 L148 98 L184 64 L210 56 L234 22 L234 140 L6 140Z" fill="url(#trendfill)"/><path class="vline" d="M6 128 L46 112 L80 118 L116 92 L148 98 L184 64 L210 56 L234 22" fill="none" stroke="#22a06b" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+                <span class="hearts"><i><svg><use href="#i-heart"/></svg></i><i><svg><use href="#i-heart"/></svg></i><i><svg><use href="#i-heart"/></svg></i></span>
+              </div>
+            </div>
+            <div class="vtxt"><span class="num n3">03</span><small>The result you get</small><strong>To help you grow and get noticed</strong><p>More people see you, engage with you and message you.</p></div>
+          </article>
         </div>
       </div>
     </section>
@@ -652,9 +759,17 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
           <svg class="sparks r" viewBox="0 0 46 46" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 10l8 6M4 26h10M10 40l8-6"/></svg>
           <span class="badge ig"><svg><use href="#logo-ig"/></svg></span>
           <span class="badge fb"><svg><use href="#logo-fb"/></svg></span>
+          <span class="badge x"><svg><use href="#logo-x"/></svg></span>
+          <span class="badge threads"><svg><use href="#logo-threads"/></svg></span>
           <span class="badge heart"><svg><use href="#i-heart"/></svg>Liked</span>
           <div class="follow-card">This month<b>26 posts</b><em>✓ scheduled</em></div>
-          <div class="phone"><div class="screen"><div class="ig-head"><span class="ig-avatar"><span>B&amp;B</span></span><div class="ig-name">brewandbloom.cafe<small>Café · Bengaluru</small></div></div><img class="post-img" src="/social-growth/assets/feed/01-latte-pour.webp" alt="" loading="lazy" decoding="async"><div class="post-bar"><svg class="i"><use href="#i-heart"/></svg><svg class="i"><use href="#i-chat"/></svg><svg class="i"><use href="#i-send"/></svg></div><div class="post-lines"><i></i><i></i></div></div></div>
+          <div class="phone"><div class="screen">
+            <div class="reel"><img src="/social-growth/assets/feed/08-reel-pour.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/03-customer.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/05-diya.webp" alt="" loading="lazy" decoding="async"><img src="/social-growth/assets/feed/04-iced-coffee.webp" alt="" loading="lazy" decoding="async"></div>
+            <div class="reel-bars"><i></i><i></i><i></i><i></i></div>
+            <div class="reel-hearts"><i><svg><use href="#i-heart"/></svg></i><i><svg><use href="#i-heart"/></svg></i><i><svg><use href="#i-heart"/></svg></i></div>
+            <div class="reel-side"><svg class="i like"><use href="#i-heart"/></svg><svg class="i"><use href="#i-chat"/></svg><svg class="i"><use href="#i-send"/></svg></div>
+            <div class="reel-meta"><b><i></i>brewandbloom.cafe</b>Fresh pour, slow mornings ☕ Order on WhatsApp</div>
+          </div></div>
         </div>
         <div class="cta-stack">
           <a class="btn btn-wa" data-wa="Hi Quantum Weave AI, I'd like to start my social media plan." href="https://wa.me/919972965677"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path transform="translate(4.3 4.3) scale(.64)" fill="currentColor" d="M9 7.6c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.1 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5l-2.4-1.2c-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7L9 7.6z"/></svg>Start on WhatsApp<svg class="i arrow"><use href="#i-arrow"/></svg></a>
@@ -880,14 +995,9 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
     gsap.utils.toArray('.sec-head').forEach(function(el){
       gsap.from(el.children, { y: 30, autoAlpha: 0, stagger: 0.08, scrollTrigger: { trigger: el, start: 'top 85%' } });
     });
-    ['.ba-col', '.stat', '.vcard', '.plan', '.get li', '.cal', '.legend', '.mosaic > *', '.process li'].forEach(function(sel){
+    ['.ba-col', '.stat', '.vstep', '.plan', '.get li', '.cal', '.legend', '.mosaic > *', '.process li'].forEach(function(sel){
       ScrollTrigger.batch(sel, { start: 'top 90%', once: true, onEnter: function(b){ gsap.from(b, { y: 40, autoAlpha: 0, stagger: 0.08, overwrite: 'auto' }); } });
     });
-    var line = document.querySelector('.trend-line');
-    if(line){
-      var len = line.getTotalLength();
-      gsap.fromTo(line, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut', scrollTrigger: { trigger: line, start: 'top 85%' } });
-    }
     gsap.from('.final .visual .phone', { y: 60, autoAlpha: 0, scrollTrigger: { trigger: '.final .visual', start: 'top 85%' } });
     gsap.from('.final .visual .badge, .final .follow-card, .final .sparks', { scale: 0.5, autoAlpha: 0, stagger: 0.1, ease: 'back.out(2)', duration: 0.8, scrollTrigger: { trigger: '.final .visual', start: 'top 80%' } });
     addEventListener('load', function(){ ScrollTrigger.refresh(); });
