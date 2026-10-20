@@ -204,8 +204,8 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
 
   /* 04 Packages (template: compact cards with a chevron; tap the card to pay) */
   .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
-  .plan{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 52px 22px 24px;box-shadow:var(--shadow);cursor:pointer;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s}
-  .plan:hover{transform:translateY(-4px);box-shadow:0 22px 44px -22px rgba(0,0,0,.28)}
+  .plan{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 52px 22px 24px;box-shadow:var(--shadow);cursor:pointer;transition:translate .3s cubic-bezier(.16,1,.3,1),box-shadow .3s}
+  .plan:hover{translate:0 -4px;box-shadow:0 22px 44px -22px rgba(0,0,0,.28)}
   .plan.featured{border:2px solid #f39ab8;background:#fff7fa}
   .plan .most{position:absolute;top:16px;right:16px;font-size:11px;font-weight:700;color:#fff;background:linear-gradient(90deg,#e1306c,#f77737);padding:4px 10px;border-radius:999px}
   .plan-ico{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;margin-bottom:16px}
@@ -227,7 +227,7 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   .pay-status{margin:8px 0 0;font-size:13px;color:#c9271f}
   .pay-status:empty{display:none}
   .plan.is-current{outline:3px solid var(--wa);outline-offset:-3px}
-  .plans-foot{margin:22px auto 0;max-width:760px;text-align:center;font-size:13.5px;color:var(--ink-2)}
+  .plans-foot{margin:32px auto 0;max-width:760px;text-align:center;font-size:13.5px;color:var(--ink-2)}
   .plans-foot a{color:var(--ink);font-weight:600}
   .paid-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin:0 0 24px;padding:18px 22px;border-radius:18px;background:#fff;box-shadow:var(--shadow);border:1px solid var(--line)}
   .paid-banner[hidden]{display:none}
@@ -268,8 +268,8 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   .mosaic > *{grid-column:span 2}
   .mosaic > :nth-child(n+4){grid-column:span 2}
   .mosaic > :nth-child(4){grid-column:2 / span 2}
-  .mosaic img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;box-shadow:0 8px 20px -12px rgba(0,0,0,.35);transition:transform .5s cubic-bezier(.16,1,.3,1)}
-  .mosaic img:hover{transform:scale(1.04)}
+  .mosaic img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;box-shadow:0 8px 20px -12px rgba(0,0,0,.35);transition:scale .5s cubic-bezier(.16,1,.3,1)}
+  .mosaic img:hover{scale:1.04}
   .mosaic .reel{position:relative;overflow:hidden;border-radius:14px}
   .mosaic .reel img{animation:kb 7s ease-in-out infinite alternate}
   .mosaic .reel::after{content:"";position:absolute;top:10px;right:10px;width:18px;height:18px;background:#fff;clip-path:polygon(25% 15%,90% 50%,25% 85%);filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
