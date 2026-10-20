@@ -50,6 +50,19 @@ Customers pay the first month online. Later months are collected with Razorpay p
 Until the config file exists, the Pay buttons show "Online payment isn't available right now" and point
 people to WhatsApp, so nothing breaks.
 
+## Security checks (tested)
+
+- Price comes only from `lib.php`; a tampered `amount` from the browser is ignored.
+- Payment is confirmed only by Razorpay's HMAC signature (`hash_equals`), and the plan is read back from the order.
+- Endpoints accept only `POST` with a JSON body under 4 KB; requests from other sites (foreign `Origin`) get 403.
+- `public/api/razorpay/.htaccess` blocks everything in that folder except the two endpoints (including `lib.php` and PHP `error_log` files).
+- Razorpay errors go to the server log, never to the visitor.
+- GSAP and Lenis load with Subresource Integrity hashes; Razorpay's `checkout.js` cannot be pinned (Razorpay updates it).
+- Keys live outside the web root and `razorpay-config.php` is git-ignored.
+
+Before going live, check in Razorpay **Account & Settings → Payment capture** that live payments are captured **automatically**.
+Otherwise payments stay "authorized" and are refunded after a few days.
+
 ## Later
 
 - Add a Razorpay webhook (`payment.captured`) if you want payments recorded in Supabase or announced on WhatsApp.

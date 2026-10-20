@@ -32,7 +32,17 @@ function require_post_json(): array
         header('Allow: POST');
         respond(405, ['success' => false, 'message' => 'Method not allowed.']);
     }
-    $body = json_decode(file_get_contents('php://input') ?: '', true);
+    // Browsers send Origin on cross-site requests; reject other sites calling this from a visitor's browser.
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    if ($origin !== '' && parse_url($origin, PHP_URL_HOST) !== strtok($host, ':')) {
+        respond(403, ['success' => false, 'message' => 'Request not allowed.']);
+    }
+    if (stripos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== 0) {
+        respond(415, ['success' => false, 'message' => 'Invalid request.']);
+    }
+    $raw = file_get_contents('php://input', false, null, 0, 4096) ?: '';
+    $body = json_decode($raw, true);
     if (!is_array($body)) {
         respond(400, ['success' => false, 'message' => 'Invalid request.']);
     }
