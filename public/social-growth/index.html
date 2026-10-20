@@ -260,6 +260,13 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
   .plan.featured .plan-wa{color:rgba(255,255,255,.9)}
   .pay-btn[aria-busy="true"]{opacity:.7;cursor:progress}
   .pay-status{margin:8px 0 0;min-height:1em;font-size:13px;text-align:center;color:#c9271f}
+  .paid-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin:0 0 28px;padding:18px 22px;border-radius:14px;background:#fff;box-shadow:var(--sheet-shadow);border-left:0}
+  .paid-banner[hidden]{display:none}
+  .paid-banner b{font-family:var(--f-display);font-size:19px;letter-spacing:-.01em}
+  .paid-banner p{margin:4px 0 0;font-size:14px;color:var(--ink-soft)}
+  .paid-banner .btn{min-height:46px;font-size:15px}
+  .paid-banner button.linkish{background:none;border:0;padding:0;margin-left:6px;font:inherit;color:var(--ink-soft);text-decoration:underline;cursor:pointer}
+  .plan.is-current{outline:3px solid var(--wa-btn);outline-offset:-3px}
   .plan.featured .pay-status{color:#fff}
   .plan.featured{background:var(--ig-deep);color:#fff;transform:translateY(-12px);box-shadow:0 24px 50px -20px rgba(150,47,191,.6)}
   .plan.featured .for,.plan.featured .price small{color:rgba(255,255,255,.86)}
@@ -556,6 +563,7 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
       <div class="wrap">
         <h2 id="plans-title" class="display">Choose the right level</h2>
         <p class="intro">Start with consistent presence. Upgrade when social media needs to contribute more directly to growth.</p>
+        <div class="paid-banner" id="paid-banner" hidden></div>
         <div class="plan-grid">
           <article class="sheet plan">
             <h3>Starter Social</h3>
@@ -980,6 +988,7 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
           handler: function(resp){
             status.style.color = ''; status.textContent = 'Confirming your payment…';
             post('verify-payment.php', resp).then(function(v){
+              savePaid(v.plan, v.payment_id);
               location.href = '/social-growth/thank-you/?plan=' + encodeURIComponent(v.plan) + '&payment=' + encodeURIComponent(v.payment_id);
             }).catch(function(e){ busy(false); status.textContent = e.message; });
           }
@@ -989,6 +998,58 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
       }).catch(function(e){ busy(false); status.textContent = e.message; });
     });
   });
+
+  // Return visits: remember a verified payment in this browser so a paying customer isn't asked to pay again.
+  // Only this device knows; clearing site data or another device shows the normal page.
+  var PLAN_ORDER = ['starter', 'growth', 'scale'];
+  var PLAN_NAMES = { starter: 'Starter Social', growth: 'Growth Social', scale: 'Scale Social' };
+  var STORE_KEY = 'qwSocialPaid';
+  function savePaid(plan, payment){
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ plan: plan, payment: payment, paidAt: Date.now() })); } catch(e){}
+  }
+  (function showPaidState(){
+    var paid = null;
+    try { paid = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch(e){}
+    if(!paid || !PLAN_NAMES[paid.plan] || typeof paid.paidAt !== 'number') return;
+    var fmt = function(t){ return new Date(t).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); };
+    var due = paid.paidAt + 30 * 86400000;
+    var active = Date.now() < due;
+    var name = PLAN_NAMES[paid.plan];
+    var payId = String(paid.payment || '').replace(/[^A-Za-z0-9_]/g, '');
+    var waText = active
+      ? 'Hi Quantum Weave, I\u2019m on ' + name + ' (Payment ID: ' + payId + '). I have a question about my plan.'
+      : 'Hi Quantum Weave, my ' + name + ' month is due. Please send me the payment link for next month. (Last Payment ID: ' + payId + ')';
+    var banner = document.getElementById('paid-banner');
+    banner.innerHTML =
+      '<div><b>You\u2019re on ' + name + '</b>' +
+      '<p>Paid ' + fmt(paid.paidAt) + ' \u00b7 Payment ID ' + payId + ' \u00b7 ' +
+      (active ? 'Next month due ' + fmt(due) + '. We\u2019ll send you a Razorpay link.' : 'Your next month is due. Message us for the payment link.') +
+      '<button type="button" class="linkish" id="paid-clear">Not you?</button></p></div>' +
+      '<a class="btn btn-wa" href="https://wa.me/919972965677?text=' + encodeURIComponent(waText) + '">' + (active ? 'Message us about your plan' : 'Get next month\u2019s link') + '</a>';
+    banner.hidden = false;
+    document.getElementById('paid-clear').addEventListener('click', function(){
+      try { localStorage.removeItem(STORE_KEY); } catch(e){}
+      location.reload();
+    });
+    if(!active) return;
+    // While the month is active: no second payment. The current plan is marked; others become WhatsApp change requests.
+    document.querySelectorAll('.pay-btn').forEach(function(btn){
+      var plan = btn.dataset.plan, card = btn.closest('.plan');
+      var a = document.createElement('a');
+      a.className = btn.className.replace('pay-btn', '').trim();
+      if(plan === paid.plan){
+        card.classList.add('is-current');
+        a.textContent = 'Your current plan';
+        a.href = 'https://wa.me/919972965677?text=' + encodeURIComponent(waText);
+      } else {
+        var verb = PLAN_ORDER.indexOf(plan) > PLAN_ORDER.indexOf(paid.plan) ? 'Upgrade' : 'Switch';
+        a.textContent = verb + ' to ' + PLAN_NAMES[plan];
+        a.href = 'https://wa.me/919972965677?text=' + encodeURIComponent('Hi Quantum Weave, I\u2019m on ' + name + ' (Payment ID: ' + payId + '). I\u2019d like to ' + verb.toLowerCase() + ' to ' + PLAN_NAMES[plan] + ' from next month.');
+      }
+      btn.replaceWith(a);
+    });
+    document.querySelectorAll('.plan .gst').forEach(function(g){ g.hidden = true; });
+  })();
 
   // Mark today's column in the posting-times grid.
   var dayIdx = (new Date().getDay() + 6) % 7;
