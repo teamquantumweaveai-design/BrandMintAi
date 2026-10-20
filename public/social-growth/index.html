@@ -122,8 +122,11 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
   .hero h1{font-size:clamp(36px,4.6vw,66px);margin:14px 0 18px;line-height:1}
   .hero h1 .hl{color:var(--ig-pink)}
   .lead{font-size:clamp(17px,1.5vw,20px);line-height:1.5;max-width:46ch;margin:0;color:var(--ink-soft);text-wrap:pretty}
-  .outcomes{list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:560px}
-  .outcomes li{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-weight:700;font-size:14px;line-height:1.25}
+  .outcomes-roll{margin:28px 0 0;max-width:560px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+  .outcomes{list-style:none;margin:0;padding:0;display:flex;width:max-content;animation:outcomes-roll 22s linear infinite}
+  .outcomes-roll:hover .outcomes{animation-play-state:paused}
+  @keyframes outcomes-roll{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+  .outcomes li{flex:none;width:140px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-weight:700;font-size:14px;line-height:1.25}
   .outcomes i{width:52px;height:52px;border-radius:14px;display:grid;place-items:center}
   .outcomes svg{width:26px;height:26px}
   .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
@@ -299,16 +302,11 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
   .times > li.today time{background:rgba(255,255,255,.18)}
   .times .now{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:#fff;color:var(--ig-pink);padding:2px 8px;border-radius:999px;white-space:nowrap}
   .times-note{font-size:14px;color:#b9b0c3;margin:14px 0 0}
-  .when-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;margin-top:64px;align-items:start}
+  .when-grid{margin-top:64px}
   .when-grid h3{font-weight:800;letter-spacing:-.02em;font-size:clamp(24px,2.4vw,30px);margin:0 0 16px;line-height:1.1}
-  .week{width:100%;border-collapse:collapse;font-size:15px}
-  .week th{font-size:13px;font-weight:700;color:#b9b0c3;text-align:left;padding:0 10px 10px 0;border-bottom:2px solid rgba(255,255,255,.5)}
-  .week td{padding:12px 10px 12px 0;border-bottom:1px solid rgba(255,255,255,.14);vertical-align:top;color:#e9e4ef}
-  .week td:first-child{font-weight:700;color:#fff;white-space:nowrap}
-  .week tr.total td{font-weight:800;color:#fff;border-bottom:0}
-  .tips{list-style:none;margin:0;padding:0}
+  .tips{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 32px}
   .tips li{position:relative;padding:14px 0 14px 40px;border-top:1px solid rgba(255,255,255,.14);color:#e9e4ef}
-  .tips li:last-child{border-bottom:1px solid rgba(255,255,255,.14)}
+  .tips li{border-bottom:1px solid rgba(255,255,255,.14)}
   .tips li::before{content:"";position:absolute;left:0;top:14px;width:26px;height:26px;border-radius:50%;background:var(--ig)}
   .tips li::after{content:"";position:absolute;left:8px;top:22px;width:10px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
   .tips strong{color:#fff}
@@ -362,7 +360,8 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
     .plan-grid{grid-template-columns:1fr;max-width:520px}
     .plan.featured{transform:none}
     .mix-wrap,.faq-wrap{grid-template-columns:1fr;gap:24px}
-    .when-grid{grid-template-columns:1fr;gap:48px}
+    .tips{grid-template-columns:1fr}
+    .tips li + li{border-top:0}
     .times{grid-template-columns:1fr;gap:8px}
     .times > li{display:grid;grid-template-columns:64px 1fr;align-items:center;gap:10px;padding:10px 12px}
     .times h3{margin:0;text-align:left}
@@ -378,7 +377,8 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
     .hero{padding:88px 0 40px}
     .hero h1{margin:12px 0 14px}
     .kicker{font-size:12px;letter-spacing:.22em}
-    .outcomes{margin-top:22px;gap:6px}
+    .outcomes-roll{margin-top:22px}
+    .outcomes li{width:110px}
     .outcomes li{font-size:12.5px}
     .outcomes i{width:46px;height:46px}
     .included li{font-size:13px}
@@ -405,6 +405,9 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     .chip{animation:none}
+    .outcomes{animation:none;flex-wrap:wrap;width:auto}
+    .outcomes li[aria-hidden]{display:none}
+    .outcomes-roll{-webkit-mask-image:none;mask-image:none}
     .marquee-track{animation:none}
     .marquee-track[aria-hidden]{display:none}
     .marquee{justify-content:center;flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}
@@ -436,12 +439,12 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
           <p class="kicker">Social Growth System</p>
           <h1 id="hero-title" class="display">Turn your <span class="hl">social media</span> into opportunities</h1>
           <p class="lead">We plan, create and publish Instagram &amp; Facebook content that builds visibility, trust and conversations for your business.</p>
-          <ul class="outcomes">
+          <div class="outcomes-roll"><ul class="outcomes">
             <li><i style="background:#fde3ee;color:#d62976"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></i>More visibility</li>
             <li><i style="background:#ece4fb;color:#6a3fc9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg></i>Real engagement</li>
             <li><i style="background:#dcf3e6;color:#0b8a68"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></i>More enquiries</li>
             <li><i style="background:#feeadb;color:#c2560a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16"/><path d="M7 16v-4M12 16V8M17 16V5"/></svg></i>Business growth</li>
-          </ul>
+          </ul></div>
         </div>
 
         <div class="hero-visual">
@@ -672,18 +675,6 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
 
         <div class="when-grid">
           <div>
-            <h3>Your week on each plan</h3>
-            <table class="week">
-              <thead><tr><th scope="col">Day</th><th scope="col">Starter</th><th scope="col">Growth</th><th scope="col">Scale</th></tr></thead>
-              <tbody>
-                <tr><td>Mon – Sat</td><td>1 post a day</td><td>2 posts a day</td><td>3 posts a day</td></tr>
-                <tr><td>Sunday</td><td>Rest day</td><td>Post on 2 Sundays</td><td>1 post</td></tr>
-                <tr><td>Reels</td><td>1 a week</td><td>1–2 a week</td><td>2 a week</td></tr>
-                <tr class="total"><td>Per month</td><td>26 + 4 Reels</td><td>54 + 6 Reels</td><td>82 + 8 Reels</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div>
             <h3>Posting habits we follow</h3>
             <ul class="tips">
               <li><strong>Post about an hour before</strong> your audience is most active, so the post is ready when they open the app.</li>
@@ -913,7 +904,7 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
     });
 
     // Groups of cards and rows arrive in a stagger as they enter.
-    ['.need', '.inside-list li', '.plan', '.mix tbody tr', '.times > li', '.week tbody tr', '.tips li', '.steps li', 'details', '.work-points li'].forEach(function(sel){
+    ['.need', '.inside-list li', '.plan', '.mix tbody tr', '.times > li', '.tips li', '.steps li', 'details', '.work-points li'].forEach(function(sel){
       ScrollTrigger.batch(sel, {
         start: 'top 90%', once: true,
         onEnter: function(batch){ gsap.from(batch, { y: 48, autoAlpha: 0, stagger: 0.09, overwrite: 'auto' }); }
@@ -1053,6 +1044,14 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
     });
     document.querySelectorAll('.plan .gst').forEach(function(g){ g.hidden = true; });
   })();
+
+  // Hero outcome icons: one copy appended so the CSS loop (-50%) is seamless.
+  var outcomes = document.querySelector('.outcomes');
+  if(outcomes){
+    Array.prototype.slice.call(outcomes.children).forEach(function(li){
+      var c = li.cloneNode(true); c.setAttribute('aria-hidden', 'true'); outcomes.appendChild(c);
+    });
+  }
 
   // Mark today's column in the posting-times grid.
   var dayIdx = (new Date().getDay() + 6) % 7;
