@@ -122,13 +122,6 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
   .hero h1{font-size:clamp(36px,4.6vw,66px);margin:14px 0 18px;line-height:1}
   .hero h1 .hl{color:var(--ig-pink)}
   .lead{font-size:clamp(17px,1.5vw,20px);line-height:1.5;max-width:46ch;margin:0;color:var(--ink-soft);text-wrap:pretty}
-  .outcomes-roll{margin:28px 0 0;max-width:560px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
-  .outcomes{list-style:none;margin:0;padding:0;display:flex;width:max-content;animation:outcomes-roll 22s linear infinite}
-  .outcomes-roll:hover .outcomes{animation-play-state:paused}
-  @keyframes outcomes-roll{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
-  .outcomes li{flex:none;width:140px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-weight:700;font-size:14px;line-height:1.25}
-  .outcomes i{width:52px;height:52px;border-radius:14px;display:grid;place-items:center}
-  .outcomes svg{width:26px;height:26px}
   .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
 
 
@@ -184,15 +177,15 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
   .cal-note{font-size:13px;color:var(--ink-soft);margin:10px 0 0}
 
   /* Client logos */
-  .clients{background:#fff;padding:28px 0 20px;border-bottom:1px solid var(--rule)}
-  .clients-title{margin:0 0 14px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+  .hero-clients{margin:30px 0 0;max-width:560px}
+  .clients-title{margin:0 0 12px;font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
   .marquee{display:flex;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
   .marquee-track{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:56px;padding-right:56px;flex:none;will-change:transform;animation:marquee var(--marquee-dur,60s) linear infinite}
   .marquee:hover .marquee-track{animation-play-state:paused}
   .marquee-track li{flex:none;display:flex;align-items:center;height:40px}
   .marquee-track img{width:auto;display:block}
   @keyframes marquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-100%,0,0)}}
-  .clients-note{margin:10px 0 0;text-align:center;font-size:12px;color:var(--ink-soft)}
+  .clients-note{margin:8px 0 0;font-size:12px;color:var(--ink-soft)}
 
   /* Content in action */
   .work-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:72px;align-items:center}
@@ -377,10 +370,6 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
     .hero{padding:88px 0 40px}
     .hero h1{margin:12px 0 14px}
     .kicker{font-size:12px;letter-spacing:.22em}
-    .outcomes-roll{margin-top:22px}
-    .outcomes li{width:110px}
-    .outcomes li{font-size:12.5px}
-    .outcomes i{width:46px;height:46px}
     .included li{font-size:13px}
     .wa-long{display:none}
     .marquee-track{gap:40px;padding-right:40px}
@@ -405,9 +394,6 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     .chip{animation:none}
-    .outcomes{animation:none;flex-wrap:wrap;width:auto}
-    .outcomes li[aria-hidden]{display:none}
-    .outcomes-roll{-webkit-mask-image:none;mask-image:none}
     .marquee-track{animation:none}
     .marquee-track[aria-hidden]{display:none}
     .marquee{justify-content:center;flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}
@@ -439,12 +425,14 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
           <p class="kicker">Social Growth System</p>
           <h1 id="hero-title" class="display">Turn your <span class="hl">social media</span> into opportunities</h1>
           <p class="lead">We plan, create and publish Instagram &amp; Facebook content that builds visibility, trust and conversations for your business.</p>
-          <div class="outcomes-roll"><ul class="outcomes">
-            <li><i style="background:#fde3ee;color:#d62976"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></i>More visibility</li>
-            <li><i style="background:#ece4fb;color:#6a3fc9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg></i>Real engagement</li>
-            <li><i style="background:#dcf3e6;color:#0b8a68"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></i>More enquiries</li>
-            <li><i style="background:#feeadb;color:#c2560a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16"/><path d="M7 16v-4M12 16V8M17 16V5"/></svg></i>Business growth</li>
-          </ul></div>
+          <div class="hero-clients" aria-labelledby="clients-title">
+            <p class="clients-title" id="clients-title">Brands our group has delivered for</p>
+            <div class="marquee">
+              <ul class="marquee-track"><li><img src="/social-growth/assets/clients/ey.png" alt="EY" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/hm.png" alt="H&amp;M" style="height:26px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/buhler.png" alt="Bühler" style="height:16px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bluewaters.svg" alt="Bluewater Adventure Sports" style="height:34px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ramaiah.svg" alt="Ramaiah" style="height:29px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/toyota.png" alt="Toyota" style="height:32px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/tata-power-solar.png" alt="Tata Power Solar" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/canara-bank.png" alt="Canara Bank" style="height:24px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/taapasi-kia.png" alt="Taapasi Kia" style="height:18px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bel-officers-club.png" alt="Bharat Electronics Officers' Club" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ctdi.png" alt="CTDI" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/coe-hm.png" alt="H&amp;M Center of Excellence" style="height:36px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/st-josephs.png" alt="St Joseph's School" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/vision-india.png" alt="Vision India" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/feather.png" alt="Feather Z-16" style="height:38px" loading="lazy" decoding="async"></li></ul>
+              <ul class="marquee-track" aria-hidden="true"><li><img src="/social-growth/assets/clients/ey.png" alt="" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/hm.png" alt="" style="height:26px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/buhler.png" alt="" style="height:16px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bluewaters.svg" alt="" style="height:34px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ramaiah.svg" alt="" style="height:29px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/toyota.png" alt="" style="height:32px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/tata-power-solar.png" alt="" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/canara-bank.png" alt="" style="height:24px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/taapasi-kia.png" alt="" style="height:18px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bel-officers-club.png" alt="" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ctdi.png" alt="" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/coe-hm.png" alt="" style="height:36px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/st-josephs.png" alt="" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/vision-india.png" alt="" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/feather.png" alt="" style="height:38px" loading="lazy" decoding="async"></li></ul>
+            </div>
+            <p class="clients-note">Work delivered across BrandMint AI ventures.</p>
+          </div>
         </div>
 
         <div class="hero-visual">
@@ -477,17 +465,6 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18h2"/></svg>Instagram + Facebook</li>
         </ul>
       </div>
-    </section>
-
-    <section class="clients" aria-labelledby="clients-title">
-      <div class="wrap">
-        <p class="clients-title" id="clients-title">Brands our group has delivered for</p>
-      </div>
-      <div class="marquee">
-        <ul class="marquee-track"><li><img src="/social-growth/assets/clients/ey.png" alt="EY" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/hm.png" alt="H&amp;M" style="height:26px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/buhler.png" alt="Bühler" style="height:16px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bluewaters.svg" alt="Bluewater Adventure Sports" style="height:34px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ramaiah.svg" alt="Ramaiah" style="height:29px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/toyota.png" alt="Toyota" style="height:32px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/tata-power-solar.png" alt="Tata Power Solar" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/canara-bank.png" alt="Canara Bank" style="height:24px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/taapasi-kia.png" alt="Taapasi Kia" style="height:18px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bel-officers-club.png" alt="Bharat Electronics Officers' Club" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ctdi.png" alt="CTDI" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/coe-hm.png" alt="H&amp;M Center of Excellence" style="height:36px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/st-josephs.png" alt="St Joseph's School" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/vision-india.png" alt="Vision India" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/feather.png" alt="Feather Z-16" style="height:38px" loading="lazy" decoding="async"></li></ul>
-        <ul class="marquee-track" aria-hidden="true"><li><img src="/social-growth/assets/clients/ey.png" alt="" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/hm.png" alt="" style="height:26px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/buhler.png" alt="" style="height:16px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bluewaters.svg" alt="" style="height:34px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ramaiah.svg" alt="" style="height:29px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/toyota.png" alt="" style="height:32px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/tata-power-solar.png" alt="" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/canara-bank.png" alt="" style="height:24px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/taapasi-kia.png" alt="" style="height:18px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bel-officers-club.png" alt="" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ctdi.png" alt="" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/coe-hm.png" alt="" style="height:36px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/st-josephs.png" alt="" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/vision-india.png" alt="" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/feather.png" alt="" style="height:38px" loading="lazy" decoding="async"></li></ul>
-      </div>
-      <p class="clients-note">Work delivered across BrandMint AI ventures.</p>
     </section>
 
     <section class="section" aria-labelledby="needs-title">
@@ -890,7 +867,7 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
     tl.from('.hero .kicker', { y: 20, autoAlpha: 0, duration: 0.8 })
       .from('#hero-title .wi', { yPercent: 115, duration: 1.2, stagger: 0.06 }, '-=0.5')
       .from('.hero .lead', { y: 24, autoAlpha: 0 }, '-=0.85')
-      .from('.outcomes li', { y: 24, autoAlpha: 0, scale: 0.9, stagger: 0.07, ease: 'back.out(1.6)', duration: 0.8 }, '-=0.8')
+      .from('.hero-clients', { y: 24, autoAlpha: 0, duration: 0.9 }, '-=0.8')
       .from('.hero .actions .btn', { y: 20, autoAlpha: 0, stagger: 0.08 }, '-=0.6')
       .from('.included li', { y: 16, autoAlpha: 0, stagger: 0.05, duration: 0.8 }, '-=0.7')
       .from('.hero-visual', { y: -90, rotation: -9, autoAlpha: 0, transformOrigin: '50% 0%', duration: 1.8, ease: 'elastic.out(1, 0.55)' }, 0.35);
@@ -899,7 +876,7 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
     gsap.to('.hero-visual', { yPercent: -10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
     // Section headings and intros.
-    gsap.utils.toArray('main section:not(.hero) h2.display, main section:not(.hero) .intro, .clients-title').forEach(function(el){
+    gsap.utils.toArray('main section:not(.hero) h2.display, main section:not(.hero) .intro').forEach(function(el){
       gsap.from(el, { y: 44, autoAlpha: 0, scrollTrigger: { trigger: el, start: 'top 88%' } });
     });
 
@@ -1044,14 +1021,6 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
     });
     document.querySelectorAll('.plan .gst').forEach(function(g){ g.hidden = true; });
   })();
-
-  // Hero outcome icons: one copy appended so the CSS loop (-50%) is seamless.
-  var outcomes = document.querySelector('.outcomes');
-  if(outcomes){
-    Array.prototype.slice.call(outcomes.children).forEach(function(li){
-      var c = li.cloneNode(true); c.setAttribute('aria-hidden', 'true'); outcomes.appendChild(c);
-    });
-  }
 
   // Mark today's column in the posting-times grid.
   var dayIdx = (new Date().getDay() + 6) % 7;
