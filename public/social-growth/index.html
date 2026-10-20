@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Powered Social Growth System | Instagram + Facebook | Quantum Weave</title>
+<meta name="description" content="Social media management for growing businesses in Bangalore and beyond. A monthly Instagram and Facebook content system with posts, Reels, calendar, publishing and reporting. Plans from ₹3,999/month.">
+<meta property="og:title" content="Don't just post. Build a social presence that creates trust and conversations.">
+<meta property="og:description" content="Monthly Instagram + Facebook content system from Quantum Weave. Plans from ₹3,999/month.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://brandmintai.io/social-growth/">
+<link rel="canonical" href="https://brandmintai.io/social-growth/">
+<meta name="theme-color" content="#962fbf">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:wght@400..800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "AI-Powered Social Growth System",
+  "serviceType": "Social media management",
+  "provider": {"@type": "Organization", "name": "Quantum Weave", "telephone": "+91-99729-65677"},
+  "areaServed": "Bengaluru, India",
+  "offers": [
+    {"@type": "Offer", "name": "Starter Social", "price": "3999", "priceCurrency": "INR", "description": "26 posts + 4 Reels per month, Instagram + Facebook"},
+    {"@type": "Offer", "name": "Growth Social", "price": "6999", "priceCurrency": "INR", "description": "54 posts + 6 Reels per month, Instagram + Facebook"},
+    {"@type": "Offer", "name": "Scale Social", "price": "9999", "priceCurrency": "INR", "description": "82 posts + 8 Reels per month, Instagram + Facebook"}
+  ]
+}
+</script>
+<!--
+THESIS: The month is the product. Agencies sell a post count; this page shows a planned month where every post has a day and a job. Refuses the dark-gradient "AI agency" hero.
+OWN-WORLD: A printed wall calendar on an Instagram-gradient wall. Ink type, paper sheets with offset shadows, seven role-colour chips, condensed calendar numerals.
+STORY: Owner sees a filled month, switches plans to see 26 / 54 / 82 posts land, understands it is a system, taps WhatsApp.
+FIRST VIEWPORT: Left, headline + CTA on the Instagram gradient. Right (below on mobile), the calendar sheet with plan switcher.
+FORM: Wall-calendar planner; signature = plan switch refilling the month.
+-->
+<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("js-anim")</script>
+<style>
+  :root{
+    --ig-blue:#4f5bd5; --ig-purple:#962fbf; --ig-pink:#d62976; --ig-orange:#fa7e1e; --ig-yellow:#feda75;
+    --ig:linear-gradient(125deg,var(--ig-blue) 0%,var(--ig-purple) 30%,var(--ig-pink) 58%,var(--ig-orange) 86%,var(--ig-yellow) 108%);
+    --ig-deep:linear-gradient(160deg,#5b51d8 0%,var(--ig-purple) 42%,var(--ig-pink) 100%);
+    --ink:#16121c;
+    --ink-soft:#4d4558;
+    --paper:#ffffff;
+    --wall:#f7f4f8;
+    --night:#16121c;
+    --night-2:#221c2b;
+    --rule:rgba(22,18,28,.14);
+    --wa:#1fa855;
+    --wa-btn:#1a8f4a;
+    --f-display:"Bricolage Grotesque",system-ui,sans-serif;
+    --f-body:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;
+    --r-edu:#2350d8; --r-auth:#6a3fc9; --r-prod:#0b8a68; --r-proof:#cf2f74;
+    --r-eng:#ea6a12; --r-offer:#c9271f; --r-fest:#d99a00;
+    --sheet-shadow:0 18px 40px -18px rgba(22,18,28,.4), 0 2px 6px -2px rgba(22,18,28,.12);
+    --max:1180px;
+    --gutter:clamp(16px,4vw,32px);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  html.lenis,html.lenis body{height:auto}
+  html.lenis{scroll-behavior:auto}
+  .lenis.lenis-stopped{overflow:clip}
+
+  /* Motion (GSAP): the hero stays hidden only until GSAP takes over */
+  .js-anim .hero{visibility:hidden}
+  #hero-title .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+  #hero-title .wi{display:inline-block;will-change:transform}
+  body{margin:0;font-family:var(--f-body);font-size:17px;line-height:1.6;color:var(--ink);background:var(--wall)}
+  a{color:inherit}
+  img,svg{display:block}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+  .display,.logo,.cal-title,.need h3,.inside-list strong,.plan h3,.price,.volume b,.steps h3,.steps li::before,.quote,.mix td.n,.times h3,.when-grid h3{font-family:var(--f-display)}
+  .display{font-weight:800;letter-spacing:-.03em;line-height:1.02;text-wrap:balance}
+  h2.display{font-size:clamp(32px,4.6vw,54px);margin:0 0 14px}
+  .intro{color:var(--ink-soft);font-size:clamp(17px,1.6vw,19px);max-width:60ch;margin:0 0 40px;text-wrap:pretty}
+  :focus-visible{outline:3px solid var(--ig-pink);outline-offset:3px;border-radius:6px}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 22px;border-radius:12px;font:inherit;font-weight:700;font-size:16px;text-decoration:none;border:2px solid var(--ink);cursor:pointer;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s,background .2s}
+  .btn-ink{background:var(--ink);color:#fff;box-shadow:0 6px 0 -1px rgba(22,18,28,.25)}
+  .btn-ink:hover{transform:translateY(-2px);box-shadow:0 9px 0 -1px rgba(22,18,28,.25)}
+  .btn-line{background:transparent;color:var(--ink)}
+  .btn-line:hover{background:rgba(22,18,28,.06)}
+  .btn-paper{background:#fff;color:var(--ink);border-color:#fff;box-shadow:0 6px 0 -1px rgba(22,18,28,.22)}
+  .btn-paper:hover{transform:translateY(-2px);box-shadow:0 9px 0 -1px rgba(22,18,28,.22)}
+  .wa-dot{width:10px;height:10px;border-radius:50%;background:var(--wa);box-shadow:0 0 0 3px rgba(31,168,85,.25);flex:none}
+
+  /* Nav sits over the light hero */
+  .top{position:absolute;top:0;left:0;right:0;z-index:5}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0}
+  .logo{display:flex;align-items:center;gap:10px;white-space:nowrap;font-weight:800;letter-spacing:-.02em;font-size:19px;text-decoration:none}
+  .logo svg{width:32px;height:32px}
+  .nav-links{display:flex;align-items:center;gap:26px;font-weight:600;font-size:15px}
+  .nav-links a:not(.btn){text-decoration:none}
+  .nav-links a:not(.btn):hover{text-decoration:underline;text-underline-offset:4px}
+  .nav .btn{min-height:44px;padding:0 16px;font-size:15px;white-space:nowrap}
+
+  /* WhatsApp button */
+  .btn-wa{background:var(--wa-btn);border-color:var(--wa-btn);color:#fff;box-shadow:0 8px 20px -8px rgba(26,143,74,.6)}
+  .btn-wa:hover{background:#157a3e;border-color:#157a3e;transform:translateY(-2px)}
+  .btn-wa svg{width:22px;height:22px;flex:none}
+  .btn .arrow{width:18px;height:18px;flex:none}
+
+  /* Hero: light ground with a soft Instagram glow */
+  .hero{position:relative;overflow:hidden;padding:100px 0 48px;background:
+    radial-gradient(60% 55% at 100% 0%,rgba(214,41,118,.20),transparent 70%),
+    radial-gradient(55% 60% at 92% 100%,rgba(250,126,30,.22),transparent 70%),
+    radial-gradient(50% 50% at 0% 100%,rgba(150,47,191,.16),transparent 70%),
+    #fdf8fb}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);grid-template-areas:"copy plans" "actions plans" "inc inc";column-gap:64px;align-items:start}
+  .hero-visual .cal{max-width:470px;margin-left:auto}
+  .hero-copy{grid-area:copy}
+  .hero-visual{grid-area:plans;align-self:center}
+  .hero .actions{grid-area:actions}
+  .included{grid-area:inc}
+  .kicker{display:block;font-weight:700;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-soft);margin:0}
+  .hero h1{font-size:clamp(40px,5.2vw,74px);margin:14px 0 18px;line-height:1}
+  .hero h1 .hl{color:var(--ig-pink)}
+  .lead{font-size:clamp(17px,1.5vw,20px);line-height:1.5;max-width:46ch;margin:0;color:var(--ink-soft);text-wrap:pretty}
+  .outcomes{list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:560px}
+  .outcomes li{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-weight:700;font-size:14px;line-height:1.25}
+  .outcomes i{width:52px;height:52px;border-radius:14px;display:grid;place-items:center}
+  .outcomes svg{width:26px;height:26px}
+  .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+
+
+  .included{list-style:none;margin:44px 0 0;padding:22px 0 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+  .included li{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:600;color:var(--ink-soft);line-height:1.3}
+  .included svg{width:26px;height:26px;flex:none;color:var(--ink)}
+  .included-label{grid-column:1/-1;margin:0 0 -4px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+
+
+  /* Sample report (illustrative) */
+  .report-wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:64px;align-items:center;margin-top:72px}
+  .report-wrap h3{font-family:var(--f-display);font-weight:800;letter-spacing:-.02em;font-size:clamp(26px,2.8vw,34px);line-height:1.1;margin:0 0 12px}
+  .report-wrap p{margin:0;color:#cdc5d6;max-width:46ch}
+  .report{position:relative;color:var(--ink);padding:22px 22px 18px}
+  .report-head{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px;font-weight:600;color:var(--ink-soft)}
+  .report-head span:last-child{font-size:12px;border:1px solid var(--rule);border-radius:8px;padding:3px 8px}
+  .report-num{display:flex;align-items:baseline;gap:10px;margin:6px 0 4px;font-family:var(--f-display);font-weight:800;font-size:40px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .report-num small{font-family:var(--f-body);font-size:15px;font-weight:700;color:#0b8a68}
+  .report svg.chart{width:100%;height:auto;display:block;margin:6px 0 14px}
+  .report-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0;padding:0;list-style:none}
+  .report-stats li{background:var(--wall);border-radius:10px;padding:10px 12px;font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.3}
+  .report-stats b{display:block;font-family:var(--f-display);font-size:20px;color:var(--ink);font-weight:800}
+  .sample-tag{position:absolute;top:-12px;left:20px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:#fff;padding:4px 10px;border-radius:999px}
+  .note{position:absolute;right:-14px;top:-26px;width:132px;padding:12px 12px 14px;background:#ffe36e;color:var(--ink);font-family:var(--f-display);font-weight:800;font-size:15px;line-height:1.15;transform:rotate(6deg);box-shadow:0 12px 20px -12px rgba(22,18,28,.5);border-radius:3px}
+
+  /* Calendar sheet */
+  .sheet{background:var(--paper);border-radius:14px;box-shadow:var(--sheet-shadow)}
+  .cal{position:relative;padding:20px 20px 18px;transform:rotate(1.2deg);color:var(--ink)}
+  .cal::before,.cal::after{content:"";position:absolute;top:-9px;width:14px;height:24px;border-radius:7px;background:var(--ink);box-shadow:inset 0 -6px 0 rgba(255,255,255,.12)}
+  .cal::before{left:28%}.cal::after{right:28%}
+  .cal-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:10px}
+  .cal-title{font-weight:800;font-size:21px;letter-spacing:-.02em;margin:0}
+  .cal-total{font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cal-week,.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+  .cal-week span{font-size:11px;font-weight:700;text-align:center;color:var(--ink-soft);padding-bottom:4px}
+  .day{position:relative;aspect-ratio:1/.78;border-radius:7px;background:var(--wall);padding:4px 5px;display:flex;flex-direction:column;min-width:0}
+  .day.sun{background:#ece6ef}
+  .day b{font-weight:700;font-size:12px;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+  .chips{margin-top:auto;display:flex;flex-direction:column;gap:3px}
+  .chip{height:6px;border-radius:3px;transform-origin:left center;animation:drop .45s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i) * 14ms)}
+  @keyframes drop{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}
+  .reel{position:absolute;top:4px;right:4px;width:13px;height:13px;border-radius:4px;background:var(--ig-deep);display:grid;place-items:center}
+  .reel::after{content:"";border-left:5px solid #fff;border-top:3px solid transparent;border-bottom:3px solid transparent;margin-left:1px}
+  .switch{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px;padding:5px;background:var(--wall);border-radius:12px}
+  .switch button{font:inherit;font-weight:700;font-size:14px;line-height:1.2;border:0;border-radius:9px;padding:10px 6px;background:transparent;color:var(--ink);cursor:pointer;min-height:48px}
+  .switch button small{display:block;font-weight:500;font-size:12px;color:var(--ink-soft)}
+  .switch button[aria-pressed="true"]{background:var(--ig-deep);color:#fff}
+  .switch button[aria-pressed="true"] small{color:rgba(255,255,255,.85)}
+  .legend{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;font-weight:600;color:var(--ink-soft)}
+  .legend li{display:flex;align-items:center;gap:6px}
+  .legend i{width:10px;height:10px;border-radius:3px;flex:none}
+  .legend .reel-key{position:static;width:12px;height:12px}
+  .cal-note{font-size:13px;color:var(--ink-soft);margin:10px 0 0}
+
+  /* Client logos */
+  .clients{background:#fff;padding:28px 0 20px;border-bottom:1px solid var(--rule)}
+  .clients-title{margin:0 0 14px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+  .marquee{display:flex;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .marquee-track{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:56px;padding-right:56px;flex:none;will-change:transform;animation:marquee var(--marquee-dur,60s) linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  .marquee-track li{flex:none;display:flex;align-items:center;height:40px}
+  .marquee-track img{width:auto;display:block}
+  @keyframes marquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-100%,0,0)}}
+  .clients-note{margin:10px 0 0;text-align:center;font-size:12px;color:var(--ink-soft)}
+
+  /* Content in action */
+  .work-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:72px;align-items:center}
+  .phone{justify-self:center;width:min(300px,100%);border:10px solid var(--ink);border-radius:40px;background:var(--ink);box-shadow:0 30px 60px -28px rgba(150,47,191,.55),0 10px 24px -14px rgba(22,18,28,.4);transform:rotate(-2deg)}
+  .phone{position:relative}
+  .phone .sample-tag{left:50%;transform:translateX(-50%) rotate(2deg);top:-14px;z-index:2;white-space:nowrap}
+  .ig{background:#fff;color:var(--ink);border-radius:30px;padding:18px 12px 12px;font-size:12px}
+  .ig-top{text-align:center;font-size:13px;margin-bottom:12px}
+  .ig-profile{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+  .ig-profile b{font-size:13px}
+  .ig-profile p{margin:2px 0 0;line-height:1.35;color:var(--ink-soft)}
+  .ig-avatar{flex:none;width:58px;height:58px;border-radius:50%;padding:3px;background:var(--ig)}
+  .ig-avatar span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:#2a1f17;color:#feda75;border:2px solid #fff;font-family:var(--f-display);font-weight:800;font-size:14px}
+  .ig-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:12px}
+  .ig-buttons span{text-align:center;font-weight:700;padding:6px 0;border-radius:8px;background:var(--wall)}
+  .ig-buttons span:first-child{background:#4f5bd5;color:#fff}
+  .ig-grid{list-style:none;margin:0 -12px -12px;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border-radius:0 0 30px 30px;overflow:hidden}
+  .ig-grid li{position:relative;aspect-ratio:4/5;background:var(--c);display:flex;align-items:flex-end;padding:8px}
+  .ig-grid li::before{content:"";position:absolute;inset:8px 8px auto auto;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.25)}
+  .ig-grid span{color:#fff;font-family:var(--f-display);font-weight:800;font-size:12px;line-height:1.1}
+  .ig-grid li.is-reel::before{border-radius:4px;background:rgba(255,255,255,.9);width:16px;height:16px;clip-path:polygon(25% 15%,90% 50%,25% 85%)}
+  .work-points{list-style:none;margin:0 0 26px;padding:0}
+  .work-points li{position:relative;padding:10px 0 10px 30px;border-top:1px solid var(--rule)}
+  .work-points li:last-child{border-bottom:1px solid var(--rule)}
+  .work-points li::before{content:"";position:absolute;left:4px;top:17px;width:11px;height:6px;border-left:2px solid var(--ig-pink);border-bottom:2px solid var(--ig-pink);transform:rotate(-45deg)}
+
+  .plan,.steps li,.times > li{transition:box-shadow .35s cubic-bezier(.16,1,.3,1),translate .35s cubic-bezier(.16,1,.3,1)}
+  @media (hover:hover){
+    .plan:hover,.steps li:hover{translate:0 -6px;box-shadow:0 30px 50px -24px rgba(22,18,28,.38)}
+    .times > li:hover{translate:0 -4px}
+  }
+
+  /* Needs */
+  .section{padding:clamp(72px,9vw,120px) 0}
+  .needs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--ink)}
+  .need{padding:28px 28px 8px 0}
+  .need + .need{padding-left:28px;border-left:1px solid var(--rule)}
+  .need h3{font-weight:800;letter-spacing:-.02em;font-size:clamp(26px,2.6vw,34px);margin:0 0 10px;line-height:1.1}
+  .need p{margin:0;color:var(--ink-soft);max-width:38ch}
+
+  /* Dark sections */
+  .night{background:var(--night);color:#fff}
+  .night .intro{color:#cdc5d6}
+  .inside-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 24px}
+  .inside-list li{position:relative;padding:28px 0 6px}
+  .inside-list li{--bar:1}
+  .inside-list li::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:2px;background:var(--ig);transform:scaleX(var(--bar));transform-origin:0 50%}
+  .inside-list strong{display:block;font-weight:800;letter-spacing:-.02em;font-size:clamp(24px,2.4vw,30px);line-height:1.1;margin-bottom:10px;color:#fff}
+  .inside-list span{color:#d7d0de}
+
+  /* Plans */
+  .plan-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch}
+  .plan{display:flex;flex-direction:column;padding:28px 26px 26px}
+  .plan h3{font-weight:800;letter-spacing:-.02em;font-size:25px;margin:0}
+  .plan .for{margin:4px 0 0;font-size:15px;color:var(--ink-soft)}
+  .price{display:flex;align-items:baseline;gap:6px;margin:20px 0 4px;font-weight:800;letter-spacing:-.03em;font-size:clamp(42px,4.4vw,54px);line-height:1;font-variant-numeric:tabular-nums}
+  .price small{font-family:var(--f-body);font-size:15px;font-weight:600;letter-spacing:0;color:var(--ink-soft)}
+  .volume{display:flex;gap:8px;margin:16px 0 18px}
+  .volume span{flex:1;background:var(--wall);border-radius:10px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--ink-soft);line-height:1.25}
+  .volume b{display:block;font-weight:800;font-size:26px;color:var(--ink);letter-spacing:-.02em}
+  .plan ul{list-style:none;margin:0 0 24px;padding:0;flex:1}
+  .plan li{position:relative;padding:8px 0 8px 26px;border-top:1px solid var(--rule);font-size:16px}
+  .plan li::before{content:"";position:absolute;left:2px;top:15px;width:11px;height:6px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg)}
+  .plan .btn{width:100%}
+  .gst{margin:0 0 4px;font-size:13px;color:var(--ink-soft)}
+  .gst b{color:var(--ink)}
+  .plan.featured .gst,.plan.featured .gst b{color:rgba(255,255,255,.9)}
+  .plan-wa{display:block;text-align:center;margin-top:12px;font-size:14px;font-weight:600;color:var(--ink-soft);text-underline-offset:3px}
+  .plan.featured .plan-wa{color:rgba(255,255,255,.9)}
+  .pay-btn[aria-busy="true"]{opacity:.7;cursor:progress}
+  .pay-status{margin:8px 0 0;min-height:1em;font-size:13px;text-align:center;color:#c9271f}
+  .plan.featured .pay-status{color:#fff}
+  .plan.featured{background:var(--ig-deep);color:#fff;transform:translateY(-12px);box-shadow:0 24px 50px -20px rgba(150,47,191,.6)}
+  .plan.featured .for,.plan.featured .price small{color:rgba(255,255,255,.86)}
+  .plan.featured .volume span{background:rgba(255,255,255,.16);color:rgba(255,255,255,.9)}
+  .plan.featured .volume b{color:#fff}
+  .plan.featured li{border-color:rgba(255,255,255,.22)}
+  .tag{align-self:flex-start;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:#fff;color:var(--ig-pink);padding:4px 10px;border-radius:999px;margin-bottom:14px}
+  .fine{margin:28px 0 0;font-size:14px;color:var(--ink-soft)}
+
+  /* Mix */
+  .mix-wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:start}
+  .mix-bar{display:flex;gap:3px;height:56px;margin:0 0 26px}
+  .mix-bar i{flex:var(--n);border-radius:6px}
+  .mix{width:100%;border-collapse:collapse;font-size:16px}
+  .mix th{font-size:13px;font-weight:700;color:var(--ink-soft);text-align:left;padding:0 0 10px;border-bottom:2px solid var(--ink)}
+  .mix td{padding:13px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+  .mix td:first-child{font-weight:700;padding-right:16px}
+  .mix td:first-child i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:10px;vertical-align:-1px}
+  .mix td.n{font-weight:800;font-size:20px;font-variant-numeric:tabular-nums;width:3.5em;line-height:1.2}
+  .mix td:last-child{color:var(--ink-soft)}
+
+  /* When we post */
+  .times{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+  .times > li{position:relative;background:var(--night-2);border-radius:14px;padding:16px 10px 12px}
+  .times h3{margin:0 0 10px;text-align:center;font-weight:800;font-size:17px;letter-spacing:-.01em}
+  .times ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+  .times time{display:block;text-align:center;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;padding:8px 4px;border-radius:9px;background:rgba(255,255,255,.07);white-space:nowrap}
+  .times > li.today{background:var(--ig-deep)}
+  .times > li.today time{background:rgba(255,255,255,.18)}
+  .times .now{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:#fff;color:var(--ig-pink);padding:2px 8px;border-radius:999px;white-space:nowrap}
+  .times-note{font-size:14px;color:#b9b0c3;margin:14px 0 0}
+  .when-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;margin-top:64px;align-items:start}
+  .when-grid h3{font-weight:800;letter-spacing:-.02em;font-size:clamp(24px,2.4vw,30px);margin:0 0 16px;line-height:1.1}
+  .week{width:100%;border-collapse:collapse;font-size:15px}
+  .week th{font-size:13px;font-weight:700;color:#b9b0c3;text-align:left;padding:0 10px 10px 0;border-bottom:2px solid rgba(255,255,255,.5)}
+  .week td{padding:12px 10px 12px 0;border-bottom:1px solid rgba(255,255,255,.14);vertical-align:top;color:#e9e4ef}
+  .week td:first-child{font-weight:700;color:#fff;white-space:nowrap}
+  .week tr.total td{font-weight:800;color:#fff;border-bottom:0}
+  .tips{list-style:none;margin:0;padding:0}
+  .tips li{position:relative;padding:14px 0 14px 40px;border-top:1px solid rgba(255,255,255,.14);color:#e9e4ef}
+  .tips li:last-child{border-bottom:1px solid rgba(255,255,255,.14)}
+  .tips li::before{content:"";position:absolute;left:0;top:14px;width:26px;height:26px;border-radius:50%;background:var(--ig)}
+  .tips li::after{content:"";position:absolute;left:8px;top:22px;width:10px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
+  .tips strong{color:#fff}
+
+  /* Steps */
+  .steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+  .steps li{counter-increment:s;padding:28px 26px}
+  .steps li::before{content:counter(s);display:block;font-weight:800;font-size:60px;line-height:.9;color:var(--ig-pink);margin-bottom:18px}
+  .steps h3{font-weight:800;letter-spacing:-.02em;font-size:26px;margin:0 0 8px}
+  .steps p{margin:0;color:var(--ink-soft)}
+
+  /* Quote */
+  .quote{margin:0;font-weight:700;letter-spacing:-.02em;line-height:1.22;font-size:clamp(26px,3.4vw,42px);max-width:30ch;text-wrap:balance}
+  .quote::before{content:"";display:block;width:72px;height:10px;border-radius:5px;background:var(--ig);margin-bottom:28px}
+
+  /* FAQ */
+  .faq-wrap{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:56px}
+  details{border-top:1px solid var(--rule)}
+  details:last-child{border-bottom:1px solid var(--rule)}
+  summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-weight:700;font-size:clamp(18px,1.8vw,21px)}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"";flex:none;width:28px;height:28px;border-radius:8px;background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath d='M14 8v12M8 14h12' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") center/28px no-repeat;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+  details[open] summary::after{transform:rotate(45deg);background-color:var(--ig-pink)}
+  details p{margin:0 0 22px;color:var(--ink-soft);max-width:65ch}
+
+  /* CTA */
+  .cta{background:var(--ig);color:#fff;border-radius:20px;padding:clamp(32px,5vw,64px);display:flex;justify-content:space-between;align-items:center;gap:32px}
+  .cta h2{margin-bottom:10px}
+  .cta p{margin:0;font-size:18px;color:rgba(255,255,255,.92);max-width:46ch}
+  .cta .btn{flex:none}
+
+  footer{padding:40px 0 48px;font-size:14px;color:var(--ink-soft)}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:24px}
+
+  /* Mobile sticky WhatsApp */
+  .sticky{display:none}
+
+  @media (max-width:980px){
+    .hero-grid{grid-template-columns:1fr;grid-template-areas:"copy" "actions" "plans" "inc"}
+    .included{grid-template-columns:1fr 1fr;margin-top:32px}
+    .report-wrap{grid-template-columns:1fr;gap:36px}
+    .work-grid{grid-template-columns:1fr;gap:44px}
+    .work-grid .phone{width:min(270px,80%)}
+    .hero-visual{margin-top:44px}
+    .hero-visual .cal{max-width:560px;margin-left:0;transform:rotate(.6deg)}
+    .needs,.inside-list,.steps{grid-template-columns:1fr}
+    .need,.need + .need{padding:24px 0;border-left:0}
+    .need + .need{border-top:1px solid var(--rule)}
+    .inside-list{grid-template-columns:1fr 1fr}
+    .plan-grid{grid-template-columns:1fr;max-width:520px}
+    .plan.featured{transform:none}
+    .mix-wrap,.faq-wrap{grid-template-columns:1fr;gap:24px}
+    .when-grid{grid-template-columns:1fr;gap:48px}
+    .times{grid-template-columns:1fr;gap:8px}
+    .times > li{display:grid;grid-template-columns:64px 1fr;align-items:center;gap:10px;padding:10px 12px}
+    .times h3{margin:0;text-align:left}
+    .times ul{grid-template-columns:repeat(3,1fr)}
+    .times .now{top:-8px;left:auto;right:12px;transform:none}
+    .cta{flex-direction:column;align-items:flex-start}
+  }
+  @media (max-width:640px){
+    body{font-size:16px;padding-bottom:84px}
+    .nav-links a:not(.btn){display:none}
+    .nav .btn{padding:0 12px;font-size:14px}
+    .logo{font-size:17px}
+    .hero{padding:88px 0 40px}
+    .hero h1{margin:12px 0 14px}
+    .kicker{font-size:12px;letter-spacing:.22em}
+    .outcomes{margin-top:22px;gap:6px}
+    .outcomes li{font-size:12.5px}
+    .outcomes i{width:46px;height:46px}
+    .included li{font-size:13px}
+    .wa-long{display:none}
+    .marquee-track{gap:40px;padding-right:40px}
+    .work .btn{width:100%}
+    .note{right:-6px;top:-30px;width:112px;font-size:13px}
+    .report{padding-top:56px}
+    .actions .btn{flex:1 1 100%}
+    .cal{padding:18px 12px 16px}
+    .cal-week,.cal-grid{gap:3px}
+    .day{padding:3px;border-radius:5px}
+    .day b{font-size:10px}
+    .chip{height:5px}
+    .reel{width:11px;height:11px;top:3px;right:3px}
+    .reel::after{border-left-width:4px;border-top-width:2.5px;border-bottom-width:2.5px}
+    .inside-list{grid-template-columns:1fr}
+    .times time{font-size:14px}
+    .cta .btn{width:100%}
+    .sticky{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:20;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+    .sticky .btn{width:100%;box-shadow:0 14px 30px -10px rgba(22,18,28,.5)}
+    .sticky.hide{transform:translateY(140%)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .chip{animation:none}
+    .marquee-track{animation:none}
+    .marquee-track[aria-hidden]{display:none}
+    .marquee{justify-content:center;flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}
+    .btn,.sticky,summary::after{transition:none}
+  }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap nav">
+      <a class="logo" href="#" aria-label="Quantum Weave home">
+        <svg viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="9" fill="#16121c"/><path d="M7 11h16M7 19h16M11 7v16M19 7v16" stroke="#feda75" stroke-width="2.6" stroke-linecap="round"/></svg>
+        Quantum Weave
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#work">Sample feed</a>
+        <a href="#plans">Plans</a>
+        <a href="#when">When we post</a>
+        <a href="#faq">FAQ</a>
+        <a class="btn btn-wa" data-wa="Hi Quantum Weave, I'm interested in the AI-Powered Social Growth System." href="https://wa.me/919972965677"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path transform="translate(4.3 4.3) scale(.64)" fill="currentColor" d="M9 7.6c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.1 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5l-2.4-1.2c-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7L9 7.6z"/></svg><span class="wa-long">Talk on </span>WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="kicker">Social Growth System</p>
+          <h1 id="hero-title" class="display">Turn your <span class="hl">social media</span> into opportunities</h1>
+          <p class="lead">We plan, create and publish Instagram &amp; Facebook content that builds visibility, trust and conversations for your business.</p>
+          <ul class="outcomes">
+            <li><i style="background:#fde3ee;color:#d62976"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></i>More visibility</li>
+            <li><i style="background:#ece4fb;color:#6a3fc9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg></i>Real engagement</li>
+            <li><i style="background:#dcf3e6;color:#0b8a68"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></i>More enquiries</li>
+            <li><i style="background:#feeadb;color:#c2560a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16"/><path d="M7 16v-4M12 16V8M17 16V5"/></svg></i>Business growth</li>
+          </ul>
+        </div>
+
+        <div class="hero-visual">
+          <figure class="sheet cal" aria-label="Illustrative content calendar for one month" style="margin:0">
+            <div class="cal-head">
+              <p class="cal-title" id="cal-title">A sample month</p>
+              <span class="cal-total" id="cal-total" aria-live="polite">26 posts · 4 Reels</span>
+            </div>
+            <div class="cal-week" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+            <div class="cal-grid" id="cal-grid" role="list"></div>
+            <div class="switch" role="group" aria-label="Preview a plan">
+              <button type="button" data-posts="26" data-reels="4" aria-pressed="true">Starter<small>₹3,999</small></button>
+              <button type="button" data-posts="54" data-reels="6" aria-pressed="false">Growth<small>₹6,999</small></button>
+              <button type="button" data-posts="82" data-reels="8" aria-pressed="false">Scale<small>₹9,999</small></button>
+            </div>
+            <ul class="legend" id="legend"></ul>
+          </figure>
+        </div>
+
+        <div class="actions">
+          <a class="btn btn-wa" data-wa="Hi Quantum Weave, please share the Social Growth System details." href="https://wa.me/919972965677"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path transform="translate(4.3 4.3) scale(.64)" fill="currentColor" d="M9 7.6c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.1 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5l-2.4-1.2c-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7L9 7.6z"/></svg>Get Started on WhatsApp</a>
+          <a class="btn btn-line" href="#plans">View Packages<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+
+        <ul class="included" aria-label="Included in every plan">
+          <li class="included-label">In every plan</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Monthly content calendar</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Captions &amp; hashtags</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></svg>Publishing included</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18h2"/></svg>Instagram + Facebook</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="clients" aria-labelledby="clients-title">
+      <div class="wrap">
+        <p class="clients-title" id="clients-title">Brands our group has delivered for</p>
+      </div>
+      <div class="marquee">
+        <ul class="marquee-track"><li><img src="/social-growth/assets/clients/ey.png" alt="EY" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/hm.png" alt="H&amp;M" style="height:26px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/buhler.png" alt="Bühler" style="height:16px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bluewaters.svg" alt="Bluewater Adventure Sports" style="height:34px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ramaiah.svg" alt="Ramaiah" style="height:29px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/toyota.png" alt="Toyota" style="height:32px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/tata-power-solar.png" alt="Tata Power Solar" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/canara-bank.png" alt="Canara Bank" style="height:24px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/taapasi-kia.png" alt="Taapasi Kia" style="height:18px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bel-officers-club.png" alt="Bharat Electronics Officers' Club" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ctdi.png" alt="CTDI" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/coe-hm.png" alt="H&amp;M Center of Excellence" style="height:36px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/st-josephs.png" alt="St Joseph's School" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/vision-india.png" alt="Vision India" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/feather.png" alt="Feather Z-16" style="height:38px" loading="lazy" decoding="async"></li></ul>
+        <ul class="marquee-track" aria-hidden="true"><li><img src="/social-growth/assets/clients/ey.png" alt="" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/hm.png" alt="" style="height:26px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/buhler.png" alt="" style="height:16px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bluewaters.svg" alt="" style="height:34px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ramaiah.svg" alt="" style="height:29px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/toyota.png" alt="" style="height:32px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/tata-power-solar.png" alt="" style="height:30px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/canara-bank.png" alt="" style="height:24px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/taapasi-kia.png" alt="" style="height:18px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/bel-officers-club.png" alt="" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/ctdi.png" alt="" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/coe-hm.png" alt="" style="height:36px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/st-josephs.png" alt="" style="height:40px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/vision-india.png" alt="" style="height:22px" loading="lazy" decoding="async"></li><li><img src="/social-growth/assets/clients/feather.png" alt="" style="height:38px" loading="lazy" decoding="async"></li></ul>
+      </div>
+      <p class="clients-note">Work delivered across BrandMint AI ventures.</p>
+    </section>
+
+    <section class="section" aria-labelledby="needs-title">
+      <div class="wrap">
+        <h2 id="needs-title" class="display">What businesses actually need</h2>
+        <p class="intro">Posting more is not the goal. The goal is to make your brand easier to notice, trust and contact.</p>
+        <div class="needs">
+          <div class="need"><h3>Consistency</h3><p>Your audience sees a brand that is active, organised and relevant instead of an account that goes silent for weeks.</p></div>
+          <div class="need"><h3>Trust</h3><p>Use useful, authority-building and proof-led content to help prospects understand why they should choose you.</p></div>
+          <div class="need"><h3>Conversations</h3><p>Every month includes CTA thinking and WhatsApp-oriented conversion paths so content can support real enquiries.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section night" aria-labelledby="inside-title">
+      <div class="wrap">
+        <h2 id="inside-title" class="display">What’s inside the system</h2>
+        <p class="intro">A structured monthly workflow—not a random pile of designs.</p>
+        <ul class="inside-list">
+          <li><strong>26–82 Posts</strong><span>Planned around education, authority, offers, proof, engagement and timely relevance.</span></li>
+          <li><strong>4–8 Reels</strong><span>Short-form video designed to add reach and variety to the monthly mix.</span></li>
+          <li><strong>Publishing</strong><span>Content calendar, captions, hashtags and scheduled posting across Instagram and Facebook.</span></li>
+          <li><strong>Insights</strong><span>Monthly performance review with recommendations for the next content cycle.</span></li>
+        </ul>
+        <div class="report-wrap">
+          <div>
+            <h3>A monthly report you can actually read</h3>
+            <p>Growth and Scale plans include a monthly performance report: reach, engagement and clicks, plus what we will change next month.</p>
+          </div>
+          <figure class="sheet report" aria-label="Sample monthly report with illustrative numbers" style="margin:0">
+            <span class="sample-tag">Sample · illustrative numbers</span>
+            <span class="note" aria-hidden="true">Built for more enquiries</span>
+            <div class="report-head"><span>Reach</span><span>Last 30 days</span></div>
+            <div class="report-num"><span data-count="18240">18,240</span> <small>↑ 24%</small></div>
+            <svg class="chart" viewBox="0 0 400 120" aria-hidden="true">
+              <defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#962fbf" stop-opacity=".35"/><stop offset="1" stop-color="#962fbf" stop-opacity="0"/></linearGradient></defs>
+              <path class="chart-area" d="M0 100 L40 92 L80 95 L120 80 L160 84 L200 66 L240 70 L280 48 L320 52 L360 30 L400 14 L400 120 L0 120 Z" fill="url(#rg)"/>
+              <path class="chart-line" d="M0 100 L40 92 L80 95 L120 80 L160 84 L200 66 L240 70 L280 48 L320 52 L360 30 L400 14" fill="none" stroke="#962fbf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+            <ul class="report-stats">
+              <li><b data-count="41.5" data-suffix="K">41.5K</b>Impressions</li>
+              <li><b data-count="1120">1,120</b>Engagements</li>
+              <li><b data-count="96">96</b>Link clicks</li>
+            </ul>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section work" id="work" aria-labelledby="work-title">
+      <div class="wrap work-grid">
+        <figure class="phone" aria-label="Illustrative Instagram profile for a fictional café" style="margin:0">
+          <span class="sample-tag">Sample feed · fictional brand</span>
+          <div class="ig">
+            <div class="ig-top"><b>brewandbloom.cafe</b></div>
+            <div class="ig-profile">
+              <span class="ig-avatar" aria-hidden="true"><span>B&amp;B</span></span>
+              <div><b>Brew &amp; Bloom Café</b><p>Filter coffee, fresh bakes and slow mornings.<br>Order on WhatsApp ↓</p></div>
+            </div>
+            <div class="ig-buttons" aria-hidden="true"><span>Follow</span><span>Message</span><span>WhatsApp</span></div>
+            <ul class="ig-grid"><li style="--c:#2350d8"><span>3 coffee myths, busted</span></li><li style="--c:#c9271f"><span>Monsoon combo offer</span></li><li style="--c:#cf2f74"><span>Customer of the week</span></li><li style="--c:#0b8a68"><span>New on the menu: cold brew</span></li><li style="--c:#d99a00"><span>Happy Diwali from our team</span></li><li style="--c:#ea6a12"><span>A or B? Pick your order</span></li><li style="--c:#6a3fc9"><span>How we roast, step by step</span></li><li style="--c:#16121c" class="is-reel"><span>Behind the counter</span></li><li style="--c:#2350d8"><span>Milk or oat: which one?</span></li></ul>
+          </div>
+        </figure>
+        <div>
+          <h2 id="work-title" class="display">What your feed could look like</h2>
+          <p class="intro">Every post has a job: teach, build trust, show the product, make an offer or join the moment. Here is the content mix played out on a sample café feed, in one consistent visual style.</p>
+          <ul class="work-points">
+            <li>Planned around your offers, festivals and local moments</li>
+            <li>One look across posts and Reels, so the page feels like a brand</li>
+            <li>Every profile and post points people to WhatsApp</li>
+          </ul>
+          <a class="btn btn-wa" data-wa="Hi Quantum Weave, I'd like a feed like this for my business." href="https://wa.me/919972965677"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path transform="translate(4.3 4.3) scale(.64)" fill="currentColor" d="M9 7.6c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.1 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5l-2.4-1.2c-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7L9 7.6z"/></svg>Get a feed like this</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="plans" aria-labelledby="plans-title">
+      <div class="wrap">
+        <h2 id="plans-title" class="display">Choose the right level</h2>
+        <p class="intro">Start with consistent presence. Upgrade when social media needs to contribute more directly to growth.</p>
+        <div class="plan-grid">
+          <article class="sheet plan">
+            <h3>Starter Social</h3>
+            <p class="for">Consistent daily presence</p>
+            <div class="price">₹3,999 <small>/ month</small></div>
+            <p class="gst">+ 18% GST · <b>₹4,718.82</b> for the first month</p>
+            <div class="volume"><span><b>26</b>posts</span><span><b>4</b>Reels</span></div>
+            <ul>
+              <li>Instagram + Facebook</li>
+              <li>Captions + hashtags</li>
+              <li>Monthly content calendar</li>
+              <li>Publishing support</li>
+            </ul>
+            <button type="button" class="btn btn-ink pay-btn" data-plan="starter">Pay ₹4,718.82 &amp; start</button>
+            <a class="plan-wa" data-wa="Hi Quantum Weave, I'm interested in the Starter Social package at ₹3,999/month." href="https://wa.me/919972965677">or ask a question on WhatsApp</a>
+            <p class="pay-status" role="status" aria-live="polite"></p>
+          </article>
+
+          <article class="sheet plan featured">
+            <span class="tag">Most popular</span>
+            <h3>Growth Social</h3>
+            <p class="for">Twice the content, plus engagement</p>
+            <div class="price">₹6,999 <small>/ month</small></div>
+            <p class="gst">+ 18% GST · <b>₹8,258.82</b> for the first month</p>
+            <div class="volume"><span><b>54</b>posts</span><span><b>6</b>Reels</span></div>
+            <ul>
+              <li>Instagram + Facebook</li>
+              <li>Captions + hashtags</li>
+              <li>Content calendar</li>
+              <li>Publishing</li>
+              <li>Basic engagement support</li>
+              <li>Monthly performance report</li>
+            </ul>
+            <button type="button" class="btn btn-paper pay-btn" data-plan="growth">Pay ₹8,258.82 &amp; start</button>
+            <a class="plan-wa" data-wa="Hi Quantum Weave, I'm interested in the Growth Social package at ₹6,999/month." href="https://wa.me/919972965677">or ask a question on WhatsApp</a>
+            <p class="pay-status" role="status" aria-live="polite"></p>
+          </article>
+
+          <article class="sheet plan">
+            <h3>Scale Social</h3>
+            <p class="for">High-volume content with campaigns</p>
+            <div class="price">₹9,999 <small>/ month</small></div>
+            <p class="gst">+ 18% GST · <b>₹11,798.82</b> for the first month</p>
+            <div class="volume"><span><b>82</b>posts</span><span><b>8</b>Reels</span></div>
+            <ul>
+              <li>Instagram + Facebook</li>
+              <li>High-volume content calendar</li>
+              <li>Publishing</li>
+              <li>Engagement support</li>
+              <li>Campaign / offer content</li>
+              <li>Monthly performance report</li>
+              <li>Content optimisation</li>
+            </ul>
+            <button type="button" class="btn btn-ink pay-btn" data-plan="scale">Pay ₹11,798.82 &amp; start</button>
+            <a class="plan-wa" data-wa="Hi Quantum Weave, I'm interested in the Scale Social package at ₹9,999/month." href="https://wa.me/919972965677">or ask a question on WhatsApp</a>
+            <p class="pay-status" role="status" aria-live="polite"></p>
+          </article>
+        </div>
+        <p class="fine">Prices are per month, plus 18% GST. You pay for the first month online through Razorpay (UPI, cards, net banking); after that we send a Razorpay payment link each month. Ad spend, professional shoots and influencer costs are separate where applicable.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="mix-title">
+      <div class="wrap mix-wrap">
+        <div>
+          <h2 id="mix-title" class="display">Built around a better content mix</h2>
+          <p class="intro">Instead of making 30 posters just to hit a number, we balance the month around what a customer needs to believe before taking action.</p>
+        </div>
+        <div>
+          <div class="mix-bar" aria-hidden="true">
+            <i style="--n:6;background:var(--r-edu)"></i><i style="--n:4;background:var(--r-auth)"></i><i style="--n:5;background:var(--r-prod)"></i><i style="--n:3;background:var(--r-proof)"></i><i style="--n:3;background:var(--r-eng)"></i><i style="--n:3;background:var(--r-offer)"></i><i style="--n:2;background:var(--r-fest)"></i>
+          </div>
+          <table class="mix">
+            <caption class="cal-note" style="caption-side:bottom;text-align:left;padding-top:12px">Typical mix per 26 posts. Larger plans scale the same balance.</caption>
+            <thead><tr><th scope="col">Content role</th><th scope="col">Mix</th><th scope="col">Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><i style="background:var(--r-edu)"></i>Educational / value</td><td class="n">6</td><td>Teach and attract attention</td></tr>
+              <tr><td><i style="background:var(--r-auth)"></i>Authority / trust</td><td class="n">4</td><td>Strengthen credibility</td></tr>
+              <tr><td><i style="background:var(--r-prod)"></i>Product / service</td><td class="n">5</td><td>Make the offer clear</td></tr>
+              <tr><td><i style="background:var(--r-proof)"></i>Testimonials / proof</td><td class="n">3</td><td>Reduce buying hesitation</td></tr>
+              <tr><td><i style="background:var(--r-eng)"></i>Engagement / community</td><td class="n">3</td><td>Encourage interaction</td></tr>
+              <tr><td><i style="background:var(--r-offer)"></i>Offers / CTA</td><td class="n">3</td><td>Create action</td></tr>
+              <tr><td><i style="background:var(--r-fest)"></i>Festival / trend / local</td><td class="n">2</td><td>Stay timely and relevant</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section night" id="when" aria-labelledby="when-title">
+      <div class="wrap">
+        <h2 id="when-title" class="display">When we post</h2>
+        <p class="intro">Good content needs good timing. Every account starts on widely used Reels posting windows, then we tune them to when your audience is actually online.</p>
+        <ol class="times" id="times">
+          <li><h3>Mon</h3><ul><li><time>12 PM</time></li><li><time>4 PM</time></li><li><time>7:30 PM</time></li></ul></li>
+          <li><h3>Tue</h3><ul><li><time>7 AM</time></li><li><time>12 PM</time></li><li><time>5 PM</time></li></ul></li>
+          <li><h3>Wed</h3><ul><li><time>8 AM</time></li><li><time>2 PM</time></li><li><time>7 PM</time></li></ul></li>
+          <li><h3>Thu</h3><ul><li><time>7 AM</time></li><li><time>1 PM</time></li><li><time>5 PM</time></li></ul></li>
+          <li><h3>Fri</h3><ul><li><time>6 AM</time></li><li><time>12 PM</time></li><li><time>4 PM</time></li></ul></li>
+          <li><h3>Sat</h3><ul><li><time>10 AM</time></li><li><time>2 PM</time></li><li><time>8 PM</time></li></ul></li>
+          <li><h3>Sun</h3><ul><li><time>10 AM</time></li><li><time>2 PM</time></li><li><time>8 PM</time></li></ul></li>
+        </ol>
+        <p class="times-note">Suggested starting windows in your audience’s local time. After the first month we adjust them using your own Instagram insights.</p>
+
+        <div class="when-grid">
+          <div>
+            <h3>Your week on each plan</h3>
+            <table class="week">
+              <thead><tr><th scope="col">Day</th><th scope="col">Starter</th><th scope="col">Growth</th><th scope="col">Scale</th></tr></thead>
+              <tbody>
+                <tr><td>Mon – Sat</td><td>1 post a day</td><td>2 posts a day</td><td>3 posts a day</td></tr>
+                <tr><td>Sunday</td><td>Rest day</td><td>Post on 2 Sundays</td><td>1 post</td></tr>
+                <tr><td>Reels</td><td>1 a week</td><td>1–2 a week</td><td>2 a week</td></tr>
+                <tr class="total"><td>Per month</td><td>26 + 4 Reels</td><td>54 + 6 Reels</td><td>82 + 8 Reels</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h3>Posting habits we follow</h3>
+            <ul class="tips">
+              <li><strong>Post about an hour before</strong> your audience is most active, so the post is ready when they open the app.</li>
+              <li><strong>Consistency plus quality</strong> beats bursts of posting followed by silence.</li>
+              <li><strong>Test, read the numbers,</strong> then lock in the times that work for your account.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title" class="display" style="margin-bottom:40px">How it works</h2>
+        <ol class="steps">
+          <li class="sheet"><h3>Understand</h3><p>We understand your offer, audience, market and current social presence.</p></li>
+          <li class="sheet"><h3>Build</h3><p>We create the monthly content system, assets, captions, Reels plan and calendar.</p></li>
+          <li class="sheet"><h3>Improve</h3><p>We review what performed and use the learning to improve the next cycle.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0" aria-label="Our approach">
+      <div class="wrap">
+        <blockquote class="quote">We don’t just keep your Instagram and Facebook active. We build a monthly content system designed to increase visibility, trust, conversations and enquiries.</blockquote>
+      </div>
+    </section>
+
+    <section class="section" id="faq" aria-labelledby="faq-title" style="padding-top:0">
+      <div class="wrap faq-wrap">
+        <h2 id="faq-title" class="display">Questions businesses ask</h2>
+        <div>
+          <details><summary>Is ad spend included?</summary><p>No. Media spend is separate. These packages cover your organic Instagram and Facebook content; paid campaigns can be discussed separately, with the ad budget paid by you.</p></details>
+          <details><summary>Do you guarantee leads?</summary><p>No. Results depend on the offer, audience, creative quality, market, response speed and other business factors. The system is designed to improve consistency and create better conditions for conversations and enquiries.</p></details>
+          <details><summary>Can you manage only Instagram?</summary><p>The core packages are designed around Instagram + Facebook. Custom scopes can be discussed for businesses with different channel priorities.</p></details>
+          <details><summary>Is this an automatic subscription?</summary><p>No. You pay for the first month here, and before each new month we send you a Razorpay payment link. Nothing is charged automatically, and you can stop or change your plan before the next month starts.</p></details>
+          <details><summary>What happens after I pay?</summary><p>You get a payment confirmation and a WhatsApp button to start onboarding. We go through your business, offers and important dates, then share your first content calendar for approval before anything is published.</p></details>
+          <details><summary>Can you create the content from scratch?</summary><p>Yes, the monthly system includes content planning and creation. Client inputs such as product information, offers, photos, testimonials or access to required assets may be requested where needed.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0" id="start" aria-labelledby="cta-title">
+      <div class="wrap">
+        <div class="cta">
+          <div>
+            <h2 id="cta-title" class="display">Ready to stop posting randomly?</h2>
+            <p>Start with Starter Social at ₹3,999/month and build from there.</p>
+          </div>
+          <a class="btn btn-wa" data-wa="Hi Quantum Weave, I'd like to discuss my social media growth plan." href="https://wa.me/919972965677"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path transform="translate(4.3 4.3) scale(.64)" fill="currentColor" d="M9 7.6c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.1 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5l-2.4-1.2c-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7L9 7.6z"/></svg>Start on WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Quantum Weave — AI-powered business systems, marketing and implementation.</span>
+      <a href="https://wa.me/919972965677">WhatsApp +91 99729 65677</a>
+    </div>
+  </footer>
+
+  <div class="sticky" id="sticky">
+    <a class="btn btn-wa" data-wa="Hi Quantum Weave, please share the Social Growth System details." href="https://wa.me/919972965677"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path transform="translate(4.3 4.3) scale(.64)" fill="currentColor" d="M9 7.6c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.1 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5l-2.4-1.2c-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7L9 7.6z"/></svg>Start on WhatsApp</a>
+  </div>
+
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  // Pre-filled WhatsApp links: edit the data-wa text on any link.
+  document.querySelectorAll('[data-wa]').forEach(function(a){
+    a.href = 'https://wa.me/919972965677?text=' + encodeURIComponent(a.dataset.wa);
+  });
+
+  // Content roles, typical mix per 26 posts.
+  var roles = [
+    {name:'Educational', c:'var(--r-edu)', n:6},
+    {name:'Authority', c:'var(--r-auth)', n:4},
+    {name:'Product', c:'var(--r-prod)', n:5},
+    {name:'Proof', c:'var(--r-proof)', n:3},
+    {name:'Engagement', c:'var(--r-eng)', n:3},
+    {name:'Offer', c:'var(--r-offer)', n:3},
+    {name:'Festival', c:'var(--r-fest)', n:2}
+  ];
+  var DAYS = 30;
+  var grid = document.getElementById('cal-grid');
+  var legend = document.getElementById('legend');
+  var total = document.getElementById('cal-total');
+
+  function scaleMix(posts){
+    // Largest-remainder scaling of the 26-post mix.
+    var raw = roles.map(function(r){ return r.n * posts / 26; });
+    var counts = raw.map(Math.floor);
+    var left = posts - counts.reduce(function(a,b){return a+b;},0);
+    raw.map(function(v,i){return [v - counts[i], i];}).sort(function(a,b){return b[0]-a[0];})
+      .slice(0,left).forEach(function(p){ counts[p[1]]++; });
+    return counts;
+  }
+
+  function render(posts, reels){
+    var counts = scaleMix(posts);
+    // Spread each role evenly through the month, then interleave.
+    var seq = [];
+    counts.forEach(function(c,ri){ for(var k=0;k<c;k++) seq.push([(k+0.5)/c, ri]); });
+    seq.sort(function(a,b){return a[0]-b[0];});
+
+    // Weekdays get an equal share; leftovers go to Sundays.
+    var isSun = function(d){ return d % 7 === 6; };
+    var weekdays = 0; for(var d=0; d<DAYS; d++) if(!isSun(d)) weekdays++;
+    var per = Math.floor(posts / weekdays), left = posts - per*weekdays;
+    var perDay = [];
+    for(d=0; d<DAYS; d++) perDay.push(isSun(d) ? 0 : per);
+    for(d=0; left>0 && d<DAYS; d++) if(isSun(d)){ perDay[d]++; left--; }
+    for(d=0; left>0; d=(d+1)%DAYS) if(!isSun(d)){ perDay[d]++; left--; }
+
+    var reelDays = {};
+    for(var r=0; r<reels; r++) reelDays[Math.floor((r+0.5)*DAYS/reels)] = true;
+
+    var html = '', p = 0, i = 0;
+    for(d=0; d<DAYS; d++){
+      var chips = '', names = [];
+      for(var k=0; k<perDay[d]; k++){
+        var role = roles[seq[p++][1]];
+        names.push(role.name);
+        chips += '<i class="chip" style="background:'+role.c+';--i:'+(i++)+'"></i>';
+      }
+      var label = 'Day '+(d+1)+': '+(names.length ? names.join(', ')+' post'+(names.length>1?'s':'') : 'no post')+(reelDays[d]?', plus a Reel':'');
+      html += '<div class="day'+(isSun(d)?' sun':'')+'" role="listitem" aria-label="'+label+'"><b>'+(d+1)+'</b>'+
+        (reelDays[d]?'<span class="reel"></span>':'')+'<span class="chips">'+chips+'</span></div>';
+    }
+    grid.innerHTML = html;
+    total.textContent = posts+' posts · '+reels+' Reels';
+    legend.innerHTML = roles.map(function(r,ri){
+      return '<li><i style="background:'+r.c+'"></i>'+r.name+'</li>';
+    }).join('') + '<li><span class="reel reel-key"></span>Reel</li>';
+  }
+
+  document.querySelectorAll('.switch button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.switch button').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+      render(+b.dataset.posts, +b.dataset.reels);
+    });
+  });
+  render(26, 4);
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Logo strip: fill each track with enough copies to cover wide screens, then loop at a steady speed.
+  var marquee = document.querySelector('.marquee');
+  if(marquee && !reduce){
+    var tracks = marquee.querySelectorAll('.marquee-track');
+    var set = tracks[0].innerHTML;
+    var copy = set.replace(/alt="[^"]*"/g,'alt=""');
+    tracks[0].innerHTML = set + copy;
+    tracks[1].innerHTML = tracks[0].innerHTML.replace(/alt="[^"]*"/g,'alt=""');
+    marquee.querySelectorAll('img').forEach(function(img){ img.loading = 'eager'; });
+    function setSpeed(){ marquee.style.setProperty('--marquee-dur', (tracks[0].scrollWidth / 55) + 's'); }
+    addEventListener('load', setSpeed); setSpeed();
+  }
+
+  // Motion: Lenis smooth scroll driven by GSAP's ticker, plus GSAP + ScrollTrigger animations.
+  var root = document.documentElement;
+  var canAnimate = root.classList.contains('js-anim') && window.gsap && window.ScrollTrigger;
+  if(!canAnimate){ root.classList.remove('js-anim'); }
+
+  var lenis = null;
+  if(window.Lenis && !reduce){
+    lenis = new Lenis({ duration: 1.15, easing: function(t){ return Math.min(1, 1.001 - Math.pow(2, -10 * t)); } });
+    if(canAnimate){
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(function(t){ lenis.raf(t * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(0);
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var id = a.getAttribute('href');
+        var el = id.length > 1 && document.querySelector(id);
+        if(el){ e.preventDefault(); lenis.scrollTo(el, { offset: -16 }); }
+        else if(id === '#'){ e.preventDefault(); lenis.scrollTo(0); }
+      });
+    });
+  }
+
+  if(canAnimate){
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.defaults({ ease: 'expo.out', duration: 1.1 });
+
+    // Hero: headline words rise out of a mask, then the rest follows; the calendar swings onto the wall.
+    var h1 = document.getElementById('hero-title');
+    (function split(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if(n.nodeType === 3){
+          var frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function(part){
+            if(!part) return;
+            if(/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(part)); return; }
+            var w = document.createElement('span'); w.className = 'w';
+            var i = document.createElement('span'); i.className = 'wi'; i.textContent = part;
+            w.appendChild(i); frag.appendChild(w);
+          });
+          node.replaceChild(frag, n);
+        } else if(n.nodeType === 1){ split(n); }
+      });
+    })(h1);
+
+    gsap.set('.hero', { visibility: 'visible' });
+    var tl = gsap.timeline({ delay: 0.1 });
+    tl.from('.hero .kicker', { y: 20, autoAlpha: 0, duration: 0.8 })
+      .from('#hero-title .wi', { yPercent: 115, duration: 1.2, stagger: 0.06 }, '-=0.5')
+      .from('.hero .lead', { y: 24, autoAlpha: 0 }, '-=0.85')
+      .from('.outcomes li', { y: 24, autoAlpha: 0, scale: 0.9, stagger: 0.07, ease: 'back.out(1.6)', duration: 0.8 }, '-=0.8')
+      .from('.hero .actions .btn', { y: 20, autoAlpha: 0, stagger: 0.08 }, '-=0.6')
+      .from('.included li', { y: 16, autoAlpha: 0, stagger: 0.05, duration: 0.8 }, '-=0.7')
+      .from('.hero-visual', { y: -90, rotation: -9, autoAlpha: 0, transformOrigin: '50% 0%', duration: 1.8, ease: 'elastic.out(1, 0.55)' }, 0.35);
+
+    // The calendar drifts up a little as the hero scrolls away.
+    gsap.to('.hero-visual', { yPercent: -10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+
+    // Section headings and intros.
+    gsap.utils.toArray('main section:not(.hero) h2.display, main section:not(.hero) .intro, .clients-title').forEach(function(el){
+      gsap.from(el, { y: 44, autoAlpha: 0, scrollTrigger: { trigger: el, start: 'top 88%' } });
+    });
+
+    // Groups of cards and rows arrive in a stagger as they enter.
+    ['.need', '.inside-list li', '.plan', '.mix tbody tr', '.times > li', '.week tbody tr', '.tips li', '.steps li', 'details', '.work-points li'].forEach(function(sel){
+      ScrollTrigger.batch(sel, {
+        start: 'top 90%', once: true,
+        onEnter: function(batch){ gsap.from(batch, { y: 48, autoAlpha: 0, stagger: 0.09, overwrite: 'auto' }); }
+      });
+    });
+
+    // Gradient rules under "What's inside" draw across.
+    gsap.fromTo('.inside-list li', { '--bar': 0 }, { '--bar': 1, duration: 1.4, stagger: 0.12, scrollTrigger: { trigger: '.inside-list', start: 'top 85%' } });
+
+    // Content-mix bar fills segment by segment.
+    gsap.from('.mix-bar i', { scaleX: 0, transformOrigin: '0 50%', stagger: 0.07, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: '.mix-bar', start: 'top 85%' } });
+
+    // Sample report: card rises, the line draws, the numbers count up.
+    var line = document.querySelector('.report .chart-line');
+    if(line){
+      var len = line.getTotalLength();
+      gsap.set(line, { strokeDasharray: len, strokeDashoffset: len });
+      var rt = gsap.timeline({ scrollTrigger: { trigger: '.report', start: 'top 82%' } });
+      rt.from('.report', { y: 60, autoAlpha: 0, rotation: 2 })
+        .from('.report-wrap > div', { y: 40, autoAlpha: 0 }, 0)
+        .to(line, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut' }, 0.3)
+        .from('.report .chart-area', { autoAlpha: 0, duration: 1 }, 1)
+        .from('.report .note', { scale: 0.4, rotation: -20, autoAlpha: 0, ease: 'back.out(2)', duration: 0.8 }, 1.1);
+      document.querySelectorAll('.report [data-count]').forEach(function(el){
+        var end = parseFloat(el.dataset.count), dec = el.dataset.count.indexOf('.') > -1 ? 1 : 0, suffix = el.dataset.suffix || '';
+        var o = { v: 0 };
+        rt.to(o, { v: end, duration: 1.6, ease: 'power2.out', onUpdate: function(){
+          el.textContent = (dec ? o.v.toFixed(1) : Math.round(o.v).toLocaleString('en-IN')) + suffix;
+        } }, 0.3);
+      });
+    }
+
+    // Sample feed: phone swings in, tiles pop in a wave.
+    gsap.from('.phone', { y: 80, rotation: -10, autoAlpha: 0, duration: 1.4, scrollTrigger: { trigger: '.work', start: 'top 80%' } });
+    gsap.from('.ig-grid li', { scale: 0.6, autoAlpha: 0, stagger: { each: 0.06, grid: [3, 3], from: 'start' }, duration: 0.7, ease: 'back.out(1.7)', scrollTrigger: { trigger: '.phone', start: 'top 70%' } });
+
+    // Closing quote and CTA.
+    gsap.from('.quote', { y: 40, autoAlpha: 0, scrollTrigger: { trigger: '.quote', start: 'top 85%' } });
+    gsap.from('.cta', { scale: 0.92, y: 40, autoAlpha: 0, duration: 1.3, scrollTrigger: { trigger: '.cta', start: 'top 88%' } });
+
+    addEventListener('load', function(){ ScrollTrigger.refresh(); });
+  }
+
+  // Razorpay checkout: the server creates the order (amount fixed server-side), Razorpay collects payment,
+  // and the server verifies the signature before we show the thank-you page.
+  var API = '/api/razorpay/';
+  var rzpLoaded = null;
+  function loadRazorpay(){
+    if(window.Razorpay) return Promise.resolve();
+    if(!rzpLoaded) rzpLoaded = new Promise(function(res, rej){
+      var sc = document.createElement('script');
+      sc.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      sc.onload = res; sc.onerror = function(){ rzpLoaded = null; rej(new Error('Could not load Razorpay. Check your connection and try again.')); };
+      document.head.appendChild(sc);
+    });
+    return rzpLoaded;
+  }
+  function post(path, body){
+    return fetch(API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ if(!r.ok || !d.success) throw new Error(d.message || 'Something went wrong. Please try again or message us on WhatsApp.'); return d; }); });
+  }
+  document.querySelectorAll('.pay-btn').forEach(function(btn){
+    var status = btn.parentNode.querySelector('.pay-status');
+    function busy(on){ btn.disabled = on; btn.setAttribute('aria-busy', on ? 'true' : 'false'); }
+    btn.addEventListener('click', function(){
+      status.textContent = ''; busy(true);
+      Promise.all([loadRazorpay(), post('create-order.php', { plan: btn.dataset.plan })]).then(function(r){
+        var o = r[1];
+        var rzp = new Razorpay({
+          key: o.key_id, order_id: o.order_id, amount: o.amount, currency: o.currency,
+          name: 'Quantum Weave', description: o.description,
+          theme: { color: '#962fbf' },
+          notes: { plan: btn.dataset.plan },
+          modal: { ondismiss: function(){ busy(false); } },
+          handler: function(resp){
+            status.style.color = ''; status.textContent = 'Confirming your payment…';
+            post('verify-payment.php', resp).then(function(v){
+              location.href = '/social-growth/thank-you/?plan=' + encodeURIComponent(v.plan) + '&payment=' + encodeURIComponent(v.payment_id);
+            }).catch(function(e){ busy(false); status.textContent = e.message; });
+          }
+        });
+        rzp.on('payment.failed', function(e){ busy(false); status.textContent = (e.error && e.error.description) || 'Payment failed. No money was taken; please try again.'; });
+        rzp.open();
+      }).catch(function(e){ busy(false); status.textContent = e.message; });
+    });
+  });
+
+  // Mark today's column in the posting-times grid.
+  var dayIdx = (new Date().getDay() + 6) % 7;
+  var todayLi = document.querySelectorAll('#times > li')[dayIdx];
+  if(todayLi){ todayLi.classList.add('today'); todayLi.insertAdjacentHTML('afterbegin','<span class="now">Today</span>'); }
+
+  // Show the mobile sticky button only after the hero, and hide it at the closing CTA.
+  var sticky = document.getElementById('sticky');
+  var hero = document.querySelector('.hero'), cta = document.getElementById('start');
+  function toggleSticky(){
+    var hide = hero.getBoundingClientRect().bottom > 120 || cta.getBoundingClientRect().top < innerHeight;
+    sticky.classList.toggle('hide', hide);
+  }
+  addEventListener('scroll', toggleSticky, {passive:true});
+  addEventListener('resize', toggleSticky);
+  toggleSticky();
+})();
+</script>
+</body>
+</html>
