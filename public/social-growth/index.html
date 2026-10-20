@@ -203,10 +203,16 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
   .ig-buttons span{text-align:center;font-weight:700;padding:6px 0;border-radius:8px;background:var(--wall)}
   .ig-buttons span:first-child{background:#4f5bd5;color:#fff}
   .ig-grid{list-style:none;margin:0 -12px -12px;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border-radius:0 0 30px 30px;overflow:hidden}
-  .ig-grid li{position:relative;aspect-ratio:4/5;background:var(--c);display:flex;align-items:flex-end;padding:8px}
-  .ig-grid li::before{content:"";position:absolute;inset:8px 8px auto auto;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.25)}
-  .ig-grid span{color:#fff;font-family:var(--f-display);font-weight:800;font-size:12px;line-height:1.1}
-  .ig-grid li.is-reel::before{border-radius:4px;background:rgba(255,255,255,.9);width:16px;height:16px;clip-path:polygon(25% 15%,90% 50%,25% 85%)}
+  .ig-grid li{position:relative;aspect-ratio:4/5;background:var(--c);display:flex;align-items:flex-end;padding:8px;overflow:hidden}
+  .ig-grid img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+  .ig-grid li::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.72));border-bottom:3px solid var(--c)}
+  .ig-grid li:hover img{transform:scale(1.08)}
+  .ig-grid li.is-reel img{animation:reel-zoom 6s ease-in-out infinite alternate}
+  @keyframes reel-zoom{from{transform:scale(1)}to{transform:scale(1.18) translateY(-4%)}}
+  .ig-grid li::before{content:none}
+  .ig-grid span{position:relative;z-index:1;color:#fff;font-family:var(--f-display);font-weight:800;font-size:12px;line-height:1.15;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+  .ig-grid li.is-reel::before{content:"";position:absolute;z-index:1;top:8px;right:8px;width:16px;height:16px;background:#fff;clip-path:polygon(25% 15%,90% 50%,25% 85%);animation:reel-pulse 1.6s ease-in-out infinite}
+  @keyframes reel-pulse{50%{opacity:.45;transform:scale(.85)}}
   .work-points{list-style:none;margin:0 0 26px;padding:0}
   .work-points li{position:relative;padding:10px 0 10px 30px;border-top:1px solid var(--rule)}
   .work-points li:last-child{border-bottom:1px solid var(--rule)}
@@ -394,6 +400,7 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     .chip{animation:none}
+    .ig-grid li.is-reel img,.ig-grid li.is-reel::before{animation:none}
     .marquee-track{animation:none}
     .marquee-track[aria-hidden]{display:none}
     .marquee{justify-content:center;flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}
@@ -525,7 +532,7 @@ FORM: Wall-calendar planner; signature = plan switch refilling the month.
               <div><b>Brew &amp; Bloom Café</b><p>Filter coffee, fresh bakes and slow mornings.<br>Order on WhatsApp ↓</p></div>
             </div>
             <div class="ig-buttons" aria-hidden="true"><span>Follow</span><span>Message</span><span>WhatsApp</span></div>
-            <ul class="ig-grid"><li style="--c:#2350d8"><span>3 coffee myths, busted</span></li><li style="--c:#c9271f"><span>Monsoon combo offer</span></li><li style="--c:#cf2f74"><span>Customer of the week</span></li><li style="--c:#0b8a68"><span>New on the menu: cold brew</span></li><li style="--c:#d99a00"><span>Happy Diwali from our team</span></li><li style="--c:#ea6a12"><span>A or B? Pick your order</span></li><li style="--c:#6a3fc9"><span>How we roast, step by step</span></li><li style="--c:#16121c" class="is-reel"><span>Behind the counter</span></li><li style="--c:#2350d8"><span>Milk or oat: which one?</span></li></ul>
+            <ul class="ig-grid"><li style="--c:#2350d8"><img src="/social-growth/assets/feed/01-latte-pour.webp" width="480" height="600" alt="" loading="lazy" decoding="async"><span>3 coffee myths, busted</span></li><li style="--c:#c9271f"><img src="/social-growth/assets/feed/02-croissant.webp" width="480" height="600" alt="" loading="lazy" decoding="async"><span>Monsoon combo offer</span></li><li style="--c:#cf2f74"><img src="/social-growth/assets/feed/03-customer.webp" width="480" height="600" alt="" loading="lazy" decoding="async"><span>Customer of the week</span></li><li style="--c:#0b8a68"><img src="/social-growth/assets/feed/04-iced-coffee.webp" width="480" height="600" alt="" loading="lazy" decoding="async"><span>New on the menu: cold brew</span></li><li style="--c:#d99a00"><img src="/social-growth/assets/feed/05-diya.webp" width="480" height="600" alt="" loading="lazy" decoding="async"><span>Happy Diwali from our team</span></li><li style="--c:#ea6a12"><img src="/social-growth/assets/feed/06-two-cups.webp" width="480" height="600" alt="" loading="lazy" decoding="async"><span>A or B? Pick your order</span></li><li style="--c:#6a3fc9"><img src="/social-growth/assets/feed/07-roasting.webp" width="480" height="600" alt="" loading="lazy" decoding="async"><span>How we roast, step by step</span></li><li style="--c:#16121c" class="is-reel"><img src="/social-growth/assets/feed/08-reel-pour.webp" width="480" height="600" alt="" loading="lazy" decoding="async"><span>Behind the counter</span></li><li style="--c:#2350d8"><img src="/social-growth/assets/feed/09-chai-milk.webp" width="480" height="600" alt="" loading="lazy" decoding="async"><span>Milk or oat: which one?</span></li></ul>
           </div>
         </figure>
         <div>
