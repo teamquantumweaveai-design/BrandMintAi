@@ -11,11 +11,11 @@ header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store');
 
-// Prices are fixed here, never taken from the browser. Amounts are in paise and include 18% GST.
+// Prices are fixed here, never taken from the browser. Amounts are the full price in paise, 18% GST included.
 const SOCIAL_GROWTH_PLANS = [
-    'starter' => ['name' => 'Starter Social', 'base' => 399900],
-    'growth'  => ['name' => 'Growth Social',  'base' => 699900],
-    'scale'   => ['name' => 'Scale Social',   'base' => 999900],
+    'starter' => ['name' => 'Starter Social', 'price' => 399900],
+    'growth'  => ['name' => 'Growth Social',  'price' => 699900],
+    'scale'   => ['name' => 'Scale Social',   'price' => 999900],
 ];
 const GST_PERCENT = 18;
 
