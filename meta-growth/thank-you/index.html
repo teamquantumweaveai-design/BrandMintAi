@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment received | Quantum Weave AI Social Growth System</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="/meta-growth/assets/brand/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#16121c;--ink-soft:#4d4558;--wa-btn:#1a8f4a;--ig:linear-gradient(125deg,#4f5bd5 0%,#962fbf 30%,#d62976 58%,#fa7e1e 86%,#feda75 108%)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100svh;display:grid;place-items:center;padding:24px 16px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Roboto,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);background:radial-gradient(60% 55% at 100% 0%,rgba(214,41,118,.18),transparent 70%),radial-gradient(55% 60% at 0% 100%,rgba(150,47,191,.14),transparent 70%),#fdf8fb}
+  .card{width:min(560px,100%);background:#fff;border-radius:20px;padding:clamp(28px,6vw,48px);box-shadow:0 24px 50px -24px rgba(22,18,28,.35)}
+  .tick{width:56px;height:56px;border-radius:50%;background:var(--ig);display:grid;place-items:center;margin-bottom:20px}
+  .tick svg{width:28px;height:28px}
+  h1{font-weight:700;letter-spacing:-.025em;line-height:1.1;font-size:clamp(30px,6vw,42px);margin:0 0 12px}
+  p{margin:0 0 14px;line-height:1.6;color:var(--ink-soft)}
+  .ref{font-size:14px;background:#f7f4f8;border-radius:10px;padding:10px 14px;word-break:break-all}
+  ol{margin:6px 0 24px;padding-left:20px;line-height:1.7;color:var(--ink-soft)}
+  .btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:54px;border-radius:12px;background:var(--wa-btn);color:#fff;font-weight:700;font-size:17px;text-decoration:none}
+  .btn:hover{background:#157a3e}
+  .back{display:block;text-align:center;margin-top:14px;color:var(--ink-soft);font-size:14px}
+</style>
+</head>
+<body>
+  <main class="card">
+    <img src="/meta-growth/assets/brand/qw-mark.png" alt="Quantum Weave AI" height="36" style="display:block;height:36px;width:auto;margin-bottom:24px">
+    <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h1>Payment received. Welcome aboard.</h1>
+    <p id="summary">Your first month of the Social Growth System is confirmed.</p>
+    <p class="ref" id="ref" hidden></p>
+    <p><strong>What happens next</strong></p>
+    <ol>
+      <li>Message us on WhatsApp so we can start onboarding.</li>
+      <li>We go through your business, offers and important dates.</li>
+      <li>You approve your first content calendar before anything is published.</li>
+    </ol>
+    <a class="btn" id="wa" href="https://wa.me/919972965677">Start onboarding on WhatsApp</a>
+    <a class="back" href="/meta-growth/">Back to the Social Growth System</a>
+  </main>
+<script>
+(function(){
+  var names = { starter: 'Starter Social', growth: 'Growth Social', scale: 'Scale Social' };
+  var q = new URLSearchParams(location.search);
+  var plan = names[q.get('plan')] || '';
+  var payment = (q.get('payment') || '').replace(/[^A-Za-z0-9_]/g, '');
+  if(plan) document.getElementById('summary').textContent = 'Your first month of ' + plan + ' is confirmed.';
+  if(payment){ var ref = document.getElementById('ref'); ref.textContent = 'Payment ID: ' + payment; ref.hidden = false; }
+  var msg = 'Hi Quantum Weave AI, I just paid for ' + (plan || 'the Social Growth System') + (payment ? ' (Payment ID: ' + payment + ')' : '') + '. I’d like to start onboarding.';
+  document.getElementById('wa').href = 'https://wa.me/919972965677?text=' + encodeURIComponent(msg);
+})();
+</script>
+</body>
+</html>

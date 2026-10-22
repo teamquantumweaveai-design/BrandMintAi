@@ -1,0 +1,8 @@
+# Only the two checkout endpoints are reachable. Blocks lib.php, PHP error_log files and anything else here.
+<IfModule mod_authz_core.c>
+  Require all denied
+  <FilesMatch "^(create-order|verify-payment)\.php$">
+    Require all granted
+  </FilesMatch>
+</IfModule>
+Options -Indexes
