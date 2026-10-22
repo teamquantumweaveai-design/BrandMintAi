@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Shared helpers for the Social Growth System checkout. Not an endpoint.
+// Shared helpers for the Meta Growth System checkout. Not an endpoint.
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
     http_response_code(404);
     exit;

@@ -26,7 +26,7 @@ export const HEADER_LINKS: NavLink[] = [
       { label: "Cashflow Copy", href: "https://cashflowcopy.in/", isExternal: true },
       { label: "WhatsApp Automation", href: "http://brandmintai.io/freemium", isExternal: true },
       { label: "AI-Powered Films", href: "http://brandmintai.io/filmsuccess", isExternal: true },
-      { label: "Social Growth System", href: "/meta-growth/", isExternal: true },
+      { label: "Meta Growth System", href: "/meta-growth/", isExternal: true },
     ],
   },
   { label: "Business Growth", href: "/business-growth" },
