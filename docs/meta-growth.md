@@ -14,15 +14,15 @@ The Quantum Weave Meta Growth System landing page is a static page served at
 
 ## Pricing
 
-Prices live only in `lib.php` (`SOCIAL_GROWTH_PLANS`), in paise, before GST. The server adds 18% GST,
-so the browser can never change the amount charged. If you change a price, also update the page text
-(`price`, `gst` line and the "Pay ₹… & start" button).
+Prices live only in `lib.php` (`SOCIAL_GROWTH_PLANS`), in paise, **including** 18% GST. The server charges
+that amount as-is, so the browser can never change it, and records the GST part in the order notes.
+If you change a price, also update the page text (`price` line and the "Pay ₹… and start" button label).
 
-| Plan | Monthly | + 18% GST | Charged |
+| Plan | Charged (incl. GST) | Before GST | GST (18%) |
 |---|---|---|---|
-| Starter Social | ₹3,999 | ₹719.82 | ₹4,718.82 |
-| Growth Social | ₹6,999 | ₹1,259.82 | ₹8,258.82 |
-| Scale Social | ₹9,999 | ₹1,799.82 | ₹11,798.82 |
+| Starter Social | ₹3,999 | ₹3,388.98 | ₹610.02 |
+| Growth Social | ₹6,999 | ₹5,931.35 | ₹1,067.65 |
+| Scale Social | ₹9,999 | ₹8,473.72 | ₹1,525.28 |
 
 Customers pay the first month online. Later months are collected with Razorpay payment links (no auto-debit).
 
