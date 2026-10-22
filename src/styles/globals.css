@@ -112,3 +112,29 @@ footer h1, footer h2, footer h3, footer h4, footer h5, footer h6,
 .mesh-glow {
   background: radial-gradient(circle at 50% -20%, rgba(255, 92, 53, 0.08) 0%, rgba(255, 122, 89, 0.04) 40%, rgba(248, 249, 250, 0) 70%);
 }
+
+/* Client logo strip: two identical tracks slide left forever (GPU transform only, so it stays smooth) */
+.logo-marquee {
+  display: flex;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.logo-marquee-track {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 56px;
+  margin: 0;
+  padding: 0 56px 0 0;
+  list-style: none;
+  will-change: transform;
+  animation: logo-marquee 75s linear infinite;
+}
+.logo-marquee:hover .logo-marquee-track { animation-play-state: paused; }
+.logo-marquee-track li { flex: none; display: flex; align-items: center; height: 44px; }
+.logo-marquee-track img { display: block; width: auto; max-width: none; }
+@keyframes logo-marquee { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-100%, 0, 0); } }
+@media (max-width: 640px) {
+  .logo-marquee-track { gap: 40px; padding-right: 40px; animation-duration: 64s; }
+}

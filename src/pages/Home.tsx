@@ -21,6 +21,7 @@ import {
 
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
+import LogoStrip from "@/components/sections/LogoStrip";
 import GradientText from "@/components/ui/GradientText";
 import GlowCard from "@/components/ui/GlowCard";
 import GradientBorder from "@/components/ui/GradientBorder";
@@ -165,6 +166,8 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+
+        <LogoStrip />
 
         {/* WHAT WE HELP YOU DO SECTION */}
         <section className="py-24 bg-white border-t border-[#CBD6E2]/60 relative z-10 w-full">
