@@ -486,12 +486,10 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
     .ba-phones .phone{width:240px}
   }
   @media (prefers-reduced-motion:reduce){
-    .kpi,.kpi.on i::after,.kpi.on b,.notif,.hero-visual .badge::after,.badge,.follow-card,.dots i,.mosaic .reel img,.marquee-track,.vflow::before,.mini-phone .g img,.deck *,.grow *,.hearts i,.reel *,.reel-bars i::after,.reel-hearts i,.reel-side .like,.final .badge::after,.final .visual::before,.final .sparks{animation:none}
+    .kpi,.kpi.on i::after,.kpi.on b,.notif,.hero-visual .badge::after,.badge,.follow-card,.dots i,.mosaic .reel img,.vflow::before,.mini-phone .g img,.deck *,.grow *,.hearts i,.reel *,.reel-bars i::after,.reel-hearts i,.reel-side .like,.final .badge::after,.final .visual::before,.final .sparks{animation:none}
     .reel img:first-child{opacity:1}
     .grow .vline{stroke-dashoffset:0}
     .grow .toast{opacity:1}
-    .marquee-track[aria-hidden]{display:none}
-    .marquee{justify-content:center;flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}
     .btn,.sticky,.plan{transition:none}
   }
 </style>
@@ -885,7 +883,7 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
 
   // Client logos: one extra copy per track covers wide screens; speed ~55px/s.
   var marquee = document.querySelector('.marquee');
-  if(marquee && !reduce){
+  if(marquee){
     var tracks = marquee.querySelectorAll('.marquee-track');
     var set = tracks[0].innerHTML, copy = set.replace(/alt="[^"]*"/g, 'alt=""');
     tracks[0].innerHTML = set + copy;
