@@ -1,6 +1,6 @@
-# Social Growth System page and Razorpay checkout
+# Meta Growth System page and Razorpay checkout
 
-The Quantum Weave Social Growth System landing page is a static page served at
+The Quantum Weave Meta Growth System landing page is a static page served at
 `https://brandmintai.io/meta-growth/`, separate from the React app (same pattern as `/ai-business-faq/`).
 
 | Path | What it is |
