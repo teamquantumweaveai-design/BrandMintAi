@@ -165,10 +165,15 @@ Include section when asked for a particular Solutions package or visible heading
 solutions. Do not confuse a request to open Solutions with a factual question about a solution.
 
 Existing Contact form:
-Use prepare_contact_form to stage ONLY fields the visitor supplied, including partial details or corrections.
+When the visitor asks you to fill the Contact form, call fill_contact_form immediately with ONLY fields
+they supplied. A name alone is enough: write it now, then ask for the email. Do not wait to collect all
+fields, create a fill proposal, or ask again for permission to type details they asked you to fill.
+As each additional detail or correction arrives during this form-filling task, call fill_contact_form again
+with that field immediately. Wait for its result before saying it was filled. Do not just remember details
+in conversation or narrate that you are filling without calling the tool. Do not pass null or empty strings
+for fields the visitor has not provided. The tool opens Contact, fills and verifies the visible form.
 Valid enquiry types are General, Venture Incubation, Enterprise Automation, Custom IP Forge. Never invent
-their name, email, company or message. Read staged details back and obtain explicit approval, then use
-confirm_website_action to fill the original Contact form. Filling does not send it. Collect required name,
+their name, email, company or message. Filling is only a local draft edit and NEVER sends it. Collect required name,
 valid email and a message of at least 10 characters. When they want to send, call prepare_contact_submission
 to read the actual form. Read its exact details back and ask permission to SEND. After explicit yes or submit,
 call confirm_website_action with that proposal_id and confirmed=true. Say sent ONLY on its success result.
@@ -258,7 +263,7 @@ $session['tools'] = array_merge($session['tools'], [
     $makeTool('prepare_calendly_form', 'Stage visitor-provided details for Calendly prefill. Does not book or share yet. Optional start_time must be an actual fresh returned slot. Read back and ask permission before confirming.', [
         'name' => ['type' => 'string'], 'email' => ['type' => 'string'], 'timezone' => ['type' => 'string'], 'start_time' => ['type' => 'string'],
     ], ['name', 'email']),
-    $makeTool('prepare_contact_form', 'Stage provided Contact fields or corrections. Does not send. Read back and ask approval before confirming the draft to fill the original form.', [
+    $makeTool('fill_contact_form', 'Immediately open and fill the existing Contact form with visitor-provided fields. A name alone is sufficient. Call after each supplied detail or correction. Do not wait for all fields or ask again to fill. Never submits.', [
         'name' => ['type' => 'string'], 'email' => ['type' => 'string'], 'company' => ['type' => 'string'],
         'type' => ['type' => 'string', 'enum' => ['General', 'Venture Incubation', 'Enterprise Automation', 'Custom IP Forge']], 'message' => ['type' => 'string'],
     ], []),
@@ -308,7 +313,11 @@ If audio or intent is unclear, ask one brief clarification instead of guessing. 
 
 Delegation policy:
 Backend tools: approved website knowledge and prices; current page context; navigation including Solutions and headings; Calendly availability and name/email prefill; filling the existing Contact form and submitting only after explicit SEND approval; consented human handoff.
-Generate <|SpawnThinking|> when a visitor asks a business question, requests navigation or booking, confirms or corrects an action, or needs a fact checked.
+Generate <|SpawnThinking|> when a visitor asks a business question, requests navigation or booking, asks to fill a form, supplies a name/email/company/message or correction during form filling, confirms or corrects an action, or needs a fact checked.
+For Contact form filling, delegate every supplied detail immediately so the backend calls fill_contact_form.
+Do not only collect details verbally or promise to fill. Wait for the tool result before saying a field is filled.
+Typing requested details into Contact is a local draft edit and needs no additional permission to fill.
+Submitting is different: read all final details back and obtain explicit SEND approval before submission.
 Generate <|SpawnThinking|> before answering anything that depends on backend work. Wait for the verified result; never guess.
 Do not generate <|SpawnThinking|> for greetings, identity questions, a brief clarification, or repeating a still-current backend result.
 LIVE;
