@@ -3,6 +3,7 @@ import { Mic, MicOff, PhoneOff, Volume2, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BrandMintVoiceSession, type VoiceCaption, type VoiceStatus, type VoiceLanguage, type VoiceProposal, type VoiceBooking } from "./realtime";
 import "./voice-agent.css";
+import { calendarPrefillUrl, fillVoiceContactForm, submitVoiceContactForm, isVoiceSpaPath, waitForVoicePage, scrollVoiceSection, type VoiceCalendarPrefill } from "./website-actions";
 
 export default function VoiceAgent() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function VoiceAgent() {
   const [captions, setCaptions] = useState<VoiceCaption[]>([]);
   const [blocked, setBlocked] = useState(false);
   const [booking, setBooking] = useState(false);
+  const [calendarDetails, setCalendarDetails] = useState<VoiceCalendarPrefill>();
   const [booked, setBooked] = useState(false);
   const bookingFrame = useRef<HTMLIFrameElement>(null);
   const session = useRef<BrandMintVoiceSession | null>(null);
@@ -35,8 +37,8 @@ export default function VoiceAgent() {
     session.current = null;
     setStatus("idle"); setMuted(false); setBlocked(false);
   };
-  const close = () => { end(); setOpen(false); setBooking(false); launcher.current?.focus(); };
-  const openBooking = () => { navigate("/contact"); setBooked(false); setBooking(true); };
+  const close = () => { end(); setOpen(false); setBooking(false); setCalendarDetails(undefined); launcher.current?.focus(); };
+  const openBooking = (details?: VoiceCalendarPrefill) => { setCalendarDetails(details); navigate("/contact"); setBooked(false); setBooking(true); };
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => session.current?.updatePageContext());
@@ -56,7 +58,7 @@ export default function VoiceAgent() {
     };
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, [booking]);
+  }, [booking, calendarDetails]);
 
   useEffect(() => () => session.current?.stop(), []);
   useEffect(() => {
@@ -92,8 +94,15 @@ export default function VoiceAgent() {
       }),
       ended: reason => { session.current = null; setStatus("idle"); setMuted(false); setBlocked(false); if (reason) setMessage(reason); },
       playbackBlocked: () => setBlocked(true),
-      navigate: path => { navigate(path); window.scrollTo({ top: 0, behavior: "smooth" }); },
+      navigate: async (path, section) => {
+        if (!isVoiceSpaPath(path)) { end(); window.location.assign(path); return true; }
+        navigate(path); await waitForVoicePage(path);
+        session.current?.updatePageContext();
+        return scrollVoiceSection(section);
+      },
       book: openBooking,
+      fillContact: fillVoiceContactForm,
+      submitContact: submitVoiceContactForm,
       proposal: setProposal,
       capabilities: setCapabilities,
       booked: result => { setBookingResult(result); setBooked(true); setBooking(false); navigate("/contact"); },
@@ -139,7 +148,7 @@ export default function VoiceAgent() {
             </label>
             {active && <p className="bm-voice-context">Helping with: {location.pathname === "/" ? "Home" : location.pathname.slice(1).replace(/-/g, " ")}</p>}
             {proposal && <div className="bm-voice-proposal" role="region" aria-label="Review voice action">
-              <strong>{proposal.kind === "booking" ? "Confirm your consultation" : "Share this summary with the team?"}</strong>
+              <strong>{{ booking: "Confirm your consultation", handoff: "Share this summary with the team?", calendar_prefill: "Review Calendly details", contact_fill: "Review Contact form details", contact_submit: "Send this Contact message?" }[proposal.kind]}</strong>
               <p>{proposal.summary}</p>
               <div><button disabled={proposalBusy} onClick={async () => {
                 if (!session.current) return;
@@ -147,7 +156,7 @@ export default function VoiceAgent() {
                 try { const result = await session.current.confirmProposal(proposal); if (!result.success) setMessage(result.message || "The action could not be confirmed."); }
                 catch { setMessage("No confirmation received. Do not retry a booking; check your email or contact the team first."); }
                 finally { setProposalBusy(false); }
-              }}>{proposalBusy ? "Checking…" : proposal.kind === "booking" ? "Confirm and send invitation" : "I agree — email this summary"}</button>
+              }}>{proposalBusy ? "Checking…" : { booking: "Confirm and send invitation", handoff: "I agree — email this summary", calendar_prefill: "Fill Calendly form", contact_fill: "Fill Contact form", contact_submit: "Confirm and send message" }[proposal.kind]}</button>
               <button disabled={proposalBusy} onClick={async () => {
                 setProposalBusy(true);
                 try { await session.current?.declineProposal(proposal); }
@@ -167,9 +176,9 @@ export default function VoiceAgent() {
                 <button onClick={() => setBooking(false)} aria-label="Close booking calendar"><X size={16} /></button></div>
               {booked && <p role="status">Your consultation is booked. Check your email for Calendly's details.</p>}
               <iframe ref={bookingFrame} title="Book a BrandMint AI consultation on Calendly"
-                src={`https://calendly.com/team-brandmint/30min?embed_domain=${encodeURIComponent(window.location.hostname)}&embed_type=Inline&hide_event_type_details=1`}
+                src={calendarPrefillUrl(calendarDetails)}
                 referrerPolicy="strict-origin-when-cross-origin" />
-              <a href="https://calendly.com/team-brandmint/30min" target="_blank" rel="noopener noreferrer" onClick={end}>Open Calendly in a new tab ↗</a>
+              <a href={calendarPrefillUrl(calendarDetails, false)} target="_blank" rel="noopener noreferrer" onClick={end}>Open Calendly in a new tab ↗</a>
             </div>}
             <div className="bm-voice-transcript" ref={transcript} role="log" aria-label="Voice conversation captions" aria-live="off" style={booking ? { height: 75 } : undefined}>
               {captions.length ? captions.map(item => <p key={item.id}><strong>{item.speaker}</strong><span>{item.text}</span></p>)
@@ -190,7 +199,7 @@ export default function VoiceAgent() {
             </div>
             <p className="bm-voice-privacy">You're speaking with AI. Starting shares microphone audio with OpenAI. Captions stay in this tab. Booking details and approved summaries are processed securely; summaries are shared only with your permission. Anonymous quality counts are collected. Close or end to stop. Five-minute sessions.</p>
             <nav className="bm-voice-links" aria-label="Contact BrandMint AI">
-              <button onClick={openBooking}>Book consultation</button>
+              <button onClick={() => openBooking()}>Book consultation</button>
               <a href="/contact" onClick={end}>Contact the team</a>
               <a href="https://wa.me/919972965677" target="_blank" rel="noopener noreferrer" onClick={end}>WhatsApp ↗</a>
             </nav>

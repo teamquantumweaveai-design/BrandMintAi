@@ -141,6 +141,27 @@ The private directory can be set with `storage_dir`; paths under the web root ar
 
 ## Local verification
 
+### Voice form assistance
+
+Ishani can stage visitor-provided Contact fields and Calendly name/email, read them back, and fill
+after explicit approval. Contact sending uses the original form's `requestSubmit()` handler, checks
+the approved snapshot again, and observes the original success/error status. Sending requires a
+separate explicit approval after read-back. A conversation cannot automatically repeat a Contact
+submission, including after an uncertain result. Silence, closing, expired drafts and corrections
+never count as approval. Drafts remain only in tab memory and expire after five minutes.
+
+On Calendly Free, `calendly_booking_enabled` stays false. A valid private token/event configuration
+enables read-only availability independently. Ishani can open a provider-returned slot link with
+approved name/email prefilled. The visitor reviews Calendly's required fields and clicks its final
+Schedule button. Opening or prefilling a form is never reported as a completed appointment.
+
+Voice navigation uses a fixed list of published page paths and can scroll to a visible heading,
+including Solutions packages. Main React routes keep the conversation connected; opening separate
+static pages or external sites ends the microphone session before navigating.
+
+The adapter is confined to `src/components/voice/`; existing page components, form validation,
+Supabase insertion, navigation markup, payments and other website features are unchanged.
+
 `npm run build` checks TypeScript and the production build. The Vite development server cannot
 execute PHP; use PHP's built-in server against `dist/` for endpoint checks, or Hostinger staging.
 Without a configured server key the widget should show a friendly unavailable message and leave

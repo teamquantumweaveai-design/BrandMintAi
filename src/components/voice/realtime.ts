@@ -1,17 +1,20 @@
+import { contactFieldsSchema, readVoiceContactForm, validateVoiceContactSubmission, resolveVoicePage, calendarPrefillUrl, type VoiceCalendarPrefill, type VoiceContactFields } from "./website-actions";
 // Native WebRTC keeps audio streaming directly between the visitor and OpenAI.
 // Only the SDP handshake goes through our PHP endpoint; no API key reaches JS.
 export type VoiceStatus = "connecting" | "listening" | "thinking" | "speaking";
 export type VoiceCaption = { id: string; speaker: "You" | "BrandMint AI"; text: string };
 export type VoiceLanguage = "en" | "hi" | "kn";
-export type VoiceProposal = { id: string; kind: "booking" | "handoff"; summary: string };
+export type VoiceProposal = { id: string; kind: "booking" | "handoff" | "calendar_prefill" | "contact_fill" | "contact_submit"; summary: string };
 export type VoiceBooking = { start_time: string; timezone: string; cancel_url?: string; reschedule_url?: string };
 type Callbacks = {
   status: (status: VoiceStatus) => void;
   caption: (caption: VoiceCaption) => void;
   ended: (message?: string) => void;
   playbackBlocked: () => void;
-  navigate: (path: string) => void;
-  book: () => void;
+  navigate: (path: string, section?: string) => Promise<boolean> | boolean | void;
+  book: (details?: VoiceCalendarPrefill) => void;
+  fillContact: (fields: VoiceContactFields) => Promise<void>;
+  submitContact: (fields: VoiceContactFields) => Promise<{ success: boolean; message: string; uncertain?: boolean }>;
   proposal?: (proposal: VoiceProposal | null) => void;
   booked?: (booking: VoiceBooking) => void;
   handoffSent?: () => void;
@@ -38,6 +41,10 @@ export class BrandMintVoiceSession {
   private liveCaptionEnd = { You: 0, "BrandMint AI": 0 };
   private liveCaptionId = { You: "", "BrandMint AI": "" };
   private handledCalls = new Set<string>();
+  private websiteDraft?: { proposal: VoiceProposal; expires: number; payload: VoiceContactFields | VoiceCalendarPrefill };
+  private availableSlots: Record<string, string> = {};
+  private slotsChecked = 0;
+  private contactAttempted = false;
 
   constructor(private audio: HTMLAudioElement, private callbacks: Callbacks, language: VoiceLanguage = "en") { this.language = language; }
 
@@ -209,6 +216,12 @@ export class BrandMintVoiceSession {
   }
 
   async confirmProposal(proposal: VoiceProposal) {
+    if (["calendar_prefill", "contact_fill", "contact_submit"].includes(proposal.kind)) {
+      const result = await this.confirmWebsiteAction(proposal.id, true);
+      this.sendContext("Result of the visitor's explicit confirmation: " + JSON.stringify(result), true);
+      if (this.protocol === "realtime" && this.channel?.readyState === "open") this.channel.send(JSON.stringify({ type: "response.create" }));
+      return result;
+    }
     const name = proposal.kind === "booking" ? "confirm_consultation" : "confirm_handoff";
     const args = proposal.kind === "booking" ? { proposal_id: proposal.id, confirmed: true } : { proposal_id: proposal.id, consented: true };
     const result = await this.action(name, args);
@@ -219,6 +232,7 @@ export class BrandMintVoiceSession {
   }
 
   async declineProposal(proposal: VoiceProposal) {
+    if (this.websiteDraft?.proposal.id === proposal.id) this.websiteDraft = undefined;
     await this.action("discard_proposal", { proposal_id: proposal.id });
     this.callbacks.proposal?.(null);
     this.sendContext("The visitor declined the prepared action in the widget. Do not book or share that proposal. Ask what they prefer next.");
@@ -251,6 +265,8 @@ export class BrandMintVoiceSession {
         body: JSON.stringify({ action: "metric", args: { event: message?.toLowerCase().includes("connect") ? "connection_failed" : "ended" } }), keepalive: true }).catch(() => {});
     }
     this.closed = true;
+    this.websiteDraft = undefined;
+    this.availableSlots = {};
     this.controller.abort();
     this.timers.forEach(clearTimeout);
     clearInterval(this.playbackMonitor);
@@ -317,19 +333,70 @@ export class BrandMintVoiceSession {
     if (event.type === "response.output_audio_transcript.done") this.updateCaption(event.item_id, "BrandMint AI", event.transcript, false);
   }
 
+  private stageWebsiteAction(kind: "calendar_prefill" | "contact_fill" | "contact_submit", payload: VoiceContactFields | VoiceCalendarPrefill) {
+    const summary = Object.entries(payload).filter(([key]) => key !== "scheduling_url").map(([key, value]) => `${key.replace(/_/g, " ")}: ${value}`).join(" · ");
+    const proposal = { id: crypto.randomUUID(), kind, summary };
+    this.websiteDraft = { proposal, payload, expires: Date.now() + 300000 };
+    this.callbacks.proposal?.(proposal);
+    return { success: true, proposal_id: proposal.id, summary, message: kind === "contact_submit"
+      ? "Read these exact details back and ask permission to SEND. Wait for the visitor's explicit approval before confirm_website_action. Nothing has been submitted."
+      : "Read these details back and ask permission to fill the form. For Calendly, explain these details will be shared with Calendly and the visitor must click its final Schedule button. Nothing has been submitted." };
+  }
+
+  private async confirmWebsiteAction(id: string, confirmed: boolean): Promise<Record<string, any>> {
+    const draft = this.websiteDraft;
+    if (this.closed || !draft || draft.proposal.id !== id || draft.expires < Date.now()) return { success: false, message: "This draft expired or changed. Prepare and review the current details again." };
+    this.websiteDraft = undefined; this.callbacks.proposal?.(null); // Consume before awaiting: no duplicate confirmations.
+    if (confirmed !== true) return { success: true, message: "Draft declined. Nothing was submitted." };
+    if (draft.proposal.kind === "calendar_prefill") {
+      this.callbacks.book(draft.payload as VoiceCalendarPrefill);
+      return { success: true, message: "Opened the Calendly form with the approved details prefilled. The visitor must review and click Calendly's final Schedule button. This is NOT a confirmed booking." };
+    }
+    if (draft.proposal.kind === "contact_fill") {
+      await this.callbacks.navigate("/contact");
+      if (this.closed) return { success: false, message: "Conversation ended. No action taken." };
+      await this.callbacks.fillContact(draft.payload);
+      return { success: true, message: "Filled the existing Contact form. Nothing was sent. Ask for remaining required details, then prepare_contact_submission and obtain explicit permission to send." };
+    }
+    if (this.contactAttempted) return { success: false, message: "A Contact submission was already attempted in this conversation. Do not retry automatically." };
+    const current = validateVoiceContactSubmission(readVoiceContactForm());
+    if (JSON.stringify(current) !== JSON.stringify(draft.payload)) return { success: false, message: "The form changed. Prepare the updated details and ask permission again. Nothing was sent." };
+    // The adapter compares the approved snapshot with the visible form again before requesting submit.
+    this.contactAttempted = true;
+    return this.callbacks.submitContact(draft.payload);
+  }
+
   private async handleTool(event: Record<string, any>) {
       if (this.closed) return;
-      const paths: Record<string, string> = {
-        home: "/", about: "/about", solutions: "/solutions", business_growth: "/business-growth",
-        quantum_weave: "/quantum-weave", ventures: "/ventures", academy: "/academy", contact: "/contact",
-      };
       let result: Record<string, unknown> = { success: false, message: "That action is not available." };
       try {
         const args = JSON.parse(event.arguments);
-        if (event.name === "navigate_website" && Object.prototype.hasOwnProperty.call(paths, args.page)) {
-          this.callbacks.navigate(paths[args.page]);
-          result = { success: true, message: `Opened ${paths[args.page]}. Navigation does not submit a form or confirm an appointment.` };
+        if (event.name === "navigate_website" && typeof args.page === "string" && resolveVoicePage(args.page)) {
+          this.websiteDraft = undefined; this.callbacks.proposal?.(null);
+          const path = resolveVoicePage(args.page)!;
+          const sectionFound = await this.callbacks.navigate(path, typeof args.section === "string" ? args.section : undefined);
+          result = { success: true, message: `Opened ${path}.${sectionFound === false ? " The requested section was not found; ask which visible section they mean." : ""} Navigation does not submit a form or confirm an appointment.` };
           void this.metric("navigation");
+        } else if (event.name === "prepare_contact_form") {
+          const fields = contactFieldsSchema.parse(args);
+          if (!Object.keys(fields).length) throw Error("Please provide at least one Contact field.");
+          result = this.stageWebsiteAction("contact_fill", fields);
+        } else if (event.name === "prepare_contact_submission") {
+          if (this.contactAttempted) throw Error("A Contact submission was already attempted. Do not retry automatically.");
+          result = this.stageWebsiteAction("contact_submit", validateVoiceContactSubmission(readVoiceContactForm()));
+        } else if (event.name === "prepare_calendly_form") {
+          const fields = contactFieldsSchema.pick({ name: true, email: true }).required().parse({ name: args.name, email: args.email });
+          const details: VoiceCalendarPrefill = { name: fields.name!, email: fields.email! };
+          if (args.timezone) { new Intl.DateTimeFormat("en", { timeZone: args.timezone }).format(); details.timezone = args.timezone; }
+          if (args.start_time) {
+            if (!this.availableSlots[args.start_time] || this.slotsChecked < Date.now() - 600000) throw Error("Check current availability again and choose an actual returned slot.");
+            if (!details.timezone) throw Error("Ask for the visitor's timezone before preparing a selected time.");
+            details.start_time = args.start_time; details.scheduling_url = this.availableSlots[args.start_time];
+          }
+          calendarPrefillUrl(details); // Validate the provider link before showing a proposal.
+          result = this.stageWebsiteAction("calendar_prefill", details);
+        } else if (event.name === "confirm_website_action") {
+          result = await this.confirmWebsiteAction(args.proposal_id, args.confirmed);
         } else if (event.name === "open_consultation_booking") {
           this.callbacks.book();
           result = { success: true, message: "Opened Contact and the embedded Calendly booking calendar. Ask the visitor to choose a slot and complete their details in the calendar. A booking is not confirmed until Calendly reports success." };
@@ -339,12 +406,15 @@ export class BrandMintVoiceSession {
           if (result.success && Array.isArray(result.results) && result.results.length === 0) void this.metric("knowledge_miss");
         } else if (["get_consultation_slots", "prepare_consultation", "confirm_consultation", "prepare_handoff", "confirm_handoff"].includes(event.name)) {
           result = await this.action(event.name, args);
+          if (event.name === "get_consultation_slots" && result.success) {
+            this.availableSlots = (result.slot_links || {}) as Record<string, string>; this.slotsChecked = Date.now();
+          }
           if (!this.closed) this.applyActionResult(event.name, result);
         } else if (event.name === "report_unanswered" && ["pricing", "service", "other"].includes(args.category)) {
           await this.metric(`unanswered_${args.category}`);
           result = { success: true };
         }
-      } catch { /* Return a tool failure for invalid arguments. */ }
+      } catch (error) { result = { success: false, message: error instanceof Error ? error.message : "The action could not be completed. Do not claim success." }; }
       if (!this.closed && this.channel?.readyState === "open") {
         this.channel.send(JSON.stringify({ type: this.protocol === "live" ? "response.item.create" : "conversation.item.create", item: {
           type: "function_call_output", call_id: event.call_id, output: JSON.stringify(result),
