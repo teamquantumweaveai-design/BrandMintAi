@@ -35,7 +35,7 @@ if ($action === 'metric') {
 
 if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confirm_consultation'], true)) {
     if (!$capabilities['voice_booking']) voice_finish($file, $state, 503, ['success' => false, 'fallback' => 'calendar', 'message' => 'Voice booking is not connected yet. Use the embedded Calendly calendar.']);
-    $eventType = (string) $config['calendly_event_type'];
+    $eventType = voice_calendar_event_type($config);
     if (!preg_match('~^https://api\.calendly\.com/event_types/[a-zA-Z0-9-]+$~', $eventType)) voice_finish($file, $state, 503, ['success' => false, 'message' => 'Calendar event configuration needs review.']);
     // Validate the configured event really is the BrandMint link, never the unrelated connected account.
     $type = voice_calendly($config, 'GET', substr($eventType, strlen('https://api.calendly.com')));
@@ -56,7 +56,7 @@ if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confir
             if (($slot['status'] ?? '') === 'available' && strtotime($slot['start_time'] ?? '') > time()) $slots[] = $slot['start_time'];
         }
         $state['slots'] = array_slice($slots, 0, 200); $state['slots_checked'] = time();
-        voice_finish($file, $state, 200, ['success' => true, 'slots_utc' => array_slice($slots, 0, 24), 'duration_minutes' => 30, 'message' => 'Use only these actual available slots. Ask which timezone the visitor wants; do not assume.']);
+        voice_finish($file, $state, 200, ['success' => true, 'event_type' => $eventType, 'slots_utc' => array_slice($slots, 0, 24), 'duration_minutes' => 30, 'message' => 'Use only these actual available slots. Ask which timezone the visitor wants; do not assume.']);
     }
     if ($action === 'prepare_consultation') {
         if (!empty($state['booking_result']) || !empty($state['booking_attempted'])) voice_finish($file, $state, 409, ['success' => false, 'message' => 'A booking was already attempted in this conversation. Check its status before starting another.']);
