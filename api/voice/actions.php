@@ -34,7 +34,7 @@ if ($action === 'metric') {
 }
 
 if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confirm_consultation'], true)) {
-    if (!$capabilities['voice_booking']) voice_finish($file, $state, 503, ['success' => false, 'fallback' => 'calendar', 'message' => 'Voice booking is not connected yet. Use the embedded Calendly calendar.']);
+    if (!($action === 'get_consultation_slots' ? $capabilities['calendar_availability'] : $capabilities['voice_booking'])) voice_finish($file, $state, 503, ['success' => false, 'fallback' => 'calendar', 'message' => 'This calendar action is not enabled. Use the embedded Calendly form.']);
     $eventType = voice_calendar_event_type($config);
     if (!preg_match('~^https://api\.calendly\.com/event_types/[a-zA-Z0-9-]+$~', $eventType)) voice_finish($file, $state, 503, ['success' => false, 'message' => 'Calendar event configuration needs review.']);
     // Validate the configured event really is the BrandMint link, never the unrelated connected account.
@@ -43,20 +43,29 @@ if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confir
     if ($type['status'] !== 200 || rtrim($resource['scheduling_url'] ?? '', '/') !== 'https://calendly.com/team-brandmint/30min'
         || empty($resource['active'])) voice_finish($file, $state, 503, ['success' => false, 'fallback' => 'calendar', 'message' => 'The BrandMint calendar connection needs review. Use the calendar instead.']);
     if ($action === 'get_consultation_slots') {
-        $requested = isset($args['date']) ? strtotime((string) $args['date'] . 'T00:00:00Z') : false;
+        $timezone = (string) ($args['timezone'] ?? 'UTC');
+        if (!in_array($timezone, timezone_identifiers_list(DateTimeZone::ALL_WITH_BC), true)) voice_finish($file, $state, 400, ['success' => false, 'message' => 'Ask for a valid IANA timezone.']);
+        $day = isset($args['date']) ? DateTimeImmutable::createFromFormat('!Y-m-d', (string) $args['date'], new DateTimeZone($timezone)) : false;
+        if (isset($args['date']) && (!$day || $day->format('Y-m-d') !== $args['date'])) voice_finish($file, $state, 400, ['success' => false, 'message' => 'Use a valid date in YYYY-MM-DD format.']);
+        $requested = $day ? $day->getTimestamp() : false;
         $start = max(time() + 60, $requested ?: time() + 60);
         if ($start > time() + 90 * 86400) voice_finish($file, $state, 400, ['success' => false, 'message' => 'Choose a date within the next 90 days.']);
-        $end = $start + 7 * 86400 - 60;
+        $end = $day ? $day->modify('+1 day')->getTimestamp() : $start + 7 * 86400 - 60;
+        if ($end <= $start) voice_finish($file, $state, 400, ['success' => false, 'message' => 'Choose a future date.']);
         $response = voice_calendly($config, 'GET', '/event_type_available_times?' . http_build_query([
             'event_type' => $eventType, 'start_time' => gmdate('Y-m-d\TH:i:s\Z', $start), 'end_time' => gmdate('Y-m-d\TH:i:s\Z', $end),
         ]));
         if ($response['status'] !== 200) voice_finish($file, $state, 502, ['success' => false, 'fallback' => 'calendar', 'message' => 'Unable to check live availability. Use the calendar.']);
-        $slots = [];
+        $slots = []; $links = [];
         foreach ($response['data']['collection'] ?? [] as $slot) {
-            if (($slot['status'] ?? '') === 'available' && strtotime($slot['start_time'] ?? '') > time()) $slots[] = $slot['start_time'];
+            if (($slot['status'] ?? '') === 'available' && strtotime($slot['start_time'] ?? '') > time()) {
+                $slots[] = $slot['start_time'];
+                $link = (string) ($slot['scheduling_url'] ?? '');
+                if (preg_match('~^https://calendly\.com/team-brandmint/30min(?:/[^\s?#]*)?(?:\?[^\s#]*)?$~', $link)) $links[$slot['start_time']] = $link;
+            }
         }
         $state['slots'] = array_slice($slots, 0, 200); $state['slots_checked'] = time();
-        voice_finish($file, $state, 200, ['success' => true, 'event_type' => $eventType, 'slots_utc' => array_slice($slots, 0, 24), 'duration_minutes' => 30, 'message' => 'Use only these actual available slots. Ask which timezone the visitor wants; do not assume.']);
+        voice_finish($file, $state, 200, ['success' => true, 'event_type' => $eventType, 'slots_utc' => array_slice($slots, 0, 24), 'slot_links' => array_intersect_key($links, array_flip(array_slice($slots, 0, 24))), 'duration_minutes' => 30, 'message' => 'Use only these actual available slots. Convert to the visitor-confirmed timezone. On the Free Plan use prepare_calendly_form, then the visitor clicks Calendly Schedule; availability alone is not a booking.']);
     }
     if ($action === 'prepare_consultation') {
         if (!empty($state['booking_result']) || !empty($state['booking_attempted'])) voice_finish($file, $state, 409, ['success' => false, 'message' => 'A booking was already attempted in this conversation. Check its status before starting another.']);
