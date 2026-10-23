@@ -136,7 +136,7 @@ export class BrandMintVoiceSession {
     this.updatePageContext();
     void this.metric("connected", Date.now() - this.startedAt);
     if (this.protocol === "live") {
-      this.appendLive("session.commentary.append", `Speak first in ${{en:"English",hi:"Hindi",kn:"Kannada"}[this.language]}: introduce yourself once as Arjun, the AI assistant for Brandmint AI Pvt Ltd, and ask what the visitor would like help with today. Then listen. Do not repeat this greeting.`);
+      this.appendLive("session.commentary.append", `Speak first in ${{en:"English",hi:"Hindi",kn:"Kannada"}[this.language]}: introduce yourself once as Ishani, the AI assistant for Brandmint AI Pvt Ltd, and ask what the visitor would like help with today. Then listen. Do not repeat this greeting.`);
       // Live has continuous audio, not Realtime response-end events. Use received audio levels for the indicator.
       let lastAudible = 0;
       this.playbackMonitor = setInterval(() => {
@@ -151,7 +151,7 @@ export class BrandMintVoiceSession {
     } else {
       this.setLanguage(this.language);
       this.channel?.send(JSON.stringify({ type: "response.create", response: {
-        instructions: `Greet once in ${{en:"English",hi:"Hindi",kn:"Kannada"}[this.language]}: "Hi, I'm Arjun, the AI assistant for Brandmint AI Pvt Ltd. What would you like help with today?" Translate for the chosen language, then listen. Never repeat the introduction unless asked.`,
+        instructions: `Greet once in ${{en:"English",hi:"Hindi",kn:"Kannada"}[this.language]}: "Hi, I'm Ishani, the AI assistant for Brandmint AI Pvt Ltd. What would you like help with today?" Translate for the chosen language, then listen. Never repeat the introduction unless asked.`,
       } }));
     }
   }
