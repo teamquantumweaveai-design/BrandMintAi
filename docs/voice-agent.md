@@ -143,8 +143,10 @@ The private directory can be set with `storage_dir`; paths under the web root ar
 
 ### Voice form assistance
 
-Ishani can stage visitor-provided Contact fields and Calendly name/email, read them back, and fill
-after explicit approval. Contact sending uses the original form's `requestSubmit()` handler, checks
+When asked to fill Contact, Ishani writes each visitor-provided field immediately and verifies the
+visible value before acknowledging it, even when only a name is available. Later fields and corrections
+preserve the other entered values. No extra fill-confirmation step is required. Calendly name/email
+still use a reviewed prefill proposal. Contact sending uses the original form's `requestSubmit()` handler, checks
 the approved snapshot again, and observes the original success/error status. Sending requires a
 separate explicit approval after read-back. A conversation cannot automatically repeat a Contact
 submission, including after an uncertain result. Silence, closing, expired drafts and corrections

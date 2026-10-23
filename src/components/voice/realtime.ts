@@ -377,10 +377,19 @@ export class BrandMintVoiceSession {
           const sectionFound = await this.callbacks.navigate(path, typeof args.section === "string" ? args.section : undefined);
           result = { success: true, message: `Opened ${path}.${sectionFound === false ? " The requested section was not found; ask which visible section they mean." : ""} Navigation does not submit a form or confirm an appointment.` };
           void this.metric("navigation");
-        } else if (event.name === "prepare_contact_form") {
+        } else if (["fill_contact_form", "prepare_contact_form"].includes(event.name)) {
           const fields = contactFieldsSchema.parse(args);
           if (!Object.keys(fields).length) throw Error("Please provide at least one Contact field.");
-          result = this.stageWebsiteAction("contact_fill", fields);
+          // Filling is a local edit requested by the visitor, not permission to send.
+          // Also handle the old tool name so already-connected sessions receive this behavior.
+          this.websiteDraft = undefined; this.callbacks.proposal?.(null);
+          await this.callbacks.navigate("/contact");
+          if (this.closed) throw Error("The conversation ended. Nothing was sent.");
+          await this.callbacks.fillContact(fields);
+          const actual = readVoiceContactForm();
+          if (Object.entries(fields).some(([key, value]) => actual[key as keyof VoiceContactFields] !== value)) throw Error("The Contact fields could not be verified. Do not claim they were filled.");
+          result = { success: true, filled_fields: fields, form_values: actual, submitted: false,
+            message: "These details are now filled and verified in the existing Contact form. Nothing was sent. Read back the filled details briefly, then ask for only the next missing required field. Use fill_contact_form for each supplied detail or correction immediately. Do not ask permission again just to fill. Sending still requires prepare_contact_submission and explicit SEND approval." };
         } else if (event.name === "prepare_contact_submission") {
           if (this.contactAttempted) throw Error("A Contact submission was already attempted. Do not retry automatically.");
           result = this.stageWebsiteAction("contact_submit", validateVoiceContactSubmission(readVoiceContactForm()));
