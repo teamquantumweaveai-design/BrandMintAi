@@ -1,0 +1,4 @@
+Options -Indexes
+<FilesMatch "^(?!(?:session|knowledge|actions|metrics)\.php$).+">
+  Require all denied
+</FilesMatch>
