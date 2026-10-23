@@ -120,7 +120,8 @@ function voice_calendly(array $config, string $method, string $path, ?array $bod
 }
 function voice_capabilities(array $config): array
 {
-    return ['voice_booking' => !empty($config['calendly_token']) && (!empty($config['calendly_event_type'])
+    return ['voice_booking' => ($config['calendly_booking_enabled'] ?? true) === true
+            && !empty($config['calendly_token']) && (!empty($config['calendly_event_type'])
             || preg_match('~^https://api\.calendly\.com/users/[a-f0-9-]{36}$~i', (string) ($config['calendly_user_uri'] ?? '')) === 1),
         'handoff' => filter_var($config['handoff_email'] ?? '', FILTER_VALIDATE_EMAIL) !== false];
 }
