@@ -120,6 +120,32 @@ function voice_calendly(array $config, string $method, string $path, ?array $bod
 }
 function voice_capabilities(array $config): array
 {
-    return ['voice_booking' => !empty($config['calendly_token']) && !empty($config['calendly_event_type']),
+    return ['voice_booking' => !empty($config['calendly_token']) && (!empty($config['calendly_event_type'])
+            || preg_match('~^https://api\.calendly\.com/users/[a-f0-9-]{36}$~i', (string) ($config['calendly_user_uri'] ?? '')) === 1),
         'handoff' => filter_var($config['handoff_email'] ?? '', FILTER_VALIDATE_EMAIL) !== false];
+}
+
+function voice_calendar_event_type(array $config): string
+{
+    // An explicit event always takes precedence and is validated by the booking handler.
+    if (!empty($config['calendly_event_type'])) return (string) $config['calendly_event_type'];
+    $user = (string) ($config['calendly_user_uri'] ?? '');
+    if (!preg_match('~^https://api\.calendly\.com/users/[a-f0-9-]{36}$~i', $user)) return '';
+    $page = null;
+    for ($attempt = 0; $attempt < 5; $attempt++) {
+        $query = ['user' => $user, 'active' => 'true', 'count' => 100];
+        if ($page !== null) $query['page_token'] = $page;
+        $response = voice_calendly($config, 'GET', '/event_types?' . http_build_query($query));
+        if ($response['status'] !== 200) return '';
+        foreach ($response['data']['collection'] ?? [] as $event) {
+            if (!empty($event['active']) && (int) ($event['duration'] ?? 0) === 30
+                && rtrim((string) ($event['scheduling_url'] ?? ''), '/') === 'https://calendly.com/team-brandmint/30min'
+                && preg_match('~^https://api\.calendly\.com/event_types/[a-zA-Z0-9-]+$~', (string) ($event['uri'] ?? ''))) {
+                return $event['uri'];
+            }
+        }
+        $page = $response['data']['pagination']['next_page_token'] ?? null;
+        if (!is_string($page) || $page === '') break;
+    }
+    return '';
 }
