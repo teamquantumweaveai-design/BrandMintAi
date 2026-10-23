@@ -45,3 +45,4 @@ next-env.d.ts
 
 # Razorpay keys must never be committed
 razorpay-config.php
+voice-config.php

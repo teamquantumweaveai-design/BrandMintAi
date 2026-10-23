@@ -1,0 +1,56 @@
+/* Every selector is scoped to the new widget. Existing site styles are untouched. */
+.bm-voice { position: fixed; bottom: max(24px, env(safe-area-inset-bottom)); left: max(16px, env(safe-area-inset-left)); z-index: 55; color: #2e384d; font: 14px/1.5 'Plus Jakarta Sans', sans-serif; }
+.bm-voice button, .bm-voice a { -webkit-tap-highlight-color: transparent; }
+.bm-voice button { cursor: pointer; font: inherit; }
+.bm-voice button:disabled { opacity: .5; cursor: wait; }
+.bm-voice button:focus-visible, .bm-voice a:focus-visible { outline: 3px solid #ff5c35; outline-offset: 4px; }
+.bm-voice-launcher { display: flex; align-items: center; gap: 9px; border: 1px solid #284e4a; border-radius: 999px; padding: 13px 17px; background: #0d3330; color: #fff; box-shadow: 0 6px 24px #0d33302b; font-weight: 700 !important; font-size: 12px !important; }
+.bm-voice-launcher:hover { background: #174a45; }
+.bm-voice-panel { position: absolute; bottom: 62px; left: 0; width: min(390px, calc(100vw - 32px)); max-height: calc(100dvh - 110px); overflow-y: auto; border: 1px solid #cbd6e2; border-radius: 22px; background: #fff; box-shadow: 0 18px 65px #24384d33; }
+.bm-voice-header { display: flex; align-items: center; gap: 11px; padding: 19px; border-bottom: 1px solid #e9edf1; }
+.bm-voice-header h2 { margin: 0; color: #2e384d; font-size: 16px; letter-spacing: -.3px; }
+.bm-voice-header p { margin: 2px 0 0; color: #516f90; font-size: 11px; }
+.bm-voice-mark { display: grid; place-items: center; width: 40px; height: 40px; background: #fff0eb; color: #df441f; border-radius: 13px; }
+.bm-voice-icon { margin-left: auto; display: grid; place-items: center; padding: 8px; border: 0; border-radius: 9px; background: #f4f6f8; color: #516f90; }
+.bm-voice-body { padding: 22px 20px 18px; text-align: center; }
+.bm-voice-orb { display: grid; place-items: center; margin: 0 auto 17px; width: 72px; height: 72px; background: linear-gradient(135deg, #fff0eb, #ffd9cc); color: #df441f; border: 6px solid #fff8f5; border-radius: 50%; }
+.bm-voice-active { animation: bm-voice-pulse 1.8s ease-in-out infinite; }
+.bm-voice-status { margin: 0; font-size: 15px; font-weight: 700; }
+.bm-voice-intro { margin: 8px 0 17px; font-size: 12px; color: #516f90; }
+.bm-voice-transcript { height: 128px; overflow-y: auto; padding: 12px; background: #f8f9fa; border: 1px solid #e9edf1; border-radius: 12px; text-align: left; overflow-wrap: anywhere; }
+.bm-voice-transcript p { margin: 0 0 11px; font-size: 12px; }
+.bm-voice-transcript strong { display: block; margin-bottom: 3px; color: #0d3330; font-size: 10px; }
+.bm-voice-placeholder { color: #516f90; }
+.bm-voice-message { margin: 12px 0 0; padding: 10px; background: #fff3e9; border-radius: 8px; color: #873c19; font-size: 12px; }
+.bm-voice-controls { display: flex; justify-content: center; gap: 8px; margin-top: 17px; }
+.bm-voice-controls button, .bm-voice-play { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; padding: 12px; border: 1px solid transparent; font-size: 12px; font-weight: 700; }
+.bm-voice-start { width: 100%; background: #ff5c35; color: #fff; }
+.bm-voice-start:hover { background: #df441f; }
+.bm-voice-mute { background: #f1f4f7; color: #2e384d; }
+.bm-voice-end { flex: 1; background: #fff0eb; color: #a12b16; }
+.bm-voice-play { margin-top: 10px; background: #e8f4f1; color: #0d3330; }
+.bm-voice-privacy { margin: 12px 0; font-size: 10px; line-height: 1.6; color: #516f90; }
+.bm-voice-links { display: flex; justify-content: center; gap: 22px; font-size: 11px; }
+.bm-voice-links a, .bm-voice-links button { color: #0d3330; text-decoration: underline; text-underline-offset: 3px; }
+.bm-voice-links button { border: 0; padding: 0; background: transparent; font-size: 11px; }
+.bm-voice-links { gap: 14px; flex-wrap: wrap; }
+.bm-voice-calendar { text-align: left; margin: 0 0 12px; }
+.bm-voice-booking-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+.bm-voice-booking-heading button { border: 0; background: #f1f4f7; padding: 6px; border-radius: 6px; }
+.bm-voice-calendar iframe { width: 100%; height: 410px; border: 1px solid #e9edf1; border-radius: 10px; background: #fafafa; }
+.bm-voice-calendar > a { display: block; margin: 6px 0; color: #0d3330; text-align: center; font-size: 11px; text-decoration: underline; }
+.bm-voice-calendar > p { padding: 10px; border-radius: 8px; background: #e8f4f1; color: #0d3330; font-size: 12px; }
+.bm-voice-language { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 13px; color: #516f90; font-size: 11px; }
+.bm-voice-language select { padding: 7px; background: #f8f9fa; color: #2e384d; border: 1px solid #cbd6e2; border-radius: 8px; max-width: 190px; }
+.bm-voice select:focus-visible { outline: 3px solid #ff5c35; outline-offset: 3px; }
+.bm-voice-context { font-size: 10px; color: #516f90; margin: -5px 0 12px; text-transform: capitalize; }
+.bm-voice-proposal, .bm-voice-confirmed { border: 1px solid #cbd6e2; background: #f1f8f6; padding: 12px; margin: 12px 0; text-align: left; border-radius: 10px; font-size: 12px; overflow-wrap: anywhere; }
+.bm-voice-proposal p { margin: 8px 0; white-space: pre-wrap; }
+.bm-voice-proposal div { display: flex; gap: 8px; flex-wrap: wrap; }
+.bm-voice-proposal button { border: 0; padding: 9px; border-radius: 7px; background: #0d3330; color: white; font-size: 11px; }
+.bm-voice-proposal button + button { background: white; color: #2e384d; border: 1px solid #cbd6e2; }
+.bm-voice-proposal small { display: block; color: #516f90; margin-top: 8px; }
+.bm-voice-confirmed a { color: #0d3330; margin-right: 14px; text-decoration: underline; }
+@keyframes bm-voice-pulse { 50% { box-shadow: 0 0 0 9px #ff5c3512; } }
+@media (prefers-reduced-motion: reduce) { .bm-voice-active { animation: none; } }
+@media (max-width: 480px) { .bm-voice-launcher { padding: 13px; } .bm-voice-launcher span { display: none; } .bm-voice-panel { max-height: calc(100dvh - 110px); } }

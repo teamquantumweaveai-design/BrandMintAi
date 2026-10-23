@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import AdminLeads from "./pages/AdminLeads";
 import FloatingButtons from "./components/floating/FloatingButtons";
 import ExitIntentModal from "./components/floating/ExitIntentModal";
+import VoiceAgent from "./components/voice/VoiceAgent";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
       </Routes>
       <FloatingButtons />
       <ExitIntentModal />
+      <VoiceAgent />
     </Router>
   );
 }
