@@ -32,6 +32,12 @@ export class BrandMintVoiceSession {
   private language: VoiceLanguage;
   private pendingContext = "";
   private actionQueue: Promise<void> = Promise.resolve();
+  private protocol: "live" | "realtime" = "realtime";
+  private ready = false;
+  private playbackMonitor?: ReturnType<typeof setInterval>;
+  private liveCaptionEnd = { You: 0, "BrandMint AI": 0 };
+  private liveCaptionId = { You: "", "BrandMint AI": "" };
+  private handledCalls = new Set<string>();
 
   constructor(private audio: HTMLAudioElement, private callbacks: Callbacks, language: VoiceLanguage = "en") { this.language = language; }
 
@@ -68,9 +74,9 @@ export class BrandMintVoiceSession {
       stream.getTracks().forEach(track => this.peer!.addTrack(track, stream));
       this.channel = this.peer.createDataChannel("oai-events");
       this.channel.onmessage = event => {
-        if (this.closed) return;
         try {
           const data = JSON.parse(event.data);
+          if (this.closed) { if (data.type === "session.closed") { this.channel?.close(); this.peer?.close(); } return; }
           if (data && typeof data === "object") void this.onEvent(data).catch(() => { /* Invalid/late events must not crash the site. */ });
         } catch { /* Ignore non-JSON messages. */ }
       };
@@ -78,22 +84,23 @@ export class BrandMintVoiceSession {
       this.channel.onclose = () => { if (!this.closed) this.stop("The voice session ended."); };
       this.channel.onopen = () => {
         if (this.closed) return;
-        this.timers.forEach(clearTimeout);
-        this.timers = [setTimeout(() => this.stop("This five-minute conversation has ended. You can start another."), 300000)];
-        this.callbacks.status("listening");
-        this.updatePageContext();
-        this.setLanguage(this.language);
-        void this.metric("connected", Date.now() - this.startedAt);
-        this.channel?.send(JSON.stringify({ type: "response.create", response: {
-          instructions: `Briefly introduce yourself as BrandMint AI's AI voice assistant and ask what business challenge the visitor wants help with. Use one short greeting in ${{en:"English",hi:"Hindi",kn:"Kannada"}[this.language]}. Do not claim to be human.`,
-        } }));
+        if (this.protocol === "realtime") this.connected();
       };
       const offer = await this.peer.createOffer();
       if (this.closed) return;
       await this.peer.setLocalDescription(offer);
+      if (this.peer.iceGatheringState !== "complete") {
+        await new Promise<void>((resolve, reject) => {
+          const peer = this.peer!;
+          const timeout = setTimeout(() => { peer.removeEventListener("icegatheringstatechange", change); reject(new Error("Unable to prepare the voice connection. Please try again.")); }, 10000);
+          const change = () => { if (peer.iceGatheringState === "complete") { clearTimeout(timeout); peer.removeEventListener("icegatheringstatechange", change); resolve(); } };
+          peer.addEventListener("icegatheringstatechange", change); change();
+        });
+      }
+      if (this.closed) return;
       const response = await fetch("/api/voice/session.php", {
-        method: "POST", headers: { "Content-Type": "application/sdp", "X-Voice-Language": this.language },
-        body: offer.sdp, signal: this.controller.signal, credentials: "same-origin",
+        method: "POST", headers: { "Content-Type": "application/sdp", "X-Voice-Language": this.language, "X-Voice-Protocol": "live" },
+        body: this.peer.localDescription!.sdp, signal: this.controller.signal, credentials: "same-origin",
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
@@ -102,6 +109,7 @@ export class BrandMintVoiceSession {
       const sdp = await response.text();
       if (!sdp.startsWith("v=0")) throw new Error("Voice isn't configured on this server yet. Please use WhatsApp for now.");
       this.token = response.headers.get("X-Voice-Token") || "";
+      this.protocol = response.headers.get("X-Voice-Protocol") === "live" ? "live" : "realtime";
       try { this.callbacks.capabilities?.(JSON.parse(response.headers.get("X-Voice-Capabilities") || '{"voice_booking":false,"handoff":false}')); } catch {}
       if (!this.closed) await this.peer.setRemoteDescription({ type: "answer", sdp });
     } catch (error) {
@@ -119,8 +127,50 @@ export class BrandMintVoiceSession {
 
   async resumePlayback() { await this.audio.play(); }
 
-  private sendContext(text: string) {
-    if (this.closed || this.channel?.readyState !== "open") return;
+  private connected() {
+    if (this.ready || this.closed) return;
+    this.ready = true;
+    this.timers.forEach(clearTimeout);
+    this.timers = [setTimeout(() => this.stop("This five-minute conversation has ended. You can start another."), 300000)];
+    this.callbacks.status("listening");
+    this.updatePageContext();
+    void this.metric("connected", Date.now() - this.startedAt);
+    if (this.protocol === "live") {
+      this.appendLive("session.commentary.append", `Speak first in ${{en:"English",hi:"Hindi",kn:"Kannada"}[this.language]}: introduce yourself once as Arjun, the AI assistant for Brandmint AI Pvt Ltd, and ask what the visitor would like help with today. Then listen. Do not repeat this greeting.`);
+      // Live has continuous audio, not Realtime response-end events. Use received audio levels for the indicator.
+      let lastAudible = 0;
+      this.playbackMonitor = setInterval(() => {
+        if (this.closed) return;
+        void this.peer?.getStats().then(stats => {
+          if (this.closed) return;
+          stats.forEach(stat => { if (stat.type === "inbound-rtp" && (stat.kind === "audio" || stat.mediaType === "audio") && stat.audioLevel > 0.005) lastAudible = Date.now(); });
+          const audible = Date.now() - lastAudible < 600;
+          if (audible !== this.speaking) { this.speaking = audible; this.callbacks.status(audible ? "speaking" : "listening"); }
+        }).catch(() => {});
+      }, 200);
+    } else {
+      this.setLanguage(this.language);
+      this.channel?.send(JSON.stringify({ type: "response.create", response: {
+        instructions: `Greet once in ${{en:"English",hi:"Hindi",kn:"Kannada"}[this.language]}: "Hi, I'm Arjun, the AI assistant for Brandmint AI Pvt Ltd. What would you like help with today?" Translate for the chosen language, then listen. Never repeat the introduction unless asked.`,
+      } }));
+    }
+  }
+
+  private appendLive(type: string, content: string) {
+    if (this.closed || !this.ready || this.channel?.readyState !== "open") return;
+    this.channel.send(JSON.stringify({ type, event_id: crypto.randomUUID(), delegation_id: null, content }));
+  }
+
+  private sendContext(text: string, speak = false) {
+    if (this.closed || !this.ready || this.channel?.readyState !== "open") return;
+    if (this.protocol === "live") {
+      // Backend receives the full context; Live append events have a 500-token limit.
+      this.channel.send(JSON.stringify({ type: "response.item.create", event_id: crypto.randomUUID(), item: {
+        type: "message", role: "developer", content: [{ type: "input_text", text }],
+      } }));
+      this.appendLive(speak ? "session.commentary.append" : "session.thinking.append", text.slice(0, 700));
+      return;
+    }
     this.channel.send(JSON.stringify({ type: "conversation.item.create", item: {
       type: "message", role: "system", content: [{ type: "input_text", text }],
     } }));
@@ -128,11 +178,13 @@ export class BrandMintVoiceSession {
 
   setLanguage(language: VoiceLanguage) {
     this.language = language;
+    if (this.protocol === "live") this.appendLive("session.instructions.append", `Visitor selected ${{ en: "English", hi: "Hindi", kn: "Kannada" }[language]}. Use this language until explicitly changed. Do not greet or introduce yourself again.`);
     this.sendContext(`Visitor selected language: ${{ en: "English", hi: "Hindi", kn: "Kannada" }[language]}. Speak in this language unless the visitor explicitly asks to switch. Keep identifiers and booking details accurate.`);
     void this.metric(`language_${language}`);
   }
 
   updatePageContext() {
+    if (!this.ready) return;
     // Public pages only. Do not send admin views, forms, query strings or input values.
     if (!["/", "/about", "/solutions", "/business-growth", "/quantum-weave", "/ventures", "/academy", "/contact"].includes(location.pathname)) return;
     const main = document.querySelector("main");
@@ -161,8 +213,8 @@ export class BrandMintVoiceSession {
     const args = proposal.kind === "booking" ? { proposal_id: proposal.id, confirmed: true } : { proposal_id: proposal.id, consented: true };
     const result = await this.action(name, args);
     this.applyActionResult(name, result);
-    this.sendContext("Result of the visitor's explicit confirmation in the widget: " + JSON.stringify(result));
-    if (this.channel?.readyState === "open") this.channel.send(JSON.stringify({ type: "response.create" }));
+    this.sendContext("Result of the visitor's explicit confirmation in the widget: " + JSON.stringify(result), true);
+    if (this.protocol === "realtime" && this.channel?.readyState === "open") this.channel.send(JSON.stringify({ type: "response.create" }));
     return result;
   }
 
@@ -186,11 +238,8 @@ export class BrandMintVoiceSession {
 
   bookingConfirmed() {
     if (this.closed || this.channel?.readyState !== "open") return;
-    this.channel.send(JSON.stringify({ type: "conversation.item.create", item: {
-      type: "message", role: "system", content: [{ type: "input_text", text:
-        "The application's embedded Calendly calendar has just reported calendly.event_scheduled from its verified frame. Briefly acknowledge that Calendly confirmed the consultation booking. Do not invent a time or any other details." }],
-    } }));
-    this.channel.send(JSON.stringify({ type: "response.create" }));
+    this.sendContext("The application's embedded Calendly calendar has just reported calendly.event_scheduled from its verified frame. Briefly acknowledge that Calendly confirmed the consultation booking. Do not invent a time or any other details.", true);
+    if (this.protocol === "realtime") this.channel.send(JSON.stringify({ type: "response.create" }));
     void this.metric("embedded_booking_completed");
   }
 
@@ -204,8 +253,12 @@ export class BrandMintVoiceSession {
     this.closed = true;
     this.controller.abort();
     this.timers.forEach(clearTimeout);
-    this.channel?.close();
-    this.peer?.close();
+    clearInterval(this.playbackMonitor);
+    if (this.protocol === "live" && this.ready && this.channel?.readyState === "open") {
+      this.channel.send(JSON.stringify({ type: "session.close", event_id: crypto.randomUUID() }));
+      // Release microphone immediately; let the data channel drain final usage.
+      setTimeout(() => { this.channel?.close(); this.peer?.close(); }, 15000);
+    } else { this.channel?.close(); this.peer?.close(); }
     this.stream?.getTracks().forEach(track => track.stop());
     this.audio.pause();
     this.audio.srcObject = null;
@@ -214,6 +267,28 @@ export class BrandMintVoiceSession {
   }
 
   private async onEvent(event: Record<string, any>) {
+    if (event.type === "session.started") { this.connected(); return; }
+    if (event.type === "session.closed") { this.ready = false; this.stop("The voice conversation ended."); return; }
+    if (this.protocol === "live" && event.type === "response.event") {
+      const nested = event.event;
+      if (nested?.type === "response.output_item.done" && nested.item?.type === "function_call") {
+        const call = nested.item;
+        if (this.handledCalls.has(call.call_id)) return;
+        this.handledCalls.add(call.call_id);
+        this.actionQueue = this.actionQueue.then(() => this.handleTool(call)).catch(() => {});
+        await this.actionQueue;
+      } else if (["response.failed", "response.incomplete"].includes(nested?.type)) {
+        this.appendLive("session.commentary.append", "The backend could not finish the request. Explain briefly, do not guess or claim success, and offer Contact or WhatsApp.");
+      }
+      return;
+    }
+    if (["session.input_transcript.delta", "session.output_transcript.delta"].includes(event.type)) {
+      const speaker = event.type === "session.input_transcript.delta" ? "You" : "BrandMint AI";
+      if (!this.liveCaptionId[speaker] || event.start_ms - this.liveCaptionEnd[speaker] > 1800) this.liveCaptionId[speaker] = crypto.randomUUID();
+      this.liveCaptionEnd[speaker] = event.end_ms;
+      this.updateCaption(this.liveCaptionId[speaker], speaker, event.delta, true);
+      return;
+    }
     if (event.type === "response.function_call_arguments.done") {
       // Serialize external actions so a prepare/confirm pair cannot race.
       this.actionQueue = this.actionQueue.then(() => this.handleTool(event)).catch(() => {});
@@ -271,7 +346,7 @@ export class BrandMintVoiceSession {
         }
       } catch { /* Return a tool failure for invalid arguments. */ }
       if (!this.closed && this.channel?.readyState === "open") {
-        this.channel.send(JSON.stringify({ type: "conversation.item.create", item: {
+        this.channel.send(JSON.stringify({ type: this.protocol === "live" ? "response.item.create" : "conversation.item.create", item: {
           type: "function_call_output", call_id: event.call_id, output: JSON.stringify(result),
         } }));
         this.channel.send(JSON.stringify({ type: "response.create" }));
