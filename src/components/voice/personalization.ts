@@ -13,7 +13,7 @@ export function loadVoiceMemory(): VoicePreferences | null {
     const saved = JSON.parse(localStorage.getItem(key) || "null");
     if (!saved || !Number.isFinite(saved.expires) || saved.expires < Date.now()) { localStorage.removeItem(key); return null; }
     return preferencesSchema.parse(saved.preferences);
-  } catch { return null; }
+  } catch { forgetVoiceMemory(); return null; }
 }
 export function saveVoiceMemory(preferences: VoicePreferences): boolean {
   try { localStorage.setItem(key, JSON.stringify({ expires: Date.now() + lifetime, preferences: preferencesSchema.parse(preferences) })); return true; } catch { return false; }

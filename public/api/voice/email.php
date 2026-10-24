@@ -48,6 +48,8 @@ if (in_array($action, ['prepare_email', 'confirm_email'], true)) {
     if (!voice_email_quota($config, $draft['reply_to'])) voice_finish($file, $state, 429, ['success' => false, 'message' => 'The email sending limit is reached. Keep the draft and contact the team.']);
     $state['email_attempted'] = true; unset($state['email_draft']); voice_save_session($file, $state);
     $sent = voice_send_email($config, $draft);
+    voice_metric($config, $sent ? 'email_accepted' : 'email_failed');
     voice_finish($file, $state, $sent ? 200 : 502, ['success' => $sent, 'accepted' => $sent,
+        'reference' => $draft['id'],
         'message' => $sent ? 'The website mail server accepted the confirmed message to connect@brandmintai.io for delivery, with the visitor email as Reply-To. Inbox delivery is not verified.' : 'Email delivery could not be verified. Do not retry automatically; the team should check the mailbox first.']);
 }

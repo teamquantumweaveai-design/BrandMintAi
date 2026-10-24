@@ -85,6 +85,18 @@ for (const [page, route] of Object.entries(pageRoutes)) {
   add(page + ' page visible copy', route, lines.join('\n'));
 }
 const revision = createHash('sha256').update(JSON.stringify(chunks)).digest('hex');
-const output = { source_revision: revision, chunks };
+const sourceFiles = [];
+function fingerprint(directory) {
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const full = path.join(directory, entry.name);
+    if (entry.isDirectory() && !['api', 'voice-insights'].includes(entry.name)) fingerprint(full);
+    else if (entry.name === 'index.html') sourceFiles.push({
+      path: path.relative(path.join(root, 'public'), full).split(path.sep).join('/'),
+      sha256: createHash('sha256').update(fs.readFileSync(full)).digest('hex'),
+    });
+  }
+}
+fingerprint(path.join(root, 'public'));
+const output = { source_revision: revision, generated_at: new Date().toISOString(), source_files: sourceFiles, chunks };
 fs.writeFileSync(path.join(root, 'public/api/voice/knowledge.json'), JSON.stringify(output, null, 2) + '\n');
 console.log(`Indexed ${chunks.length} public website excerpts from marketing constants and static pages.`);

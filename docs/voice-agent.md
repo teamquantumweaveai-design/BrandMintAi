@@ -1,5 +1,26 @@
 # BrandMint AI voice agent
 
+## Reliability checks
+
+Knowledge is rebuilt on every deployment. Each index includes its revision, generation time and hashes of
+the deployed public static pages. `knowledge.php?status=1` reports health without requiring a conversation.
+Changed static pages are excluded from search until rebuilt. During a call, the widget checks every minute;
+new revisions invalidate earlier retrieved facts. SPA copy refreshes through the existing build pipeline and
+current-page context. Linked external sites and private records are not indexed.
+
+Calendly shows that prefilled details are not a booking, until a verified message from its own iframe reports
+completion. Reviews display the selected slot in IST by default. Free Plan visitors still complete the final
+Calendly form. No API booking upgrade or subscription change is made.
+
+Remember me is opt-in, expires in 30 days, exposes a collapsible saved-details view, and has Forget me.
+Invalid stored data is removed. Forget also invalidates pending email and website approvals; it cannot erase
+audio already sent during a call. No transcript or action consent is persisted.
+
+Private voice insights include categorized action failures and aggregate backend/tool timing. No text,
+email, name or raw error is sent as analytics. Counts may overlap and timing is not total conversation time.
+Email success means mail-server acceptance, with a non-secret reference for the team to locate the message;
+inbox delivery and Reply-To correctness require a mailbox check. The recipient stays fixed to the company.
+
 This adds a separate bottom-left voice widget to the existing React site. The original chat,
 WhatsApp buttons, pages, styling, forms, payments, and deployment workflow remain intact.
 The only existing app file changed is `src/App.tsx`: one import and one component mount.

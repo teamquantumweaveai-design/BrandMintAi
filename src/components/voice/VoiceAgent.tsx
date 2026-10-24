@@ -26,6 +26,8 @@ export default function VoiceAgent() {
   const [status, setStatus] = useState<VoiceStatus | "idle">("idle");
   const [muted, setMuted] = useState(false);
   const [message, setMessage] = useState("");
+  const [knowledge, setKnowledge] = useState<"checking" | "ready" | "refresh_required" | "unavailable">("checking");
+  const [memoryVersion, setMemoryVersion] = useState(0);
   const [captions, setCaptions] = useState<VoiceCaption[]>([]);
   const [blocked, setBlocked] = useState(false);
   const [booking, setBooking] = useState(false);
@@ -47,7 +49,7 @@ export default function VoiceAgent() {
     session.current = null;
     setStatus("idle"); setMuted(false); setBlocked(false);
   };
-  const clearMemory = () => { forgetVoiceMemory(); savedPreferences.current = {}; rememberEnabled.current = false; setRemember(false); session.current?.forgetPreferences(); };
+  const clearMemory = () => { forgetVoiceMemory(); savedPreferences.current = {}; rememberEnabled.current = false; setRemember(false); setMemoryVersion(value => value + 1); session.current?.forgetPreferences(); setMessage("Saved details cleared from this device. Memory is off. Earlier audio in this call is not erased."); };
   const close = () => { end(); setOpen(false); setBooking(false); setCalendarDetails(undefined); showEmailDraft(undefined); launcher.current?.focus(); };
   const openBooking = (details?: VoiceCalendarPrefill) => { setCalendarDetails(details); navigate("/contact"); setBooked(false); setBooking(true); };
 
@@ -123,12 +125,13 @@ export default function VoiceAgent() {
         if (!rememberEnabled.current) return false;
         const next = { ...savedPreferences.current, ...details };
         if (!saveVoiceMemory(next)) return false;
-        savedPreferences.current = next; return true;
+        savedPreferences.current = next; setMemoryVersion(value => value + 1); return true;
       },
       forget: clearMemory,
       emailDraft: showEmailDraft,
       getEmailDraft: () => emailDraftRef.current,
-      emailSent: () => { showEmailDraft(undefined); setEmailAccepted(true); setMessage("Your message was accepted for delivery to connect@brandmintai.io. The team can reply to your email address."); },
+      emailSent: reference => { showEmailDraft(undefined); setEmailAccepted(true); setMessage("Your message was accepted for delivery to connect@brandmintai.io. Inbox delivery is not yet verified. The team can reply to your email address." + (reference ? ` Reference: ${reference}` : "")); },
+      knowledge: setKnowledge,
     }, language, savedPreferences.current);
     session.current = call;
     try { await call.start(); } catch (error) {
@@ -143,7 +146,7 @@ export default function VoiceAgent() {
         <section ref={panel} className="bm-voice-panel" role="dialog" aria-labelledby="bm-voice-title"
           onKeyDown={event => {
             if (event.key !== "Tab") return;
-            const elements = panel.current?.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], select, iframe');
+            const elements = panel.current?.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], select, input:not(:disabled), textarea:not(:disabled), summary, iframe');
             if (!elements?.length) return;
             const first = elements[0], last = elements[elements.length - 1];
             if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
@@ -176,10 +179,13 @@ export default function VoiceAgent() {
               }} /> Remember me on this device</label>
               <button onClick={clearMemory}>Forget me</button>
               <small>{remember ? "Basic preferences saved for 30 days. Tell Ishani what to remember. Avoid shared devices." : "Memory is off. Conversation context lasts for this call."} Booking times default to IST.</small>
+              {remember && <details key={memoryVersion}><summary>View saved details</summary>
+                {Object.keys(savedPreferences.current).length ? <dl>{Object.entries(savedPreferences.current).map(([key, value]) => <React.Fragment key={key}><dt>{key}</dt><dd>{value}</dd></React.Fragment>)}</dl> : <small>No personal details saved yet.</small>}
+              </details>}
             </div>
             {emailDraft && <div className="bm-voice-email" aria-label="Email draft">
               <strong>{emailAccepted ? "Email accepted for delivery" : "Email draft · not sent"}</strong>
-              <label>To<input aria-label="Draft email recipient" value={emailDraft.to || ""} onChange={event => editEmailDraft({ ...emailDraft, to: event.target.value || undefined })} /></label>
+              <label>To<input aria-label="Draft email recipient" value={emailDraft.to || ""} readOnly /></label>
               <label>Your email (for replies)<input aria-label="Your email for replies" type="email" value={emailDraft.reply_to || ""} onChange={event => editEmailDraft({ ...emailDraft, reply_to: event.target.value || undefined })} /></label>
               <label>Subject<input aria-label="Draft email subject" value={emailDraft.subject} onChange={event => editEmailDraft({ ...emailDraft, subject: event.target.value })} /></label>
               <label>Message<textarea aria-label="Draft email body" value={emailDraft.body} onChange={event => editEmailDraft({ ...emailDraft, body: event.target.value })} /></label>
@@ -195,6 +201,7 @@ export default function VoiceAgent() {
               <button onClick={() => editEmailDraft(undefined)}>Discard draft</button>
             </div>}
             {active && <p className="bm-voice-context">Helping with: {location.pathname === "/" ? "Home" : location.pathname.slice(1).replace(/-/g, " ")}</p>}
+            {active && <p className="bm-voice-context" role="status" aria-label="Website knowledge status">{{ checking: "Checking website knowledge…", ready: "Website knowledge available · refreshed with website deployments", refresh_required: "Some website information needs a refresh. Ishani will use verified details or refer you to the team.", unavailable: "Website lookup is unavailable. Ask Ishani to help you contact the team." }[knowledge]}</p>}
             {proposal && <div className="bm-voice-proposal" role="region" aria-label="Review voice action">
               <strong>{{ booking: "Confirm your consultation", handoff: "Share this summary with the team?", calendar_prefill: "Review Calendly details", contact_fill: "Review Contact form details", contact_submit: "Send this Contact message?", email: "Confirm recipient and exact email" }[proposal.kind]}</strong>
               <p>{proposal.summary}</p>
@@ -223,6 +230,7 @@ export default function VoiceAgent() {
               <div className="bm-voice-booking-heading"><strong>{booked ? "Calendly confirmed your booking" : "Book your 30-minute consultation"}</strong>
                 <button onClick={() => setBooking(false)} aria-label="Close booking calendar"><X size={16} /></button></div>
               {booked && <p role="status">Your consultation is booked. Check your email for Calendly's details.</p>}
+              {!booked && <p role="status">{calendarDetails ? "Details prefilled · appointment not booked yet." : "Choose a time · appointment not booked yet."} Review the date and time in {calendarDetails?.timezone && calendarDetails.timezone !== 'Asia/Kolkata' ? calendarDetails.timezone : 'IST'}, complete any required fields, then click Calendly's final Schedule button. Wait for its confirmation.</p>}
               <iframe ref={bookingFrame} title="Book a BrandMint AI consultation on Calendly"
                 src={calendarPrefillUrl(calendarDetails)}
                 referrerPolicy="strict-origin-when-cross-origin" />
