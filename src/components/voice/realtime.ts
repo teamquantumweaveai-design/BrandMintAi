@@ -7,7 +7,7 @@ export type VoiceStatus = "connecting" | "listening" | "thinking" | "speaking";
 export type VoiceCaption = { id: string; speaker: "You" | "BrandMint AI"; text: string };
 export type VoiceLanguage = "en" | "hi" | "kn";
 export type VoiceProposal = { id: string; kind: "booking" | "handoff" | "calendar_prefill" | "contact_fill" | "contact_submit" | "email"; summary: string };
-export type VoiceBooking = { start_time: string; timezone: string; cancel_url?: string; reschedule_url?: string };
+export type VoiceBooking = { start_time: string; timezone: string; provider?: "google" | "calendly"; meeting_url?: string; cancel_url?: string; reschedule_url?: string };
 type Callbacks = {
   status: (status: VoiceStatus) => void;
   caption: (caption: VoiceCaption) => void;
@@ -309,8 +309,7 @@ export class BrandMintVoiceSession {
     }
     const name = proposal.kind === "booking" ? "confirm_consultation" : "confirm_handoff";
     const args = proposal.kind === "booking" ? { proposal_id: proposal.id, confirmed: true } : { proposal_id: proposal.id, consented: true };
-    const result = await this.action(name, args);
-    this.applyActionResult(name, result);
+    const result = await this.confirmServerAction(name, args);
     this.sendContext("Result of the visitor's explicit confirmation in the widget: " + JSON.stringify(result), true);
     if (this.protocol === "realtime" && this.channel?.readyState === "open") this.channel.send(JSON.stringify({ type: "response.create" }));
     return result;
@@ -334,12 +333,21 @@ export class BrandMintVoiceSession {
     this.sendContext("The visitor declined the prepared action in the widget. Do not book or share that proposal. Ask what they prefer next.");
   }
 
+  private confirmServerAction(name: string, args: Record<string, any>) {
+    const approved = name === "confirm_handoff" ? args.consented === true : args.confirmed === true;
+    return this.confirmOnce(args.proposal_id, approved, async () => {
+      const result = await this.action(name, args);
+      if (!this.closed) this.applyActionResult(name, result);
+      return result;
+    });
+  }
+
   private applyActionResult(name: string, result: Record<string, any>) {
     if (!result.success) return;
     if (name === "prepare_consultation") {
       const item = result.summary;
       const date = new Date(item.start_time).toLocaleString(this.language === "en" ? "en-IN" : this.language === "hi" ? "hi-IN" : "kn-IN", { timeZone: item.invitee.timezone, dateStyle: "full", timeStyle: "short" });
-      this.showProposal({ id: result.proposal_id, kind: "booking", summary: `${date} (${item.invitee.timezone}) · ${item.invitee.name} · ${item.invitee.email}` });
+      this.showProposal({ id: result.proposal_id, kind: "booking", summary: `${result.provider === "google" ? "Google Calendar" : "Calendly"} · ${date} (${item.invitee.timezone}) · ${item.invitee.name} · ${item.invitee.email}` });
     }
     if (name === "prepare_handoff") this.showProposal({ id: result.proposal_id, kind: "handoff", summary: result.summary });
     if (name === "confirm_consultation" && result.booking) { this.showProposal(null); this.callbacks.booked?.(result.booking); }
@@ -621,11 +629,12 @@ export class BrandMintVoiceSession {
           if ((result.knowledge as { status?: string } | undefined)?.status === 'refresh_required') this.callbacks.knowledge?.('refresh_required');
           if (result.success && Array.isArray(result.results) && result.results.length === 0) void this.metric("knowledge_miss");
         } else if (["get_consultation_slots", "prepare_consultation", "confirm_consultation", "prepare_handoff", "confirm_handoff"].includes(event.name)) {
-          result = await this.action(event.name, args);
+          result = ["confirm_consultation", "confirm_handoff"].includes(event.name)
+            ? await this.confirmServerAction(event.name, args) : await this.action(event.name, args);
           if (event.name === "get_consultation_slots" && result.success) {
             this.availableSlots = (result.slot_links || {}) as Record<string, string>; this.slotsChecked = Date.now();
           }
-          if (!this.closed) this.applyActionResult(event.name, result);
+          if (!this.closed && !["confirm_consultation", "confirm_handoff"].includes(event.name)) this.applyActionResult(event.name, result);
         } else if (event.name === "report_unanswered" && ["pricing", "service", "other"].includes(args.category)) {
           await this.metric(`unanswered_${args.category}`);
           result = { success: true };

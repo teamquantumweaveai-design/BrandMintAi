@@ -221,9 +221,11 @@ export default function VoiceAgent() {
               <small>You can also tell the assistant to confirm, correct, or decline these details.</small>
             </div>}
             {bookingResult && <div className="bm-voice-confirmed" role="status"><strong>Your consultation is booked</strong>
+              {bookingResult.provider && <p>{bookingResult.provider === "google" ? "Google Calendar" : "Calendly"}</p>}
               <p>{new Date(bookingResult.start_time).toLocaleString("en-IN", {timeZone: bookingResult.timezone})} ({bookingResult.timezone})</p>
               {bookingResult.reschedule_url?.startsWith("https://calendly.com/") && <a href={bookingResult.reschedule_url} target="_blank" rel="noopener noreferrer" onClick={end}>Reschedule ↗</a>}
               {bookingResult.cancel_url?.startsWith("https://calendly.com/") && <a href={bookingResult.cancel_url} target="_blank" rel="noopener noreferrer" onClick={end}>Cancel booking ↗</a>}
+              {bookingResult.meeting_url?.startsWith("https://meet.google.com/") && <a href={bookingResult.meeting_url} target="_blank" rel="noopener noreferrer" onClick={end}>Meeting link ↗</a>}
             </div>}
             {handoffSent && <p className="bm-voice-confirmed" role="status">Your approved summary was submitted to the team's mail server for delivery.</p>}
             {booking && <div className="bm-voice-calendar">

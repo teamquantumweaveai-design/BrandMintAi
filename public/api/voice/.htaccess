@@ -1,4 +1,4 @@
 Options -Indexes
-<FilesMatch "^(?!(?:session|knowledge|actions|metrics)\.php$).+">
+<FilesMatch "^(?!(?:session|knowledge|actions|metrics|google-connect)\.php$).+">
   Require all denied
 </FilesMatch>

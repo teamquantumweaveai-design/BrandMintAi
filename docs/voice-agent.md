@@ -209,6 +209,65 @@ enables read-only availability independently. Ishani can open a provider-returne
 approved name/email prefilled. The visitor reviews Calendly's required fields and clicks its final
 Schedule button. Opening or prefilling a form is never reported as a completed appointment.
 
+### Automatic Google Calendar booking alongside Calendly Free
+
+Google Calendar is an additional voice-only booking provider. The existing Calendly form and all
+website pages stay in place. Keep `calendly_booking_enabled => false` for the Free account.
+When Google is connected, Ishani can check availability, review the visitor's exact details, and
+create one Google appointment with guest invitations after spoken approval, without a final click.
+These appointments are recorded in Google Calendar. They are not Calendly scheduled-event records.
+The default provider is Google when automatic Calendly booking is disabled. Explicit provider requests
+are supported; one request must never create appointments in both systems.
+
+The Google owner and calendar are pinned to `team.brandmint@gmail.com`. Owner setup:
+
+1. In the company Google Cloud project, enable Google Calendar API and create a separate **Web
+   application** OAuth client called **BrandMint Ishani Voice Booking**, marked as an AI agent.
+   Authorized redirect URI: `https://brandmintai.io/api/voice/google-connect.php`.
+   Do not alter existing OAuth clients, project branding or website authentication.
+2. Add the following inside the existing private Hostinger `voice-config.php` return array. Keep
+   all existing secrets and settings. Use actual credentials only in that private file, never in Git:
+
+   ```php
+   'google_client_id' => 'YOUR_GOOGLE_OAUTH_CLIENT_ID',
+   'google_client_secret' => 'YOUR_GOOGLE_OAUTH_CLIENT_SECRET',
+   'google_setup_token' => 'A_NEW_RANDOM_SECRET_OF_AT_LEAST_32_CHARACTERS',
+   'google_owner_email' => 'team.brandmint@gmail.com',
+   'google_calendar_id' => 'team.brandmint@gmail.com',
+   'google_create_meet' => true,
+   'google_booking_enabled' => false,
+   'google_shared_calendar_confirmed' => false,
+   ```
+
+3. Open the callback URL, enter the private setup token, and authorize as the company account.
+   This requests `openid email`, `calendar.events.owned`, and `calendar.freebusy`. The new app can
+   manage events on owned calendars and read availability; this implementation uses only the pinned
+   company calendar. The chat's Google Calendar connector does not provide website credentials.
+   The callback verifies CSRF state, PKCE, scopes and the exact verified Google account, then stores
+   the offline grant outside `public_html`. It never returns tokens to the browser.
+4. Ensure Calendly checks this **same company calendar** for conflicts. Only then change
+   `google_shared_calendar_confirmed` and `google_booking_enabled` to `true`. Remove
+   `google_setup_token` after setup to disable the owner connection page. If the Google OAuth app
+   is in Testing, Calendar refresh grants can expire after seven days; use an appropriate Production
+   publishing configuration for ongoing use, following Google's verification requirements.
+5. Test one explicitly approved appointment and verify its company-calendar event and guest invitation.
+   Google confirmation does not verify inbox delivery or the guest's acceptance. Meet links are shown
+   only when actually returned by Google; never invent a conferencing link.
+
+Both providers use Calendly's verified BrandMint event availability as the source of working hours,
+duration and booking rules. Google also checks live company-calendar conflicts. Payment or required
+Calendly questions cannot be bypassed by choosing Google. A private shared lock and slot ledger prevent
+the website from submitting the same appointment through both routes, including after unknown network
+outcomes. Keep Calendly's own conflict calendar configured correctly for bookings made outside Ishani.
+Do not automatically retry or switch providers after an uncertain result; the team must check the calendar.
+The private ledger contains slot timestamps and event IDs, not guest names or emails; old slots are pruned.
+Google attempts have a configurable `google_daily_booking_limit` (default 100). Neither Google nor
+Calendly makes appointment creation an atomic transaction with other independent scheduling clients.
+
+If the private configuration or owner grant is absent, no Google booking is enabled, and the owner setup
+URL returns 404 until configured. Failed authorization and availability checks never imply free time.
+Rollback Google only by setting `google_booking_enabled => false`; the existing Calendly form continues.
+
 Voice navigation uses a fixed list of published page paths and can scroll to a visible heading,
 including Solutions packages. Main React routes keep the conversation connected; opening separate
 static pages or external sites ends the microphone session before navigating.

@@ -160,7 +160,16 @@ do not ask which timezone unless the visitor requests another or provides a conf
 Offer actual available slots in IST and collect name and email carefully. Pass Asia/Kolkata to calendar
 tools by default. Always say the date, local time and IST when confirming. Use the live current IST date
 provided below to interpret today/tomorrow. Never treat UTC timestamps as Indian local clock times.
-When voice_booking is false (Free Plan), use prepare_calendly_form with name, email, timezone and the actual
+Configured capabilities identify each provider separately: google_booking and calendly_booking.
+Default to booking_provider. For an explicit Google Calendar or Calendly request, pass that provider in
+get_consultation_slots and prepare_consultation. Create only one appointment for a visitor request.
+Google appointments are recorded in Google Calendar; Calendly appointments are recorded in Calendly.
+Google slots use verified BrandMint working hours and Google conflicts. During read-back, name the provider
+receiving the details. Use prepare_consultation when the returned automatic_booking is true.
+Never switch providers or retry after an uncertain booking outcome. When Google booking is connected
+and Calendly is Free, use Google for hands-free booking. An explicit Calendly request can still use its
+existing form when calendly_booking is false.
+When automatic booking for the selected provider is unavailable, use prepare_calendly_form with name, email, timezone and the actual
 chosen start_time returned by get_consultation_slots. It prepares a prefilled calendar, not an appointment.
 Once the visitor has supplied name/email and selected a slot (including asking for the first available),
 call prepare_calendly_form immediately before asking for approval. Do not return just a spoken review
@@ -169,7 +178,7 @@ Read every detail back, spell the email carefully, and ask permission to share t
 Only after explicit approval call confirm_website_action using that proposal_id. The visitor must still review
 and click Calendly's final Schedule button and answer any required questions. Never promise only one click
 when the form needs more information. If no slot was chosen, omit start_time and let the visitor select one.
-When voice_booking is true, use prepare_consultation with the chosen slot exactly as returned. Read the date, time, timezone, name and
+When automatic_booking is true, use prepare_consultation with the same provider and chosen slot exactly as returned. Read the date, time, timezone, name and
 email back and explicitly ask permission to book and send the invitation. Only after an unambiguous yes,
 call confirm_consultation with that proposal ID. If they correct a detail, prepare a new proposal and confirm again.
 Never infer permission from silence, earlier interest, or a tool result. Do not book while the visitor is still
@@ -334,7 +343,7 @@ $session['tools'] = array_merge($session['tools'], [
     $makeTool('confirm_email', 'Send a prepared email ONLY after explicit approval of its exact recipient and message. Never retry an uncertain send. false declines.', [
         'proposal_id' => ['type' => 'string'], 'confirmed' => ['type' => 'boolean'],
     ], ['proposal_id', 'confirmed']),
-    $makeTool('get_consultation_slots', 'Read actual Calendly availability. Default timezone Asia/Kolkata (IST); ask preferred date/time, not timezone. Convert returned UTC slots to IST unless another timezone requested.', ['date' => ['type' => 'string'], 'timezone' => ['type' => 'string']], []),
+    $makeTool('get_consultation_slots', 'Read actual availability for the configured provider, or an explicitly requested Google Calendar/Calendly provider. Default Asia/Kolkata (IST). Preserve the returned provider and automatic_booking flag.', ['date' => ['type' => 'string'], 'timezone' => ['type' => 'string'], 'provider' => ['type' => 'string', 'enum' => ['auto', 'google', 'calendly']]], []),
     $makeTool('prepare_calendly_form', 'Stage visitor-provided details for Calendly prefill. Does not book or share yet. Optional start_time must be an actual fresh returned slot. Read back and ask permission before confirming.', [
         'name' => ['type' => 'string'], 'email' => ['type' => 'string'], 'timezone' => ['type' => 'string'], 'start_time' => ['type' => 'string'],
     ], ['name', 'email']),
@@ -347,6 +356,7 @@ $session['tools'] = array_merge($session['tools'], [
         'proposal_id' => ['type' => 'string'], 'confirmed' => ['type' => 'boolean'],
     ], ['proposal_id', 'confirmed']),
     $makeTool('prepare_consultation', 'Prepare a booking for explicit confirmation. Does not book yet. Use the exact UTC start_time from live slots and visitor-confirmed timezone/name/email.', [
+        'provider' => ['type' => 'string', 'enum' => ['google', 'calendly']],
         'start_time' => ['type' => 'string'], 'timezone' => ['type' => 'string'], 'name' => ['type' => 'string'], 'email' => ['type' => 'string'],
     ], ['start_time', 'timezone', 'name', 'email']),
     $makeTool('confirm_consultation', 'Book the prepared appointment ONLY after reading all details back and receiving explicit approval to book and send the invite. Never retry uncertain outcomes.', [
@@ -391,7 +401,12 @@ Interruption policy: Stop speaking when the visitor interrupts. Listen and addre
 If audio or intent is unclear, ask one brief clarification instead of guessing. Keep listening during pauses.
 
 Delegation policy:
-Backend tools: approved website knowledge and prices; current page context; navigation including Solutions and headings; Calendly availability and name/email prefill; filling the existing Contact form and submitting only after explicit SEND approval; consented human handoff.
+Backend tools: approved website knowledge and prices; current page context; navigation including Solutions and headings; Google Calendar and Calendly consultation availability, booking and prefill according to configured capabilities; filling the existing Contact form and submitting only after explicit SEND approval; consented human handoff.
+For consultations, delegate a fresh availability check first. When automatic booking is available,
+have the backend prepare_consultation before you ask approval. Read back provider, date, time, IST,
+name and email, then ask 'Do you confirm booking this consultation and sending the invitation?'
+After explicit approval, delegate confirm_consultation. Do not only acknowledge or ask for a button click.
+Use only one provider per appointment. Never switch providers after an unknown booking result.
 For Calendly prefill, when name, email and a slot choice are known, generate <|SpawnThinking|> to have
 the backend call prepare_calendly_form BEFORE you ask permission. The review panel must exist first.
 Read its exact details and ask to share with Calendly; after explicit yes, generate <|SpawnThinking|>
