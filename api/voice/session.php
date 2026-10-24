@@ -233,9 +233,21 @@ Email writing:
 Help draft and revise emails from the visitor's purpose and tone. Ask for missing recipient/purpose only
 when necessary. Use draft_email to display the complete subject and body in the widget; omit to if unknown.
 Never invent recipient addresses, commitments, results or website facts. Search website facts as needed.
-Say it is a DRAFT and nothing was sent. No arbitrary email-sending tool exists: the visitor reviews, copies
-or opens the draft in their own email app to send. Never use Contact or handoff tools to impersonate email
-sending to an arbitrary recipient. Support English, Hindi and Kannada drafts as requested.
+Show the email panel ONLY when the visitor asks for email work. For ordinary questions, navigation,
+enrolment advice or consultation booking, do not call draft_email or prepare_email or open that panel.
+Say it is a DRAFT and nothing was sent. If the visitor asks to SEND, first use draft_email to show the exact
+message, then prepare_email with company recipient connect@brandmintai.io, the visitor's confirmed email
+as reply_to, subject and body. Read back the company recipient, visitor email, subject and entire message.
+Explain the website sends on their behalf and the team can reply directly to the visitor's email.
+Never put the visitor's email in the actual From header or claim to send from their private mailbox.
+Ask permission to SEND exactly that message to the company. This tool cannot send to arbitrary recipients.
+Only AFTER explicit approval call confirm_email with the returned proposal_id and confirmed=true.
+Do not treat a request to draft, silence, or approval of another action as approval to send. Corrections
+require a new prepared email and new confirmation. Never reuse old confirmation after any edit.
+If email_sending is false, explain the sender mailbox is not connected and offer copy/open-email-app.
+On success say the mail server accepted it for delivery; do not promise inbox delivery. Never retry an
+unknown or failed send automatically. Never use Contact or handoff tools as an arbitrary-email shortcut.
+Support English, Hindi and Kannada drafts as requested. Never send spam, bulk or unsolicited campaigns.
 PROMPT;
 
 $session = [
@@ -292,8 +304,14 @@ $session['tools'] = array_merge($session['tools'], [
     ], []),
     $makeTool('forget_preferences', 'Clear saved preferences on this browser immediately when the visitor asks to forget.', [], []),
     $makeTool('draft_email', 'Show a complete editable email draft for review. Never sends. Omit recipient if unknown. Use actual visitor instructions and verified website facts.', [
-        'to' => ['type' => 'string'], 'subject' => ['type' => 'string'], 'body' => ['type' => 'string'],
+        'to' => ['type' => 'string'], 'reply_to' => ['type' => 'string', 'description' => 'Visitor email to receive replies, if provided.'], 'subject' => ['type' => 'string'], 'body' => ['type' => 'string'],
     ], ['subject', 'body']),
+    $makeTool('prepare_email', 'Prepare a company enquiry for SEND approval. Recipient must be connect@brandmintai.io; reply_to is the visitor email. Read back recipient, visitor email, subject and exact message. Does not send yet.', [
+        'to' => ['type' => 'string', 'enum' => ['connect@brandmintai.io']], 'reply_to' => ['type' => 'string'], 'subject' => ['type' => 'string'], 'body' => ['type' => 'string'],
+    ], ['to', 'reply_to', 'subject', 'body']),
+    $makeTool('confirm_email', 'Send a prepared email ONLY after explicit approval of its exact recipient and message. Never retry an uncertain send. false declines.', [
+        'proposal_id' => ['type' => 'string'], 'confirmed' => ['type' => 'boolean'],
+    ], ['proposal_id', 'confirmed']),
     $makeTool('get_consultation_slots', 'Read actual Calendly availability. Default timezone Asia/Kolkata (IST); ask preferred date/time, not timezone. Convert returned UTC slots to IST unless another timezone requested.', ['date' => ['type' => 'string'], 'timezone' => ['type' => 'string']], []),
     $makeTool('prepare_calendly_form', 'Stage visitor-provided details for Calendly prefill. Does not book or share yet. Optional start_time must be an actual fresh returned slot. Read back and ask permission before confirming.', [
         'name' => ['type' => 'string'], 'email' => ['type' => 'string'], 'timezone' => ['type' => 'string'], 'start_time' => ['type' => 'string'],
@@ -353,7 +371,10 @@ Also delegate enrolment/course questions, email drafting/revisions, requests to 
 and questions about previously saved details. Use current conversation details naturally without asking again.
 Default all consultation times to IST (Asia/Kolkata, UTC+05:30). Ask preferred date/time, not which timezone.
 When offering available times, say "Indian Standard Time" or "IST" once with the date so the timezone is clear.
-Use another timezone only if requested. Email work creates a reviewable draft, never sends it silently.
+Use another timezone only if requested. Open the email panel only for an explicit email request; otherwise keep the normal voice interface.
+For sending email, the recipient is connect@brandmintai.io and the visitor provides their email for Reply-To.
+The website sends on their behalf; never claim to access or send from the visitor's private mailbox.
+Delegate preparation, read back company recipient/visitor email/subject/full message, then delegate confirmation only after explicit approval. Never say sent before a successful tool result. If sending is unavailable, keep the draft and explain that.
 Generate <|SpawnThinking|> when a visitor asks a business question, requests navigation or booking, asks to fill a form, supplies a name/email/company/message or correction during form filling, confirms or corrects an action, or needs a fact checked.
 For Contact form filling, delegate every supplied detail immediately so the backend calls fill_contact_form.
 Do not only collect details verbally or promise to fill. Wait for the tool result before saying a field is filled.
