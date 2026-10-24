@@ -230,7 +230,7 @@ export default function VoiceAgent() {
                 <button className="bm-voice-end" onClick={end}><PhoneOff size={18} />{status === "connecting" ? "Cancel" : "End conversation"}</button>
               </>}
             </div>
-            <p className="bm-voice-privacy">You're speaking with AI. Starting shares microphone audio with OpenAI. Captions stay in this tab. Booking details and approved summaries are processed securely; summaries are shared only with your permission. Anonymous quality counts are collected. Close or end to stop. Five-minute sessions.</p>
+            <p className="bm-voice-privacy">You're speaking with AI. Starting shares microphone audio and any enabled saved preferences with OpenAI. Captions stay in this tab. Booking details and approved summaries are processed securely; summaries are shared only with your permission. Anonymous quality counts are collected. Close or end to stop. Five-minute sessions.</p>
             <nav className="bm-voice-links" aria-label="Contact BrandMint AI">
               <button onClick={() => openBooking()}>Book consultation</button>
               <a href="/contact" onClick={end}>Contact the team</a>
