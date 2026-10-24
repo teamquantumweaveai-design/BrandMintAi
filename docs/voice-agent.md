@@ -216,6 +216,13 @@ static pages or external sites ends the microphone session before navigating.
 The adapter is confined to `src/components/voice/`; existing page components, form validation,
 Supabase insertion, navigation markup, payments and other website features are unchanged.
 
+Prepared reviews also listen for a fresh, unambiguous spoken approval or refusal after Ishani's
+confirmation question. After a short pause for transcript fragments, the application executes the
+same confirmation method as the review button even if the model omits its tool call. Changed details,
+conditional replies, expired reviews and closing the session cannot authorize this fallback.
+In-flight confirmation results are shared across model, spoken and button paths to prevent duplicate
+email or Contact submissions. Calendly Free still requires its final provider-hosted Schedule click.
+
 `npm run build` checks TypeScript and the production build. The Vite development server cannot
 execute PHP; use PHP's built-in server against `dist/` for endpoint checks, or Hostinger staging.
 Without a configured server key the widget should show a friendly unavailable message and leave

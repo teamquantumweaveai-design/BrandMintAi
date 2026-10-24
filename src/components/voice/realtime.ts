@@ -1,3 +1,4 @@
+import { SpokenConfirmation } from "./spoken-confirmation";
 import { contactFieldsSchema, readVoiceContactForm, validateVoiceContactSubmission, resolveVoicePage, calendarPrefillUrl, type VoiceCalendarPrefill, type VoiceContactFields } from "./website-actions";
 import { preferencesSchema, emailDraftSchema, type VoicePreferences, type VoiceEmailDraft } from "./personalization";
 // Native WebRTC keeps audio streaming directly between the visitor and OpenAI.
@@ -58,12 +59,46 @@ export class BrandMintVoiceSession {
   private knowledgeRevision = "";
   private backendStarted = new Map<string, number>();
 
+  private activeReview?: VoiceProposal;
+  private confirmationResults = new Map<string, { approved: boolean; result: Promise<Record<string, any>> }>();
+  private spokenConfirmation = new SpokenConfirmation((id, approved) => {
+    const proposal = this.activeReview;
+    if (!proposal || proposal.id !== id || this.closed) return;
+    this.actionQueue = this.actionQueue.then(async () => {
+      if (this.closed || this.activeReview?.id !== id) return;
+      try {
+        if (approved) await this.confirmProposal(proposal);
+        else await this.declineProposal(proposal);
+      } catch {
+        this.sendContext("The confirmed action did not return a verified result. Explain that its outcome is unverified. Do not claim success or retry automatically.", true);
+      }
+    }).catch(() => {});
+  });
+
+  private showProposal(proposal: VoiceProposal | null) {
+    this.activeReview = proposal || undefined;
+    this.spokenConfirmation.review(proposal?.id);
+    this.callbacks.proposal?.(proposal);
+  }
+
+  private confirmOnce(id: string, approved: boolean, run: () => Promise<Record<string, any>>) {
+    if (this.closed) return Promise.resolve({ success: false, message: "Conversation ended. No new action taken." });
+    const previous = this.confirmationResults.get(id);
+    if (previous) return previous.approved === approved ? previous.result : Promise.resolve({ success: false, message: "This review was already resolved. Do not repeat the action." });
+    // Store the in-flight result before starting; UI, model and speech paths share
+    // one attempt and the same verified outcome, including an unknown outcome.
+    const result = Promise.resolve().then(run);
+    this.confirmationResults.set(id, { approved, result });
+    if (this.confirmationResults.size > 30) this.confirmationResults.delete(this.confirmationResults.keys().next().value!);
+    return result;
+  }
+
   constructor(private audio: HTMLAudioElement, private callbacks: Callbacks, language: VoiceLanguage = "en", private preferences: VoicePreferences = {}) { this.language = language; }
 
   forgetPreferences() {
     this.preferences = {};
     this.invalidateEmailProposal();
-    this.websiteDraft = undefined; this.callbacks.proposal?.(null);
+    this.websiteDraft = undefined; this.showProposal(null);
     this.sendContext("Visitor cleared saved preferences. Do not reuse previously remembered details. Ask for any details needed again. No prior permission to send or book carries forward.");
   }
 
@@ -282,10 +317,20 @@ export class BrandMintVoiceSession {
   }
 
   async declineProposal(proposal: VoiceProposal) {
+    if (proposal.kind === "email") {
+      const result = await this.confirmEmail(proposal.id, false);
+      this.sendContext("Visitor declined the email: " + JSON.stringify(result), true);
+      return;
+    }
+    if (["calendar_prefill", "contact_fill", "contact_submit"].includes(proposal.kind)) {
+      const result = await this.confirmWebsiteAction(proposal.id, false);
+      this.sendContext("Visitor declined the website action: " + JSON.stringify(result), true);
+      return;
+    }
     if (this.emailPending?.id === proposal.id) this.emailPending = undefined;
     if (this.websiteDraft?.proposal.id === proposal.id) this.websiteDraft = undefined;
     await this.action("discard_proposal", { proposal_id: proposal.id });
-    this.callbacks.proposal?.(null);
+    this.showProposal(null);
     this.sendContext("The visitor declined the prepared action in the widget. Do not book or share that proposal. Ask what they prefer next.");
   }
 
@@ -294,11 +339,11 @@ export class BrandMintVoiceSession {
     if (name === "prepare_consultation") {
       const item = result.summary;
       const date = new Date(item.start_time).toLocaleString(this.language === "en" ? "en-IN" : this.language === "hi" ? "hi-IN" : "kn-IN", { timeZone: item.invitee.timezone, dateStyle: "full", timeStyle: "short" });
-      this.callbacks.proposal?.({ id: result.proposal_id, kind: "booking", summary: `${date} (${item.invitee.timezone}) · ${item.invitee.name} · ${item.invitee.email}` });
+      this.showProposal({ id: result.proposal_id, kind: "booking", summary: `${date} (${item.invitee.timezone}) · ${item.invitee.name} · ${item.invitee.email}` });
     }
-    if (name === "prepare_handoff") this.callbacks.proposal?.({ id: result.proposal_id, kind: "handoff", summary: result.summary });
-    if (name === "confirm_consultation" && result.booking) { this.callbacks.proposal?.(null); this.callbacks.booked?.(result.booking); }
-    if (name === "confirm_handoff") { this.callbacks.proposal?.(null); this.callbacks.handoffSent?.(); }
+    if (name === "prepare_handoff") this.showProposal({ id: result.proposal_id, kind: "handoff", summary: result.summary });
+    if (name === "confirm_consultation" && result.booking) { this.showProposal(null); this.callbacks.booked?.(result.booking); }
+    if (name === "confirm_handoff") { this.showProposal(null); this.callbacks.handoffSent?.(); }
   }
 
   bookingConfirmed() {
@@ -316,6 +361,8 @@ export class BrandMintVoiceSession {
         body: JSON.stringify({ action: "metric", args: { event: message?.toLowerCase().includes("connect") ? "connection_failed" : "ended" } }), keepalive: true }).catch(() => {});
     }
     this.closed = true;
+    this.spokenConfirmation.review();
+    this.activeReview = undefined;
     this.emailPending = undefined;
     this.websiteDraft = undefined;
     this.availableSlots = {};
@@ -332,7 +379,7 @@ export class BrandMintVoiceSession {
     this.stream?.getTracks().forEach(track => track.stop());
     this.audio.pause();
     this.audio.srcObject = null;
-    this.callbacks.proposal?.(null);
+    this.showProposal(null);
     this.callbacks.ended(message);
   }
 
@@ -364,6 +411,10 @@ export class BrandMintVoiceSession {
       if (!this.liveCaptionId[speaker] || event.start_ms - this.liveCaptionEnd[speaker] > 1800) this.liveCaptionId[speaker] = crypto.randomUUID();
       this.liveCaptionEnd[speaker] = event.end_ms;
       this.updateCaption(this.liveCaptionId[speaker], speaker, event.delta, true);
+      if (typeof event.delta === "string") {
+        if (speaker === "You") this.spokenConfirmation.visitor(event.delta, event.start_ms);
+        else this.spokenConfirmation.assistant(event.delta, event.end_ms);
+      }
       return;
     }
     if (event.type === "response.function_call_arguments.done") {
@@ -389,15 +440,21 @@ export class BrandMintVoiceSession {
       if (event.response?.status === "failed") this.stop("The voice reply failed. Please try again.");
       else if (!this.speaking) this.callbacks.status("listening");
     }
-    if (event.type === "conversation.item.input_audio_transcription.completed") this.updateCaption(event.item_id, "You", event.transcript, false);
+    if (event.type === "conversation.item.input_audio_transcription.completed") {
+      this.updateCaption(event.item_id, "You", event.transcript, false);
+      this.spokenConfirmation.visitor(event.transcript);
+    }
     if (event.type === "response.output_audio_transcript.delta") this.updateCaption(event.item_id, "BrandMint AI", event.delta, true);
-    if (event.type === "response.output_audio_transcript.done") this.updateCaption(event.item_id, "BrandMint AI", event.transcript, false);
+    if (event.type === "response.output_audio_transcript.done") {
+      this.updateCaption(event.item_id, "BrandMint AI", event.transcript, false);
+      this.spokenConfirmation.assistant(event.transcript);
+    }
   }
 
   invalidateEmailProposal() {
     this.emailRevision++;
     const id = this.emailPending?.id; this.emailPending = undefined;
-    if (id) { this.callbacks.proposal?.(null); void this.action("discard_proposal", { proposal_id: id }).catch(() => {}); }
+    if (id) { this.showProposal(null); void this.action("discard_proposal", { proposal_id: id }).catch(() => {}); }
   }
 
   private setEmailSpeechState(state: "review" | "approved" | "declined" | "accepted" | "unknown") {
@@ -423,21 +480,25 @@ export class BrandMintVoiceSession {
     if (result.success) {
       this.emailPending = { id: result.proposal_id, email: result.email };
       this.callbacks.emailDraft?.(result.email);
-      this.callbacks.proposal?.({ id: result.proposal_id, kind: "email", summary: `To: ${result.email.to}\nYour email (Reply-To): ${result.email.reply_to}\nSubject: ${result.email.subject}\n\n${result.email.body}` });
+      this.showProposal({ id: result.proposal_id, kind: "email", summary: `To: ${result.email.to}\nYour email (Reply-To): ${result.email.reply_to}\nSubject: ${result.email.subject}\n\n${result.email.body}` });
       this.setEmailSpeechState("review");
     }
     this.sendContext("Email preparation result. Do not send before a new explicit approval of these exact details: " + JSON.stringify(result));
     return result;
   }
 
-  private async confirmEmail(id: string, confirmed: boolean): Promise<Record<string, any>> {
+  private confirmEmail(id: string, confirmed: boolean): Promise<Record<string, any>> {
+    return this.confirmOnce(id, confirmed === true, () => this.performEmailConfirmation(id, confirmed));
+  }
+
+  private async performEmailConfirmation(id: string, confirmed: boolean): Promise<Record<string, any>> {
     const pending = this.emailPending;
     if (!pending || id !== pending.id || this.closed) return { success: false, message: "Email review expired or changed. Review the recipient and exact message again." };
     const current = this.callbacks.getEmailDraft?.();
     if (!current || JSON.stringify(emailDraftSchema.parse(current)) !== JSON.stringify(emailDraftSchema.parse(pending.email))) {
       this.invalidateEmailProposal(); return { success: false, message: "The draft changed. Read back and confirm the updated recipient and message. Nothing was sent." };
     }
-    this.emailPending = undefined; this.callbacks.proposal?.(null);
+    this.emailPending = undefined; this.showProposal(null);
     if (confirmed !== true) { await this.action("discard_proposal", { proposal_id: id }); this.setEmailSpeechState("declined"); return { success: true, message: "Email declined. Nothing was sent." }; }
     this.setEmailSpeechState("approved");
     let result: Record<string, any>;
@@ -458,16 +519,20 @@ export class BrandMintVoiceSession {
     }).join(" · ");
     const proposal = { id: crypto.randomUUID(), kind, summary };
     this.websiteDraft = { proposal, payload, expires: Date.now() + 300000 };
-    this.callbacks.proposal?.(proposal);
+    this.showProposal(proposal);
     return { success: true, proposal_id: proposal.id, summary, message: kind === "contact_submit"
-      ? "Read these exact details back and ask permission to SEND. Wait for the visitor's explicit approval before confirm_website_action. Nothing has been submitted."
-      : "Read these details back and ask permission to fill the form. For Calendly, explain these details will be shared with Calendly and the visitor must click its final Schedule button. Nothing has been submitted." };
+      ? "Read these exact details back, then ask 'Do you confirm submitting these exact details?' in the selected language. Wait for explicit approval before confirm_website_action. Nothing has been submitted."
+      : "Read these details back, then ask 'May I fill the form with these details?' in the selected language. For Calendly, explain these details will be shared with Calendly and the visitor must click its final Schedule button. Nothing has been submitted." };
   }
 
-  private async confirmWebsiteAction(id: string, confirmed: boolean): Promise<Record<string, any>> {
+  private confirmWebsiteAction(id: string, confirmed: boolean): Promise<Record<string, any>> {
+    return this.confirmOnce(id, confirmed === true, () => this.performWebsiteConfirmation(id, confirmed));
+  }
+
+  private async performWebsiteConfirmation(id: string, confirmed: boolean): Promise<Record<string, any>> {
     const draft = this.websiteDraft;
     if (this.closed || !draft || draft.proposal.id !== id || draft.expires < Date.now()) return { success: false, message: "This draft expired or changed. Prepare and review the current details again." };
-    this.websiteDraft = undefined; this.callbacks.proposal?.(null); // Consume before awaiting: no duplicate confirmations.
+    this.websiteDraft = undefined; this.showProposal(null); // Consume before awaiting: no duplicate confirmations.
     if (confirmed !== true) return { success: true, message: "Draft declined. Nothing was submitted." };
     if (draft.proposal.kind === "calendar_prefill") {
       this.callbacks.book(draft.payload as VoiceCalendarPrefill);
@@ -494,7 +559,7 @@ export class BrandMintVoiceSession {
       try {
         const args = JSON.parse(event.arguments);
         if (event.name === "navigate_website" && typeof args.page === "string" && resolveVoicePage(args.page)) {
-          this.websiteDraft = undefined; this.callbacks.proposal?.(null);
+          this.websiteDraft = undefined; this.showProposal(null);
           const path = resolveVoicePage(args.page)!;
           const sectionFound = await this.callbacks.navigate(path, typeof args.section === "string" ? args.section : undefined);
           result = { success: true, message: `Opened ${path}.${sectionFound === false ? " The requested section was not found; ask which visible section they mean." : ""} Navigation does not submit a form or confirm an appointment.` };
@@ -523,7 +588,7 @@ export class BrandMintVoiceSession {
           if (!Object.keys(fields).length) throw Error("Please provide at least one Contact field.");
           // Filling is a local edit requested by the visitor, not permission to send.
           // Also handle the old tool name so already-connected sessions receive this behavior.
-          this.websiteDraft = undefined; this.callbacks.proposal?.(null);
+          this.websiteDraft = undefined; this.showProposal(null);
           await this.callbacks.navigate("/contact");
           if (this.closed) throw Error("The conversation ended. Nothing was sent.");
           await this.callbacks.fillContact(fields);
