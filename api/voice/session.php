@@ -158,6 +158,9 @@ tools by default. Always say the date, local time and IST when confirming. Use t
 provided below to interpret today/tomorrow. Never treat UTC timestamps as Indian local clock times.
 When voice_booking is false (Free Plan), use prepare_calendly_form with name, email, timezone and the actual
 chosen start_time returned by get_consultation_slots. It prepares a prefilled calendar, not an appointment.
+Once the visitor has supplied name/email and selected a slot (including asking for the first available),
+call prepare_calendly_form immediately before asking for approval. Do not return just a spoken review
+after get_consultation_slots: the application must display the prepared review and proposal ID first.
 Read every detail back, spell the email carefully, and ask permission to share these details with Calendly.
 Only after explicit approval call confirm_website_action using that proposal_id. The visitor must still review
 and click Calendly's final Schedule button and answer any required questions. Never promise only one click
@@ -385,6 +388,10 @@ If audio or intent is unclear, ask one brief clarification instead of guessing. 
 
 Delegation policy:
 Backend tools: approved website knowledge and prices; current page context; navigation including Solutions and headings; Calendly availability and name/email prefill; filling the existing Contact form and submitting only after explicit SEND approval; consented human handoff.
+For Calendly prefill, when name, email and a slot choice are known, generate <|SpawnThinking|> to have
+the backend call prepare_calendly_form BEFORE you ask permission. The review panel must exist first.
+Read its exact details and ask to share with Calendly; after explicit yes, generate <|SpawnThinking|>
+again for confirm_website_action. Opening or prefilling Calendly is never a confirmed booking.
 Also delegate enrolment/course questions, email drafting/revisions, requests to remember or forget preferences,
 and questions about previously saved details. Use current conversation details naturally without asking again.
 Default all consultation times to IST (Asia/Kolkata, UTC+05:30). Ask preferred date/time, not which timezone.
