@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) { http_response_code(404); exit; }
+require_once __DIR__ . '/google-calendar.php';
 
 function voice_config(): array
 {
@@ -123,7 +124,11 @@ function voice_capabilities(array $config): array
 {
     $calendar = !empty($config['calendly_token']) && (!empty($config['calendly_event_type'])
         || preg_match('~^https://api\.calendly\.com/users/[a-f0-9-]{36}$~i', (string) ($config['calendly_user_uri'] ?? '')) === 1);
-    return ['voice_booking' => ($config['calendly_booking_enabled'] ?? true) === true && $calendar,
+    $calendlyBooking = ($config['calendly_booking_enabled'] ?? true) === true && $calendar;
+    $googleBooking = $calendar && voice_google_enabled($config);
+    return ['voice_booking' => $calendlyBooking || $googleBooking,
+        'calendly_booking' => $calendlyBooking, 'google_booking' => $googleBooking,
+        'booking_provider' => $calendlyBooking ? 'calendly' : ($googleBooking ? 'google' : 'none'),
         'calendar_availability' => $calendar,
         'email_sending' => ($config['email_sending_enabled'] ?? true) === true && function_exists('mail'),
         'handoff' => filter_var($config['handoff_email'] ?? '', FILTER_VALIDATE_EMAIL) !== false];

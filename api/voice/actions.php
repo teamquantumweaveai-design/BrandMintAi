@@ -38,7 +38,10 @@ if ($action === 'metric') {
 
 require __DIR__ . '/email.php';
 if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confirm_consultation'], true)) {
-    if (!($action === 'get_consultation_slots' ? $capabilities['calendar_availability'] : $capabilities['voice_booking'])) voice_finish($file, $state, 503, ['success' => false, 'fallback' => 'calendar', 'message' => 'This calendar action is not enabled. Use the embedded Calendly form.']);
+    $provider = voice_booking_provider($config, $args, $state, $action);
+    if ($provider === 'invalid') voice_finish($file, $state, 400, ['success' => false, 'message' => 'Choose Google Calendar or Calendly.']);
+    if ($provider === 'google') voice_google_booking($config, $file, $state, $action, $args);
+    if (!($action === 'get_consultation_slots' ? $capabilities['calendar_availability'] : $capabilities['calendly_booking'])) voice_finish($file, $state, 503, ['success' => false, 'fallback' => 'calendar', 'message' => 'Calendly automatic booking is not enabled. Use the existing form, or check availability with provider google when Google booking is connected.']);
     $eventType = voice_calendar_event_type($config);
     if (!preg_match('~^https://api\.calendly\.com/event_types/[a-zA-Z0-9-]+$~', $eventType)) voice_finish($file, $state, 503, ['success' => false, 'message' => 'Calendar event configuration needs review.']);
     // Validate the configured event really is the BrandMint link, never the unrelated connected account.
@@ -61,21 +64,25 @@ if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confir
         ]));
         if ($response['status'] !== 200) voice_finish($file, $state, 502, ['success' => false, 'fallback' => 'calendar', 'message' => 'Unable to check live availability. Use the calendar.']);
         $slots = []; $links = [];
+        $googleBusy = voice_google_enabled($config) ? voice_google_busy($config, $start, $end) : [];
+        if ($googleBusy === null) voice_finish($file, $state, 502, ['success' => false, 'message' => 'Unable to verify Google Calendar conflicts. Do not offer unverified slots.']);
         foreach ($response['data']['collection'] ?? [] as $slot) {
-            if (($slot['status'] ?? '') === 'available' && strtotime($slot['start_time'] ?? '') > time()) {
+            if (($slot['status'] ?? '') === 'available' && strtotime($slot['start_time'] ?? '') > time()
+                && voice_google_free($googleBusy, strtotime($slot['start_time']))
+                && (!voice_google_enabled($config) || voice_google_reserved($config, strtotime($slot['start_time'])) === false)) {
                 $slots[] = $slot['start_time'];
                 $link = (string) ($slot['scheduling_url'] ?? '');
                 if (preg_match('~^https://calendly\.com/team-brandmint/30min(?:/[^\s?#]*)?(?:\?[^\s#]*)?$~', $link)) $links[$slot['start_time']] = $link;
             }
         }
-        $state['slots'] = array_slice($slots, 0, 200); $state['slots_checked'] = time();
-        voice_finish($file, $state, 200, ['success' => true, 'event_type' => $eventType, 'slots_utc' => array_slice($slots, 0, 24), 'slot_links' => array_intersect_key($links, array_flip(array_slice($slots, 0, 24))), 'timezone' => $timezone, 'slots_local' => array_map(fn($slot) => (new DateTimeImmutable($slot))->setTimezone(new DateTimeZone($timezone))->format('Y-m-d H:i T'), array_slice($slots, 0, 24)), 'duration_minutes' => 30, 'message' => 'Use only these actual available slots. Default to IST unless another timezone requested. On the Free Plan use prepare_calendly_form, then the visitor clicks Calendly Schedule; availability alone is not a booking.']);
+        $state['slots'] = array_slice($slots, 0, 200); $state['slots_checked'] = time(); $state['slot_provider'] = 'calendly';
+        voice_finish($file, $state, 200, ['success' => true, 'provider' => 'calendly', 'automatic_booking' => $capabilities['calendly_booking'], 'event_type' => $eventType, 'slots_utc' => array_slice($slots, 0, 24), 'slot_links' => array_intersect_key($links, array_flip(array_slice($slots, 0, 24))), 'timezone' => $timezone, 'slots_local' => array_map(fn($slot) => (new DateTimeImmutable($slot))->setTimezone(new DateTimeZone($timezone))->format('Y-m-d H:i T'), array_slice($slots, 0, 24)), 'duration_minutes' => 30, 'message' => $capabilities['calendly_booking'] ? 'Use prepare_consultation for these Calendly slots, then read back and obtain explicit booking approval.' : 'Calendly Free: use prepare_calendly_form and the visitor clicks Schedule. If google_booking is true, check fresh slots with provider google for an automatic Google appointment. Never switch providers after an uncertain booking attempt.']);
     }
     if ($action === 'prepare_consultation') {
         if (!empty($state['booking_result']) || !empty($state['booking_attempted'])) voice_finish($file, $state, 409, ['success' => false, 'message' => 'A booking was already attempted in this conversation. Check its status before starting another.']);
         $name = trim((string) ($args['name'] ?? '')); $email = trim((string) ($args['email'] ?? ''));
         $time = (string) ($args['start_time'] ?? ''); $timezone = (string) ($args['timezone'] ?? '');
-        if (strlen($name) < 2 || strlen($name) > 150 || preg_match('/[\r\n]/', $name) || !filter_var($email, FILTER_VALIDATE_EMAIL)
+        if (($state['slot_provider'] ?? 'calendly') !== 'calendly' || strlen($name) < 2 || strlen($name) > 150 || preg_match('/[\r\n]/', $name) || !filter_var($email, FILTER_VALIDATE_EMAIL)
             || !in_array($timezone, timezone_identifiers_list(DateTimeZone::ALL_WITH_BC), true) || !in_array($time, $state['slots'] ?? [], true)
             || ($state['slots_checked'] ?? 0) < time() - 600) {
             voice_finish($file, $state, 400, ['success' => false, 'message' => 'Use a freshly checked available slot, valid name/email, and an IANA timezone.']);
@@ -95,8 +102,8 @@ if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confir
             $payload['location'] = ['kind' => $kind];
         }
         $proposal = bin2hex(random_bytes(16));
-        $state['booking_draft'] = ['id' => $proposal, 'expires' => time() + 300, 'payload' => $payload];
-        voice_finish($file, $state, 200, ['success' => true, 'proposal_id' => $proposal, 'summary' => $payload, 'message' => 'Read back the exact date, time, timezone, name and email, and ask permission to book and send the invitation. Call confirm_consultation only after the visitor explicitly agrees.']);
+        $state['booking_draft'] = ['id' => $proposal, 'provider' => 'calendly', 'expires' => time() + 300, 'payload' => $payload];
+        voice_finish($file, $state, 200, ['success' => true, 'provider' => 'calendly', 'proposal_id' => $proposal, 'summary' => $payload, 'message' => 'Read back the exact Calendly date, time, timezone, name and email. Ask: Do you confirm booking this consultation and sending the invitation? Call confirm_consultation only after the visitor explicitly agrees.']);
     }
     $draft = $state['booking_draft'] ?? [];
     if (($args['proposal_id'] ?? '') !== ($draft['id'] ?? '') || empty($draft) || ($args['confirmed'] ?? false) !== true) voice_finish($file, $state, 400, ['success' => false, 'message' => 'Explicit confirmation of a prepared booking is required.']);
@@ -104,25 +111,34 @@ if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confir
     if (!empty($state['booking_attempted'])) voice_finish($file, $state, 409, ['success' => false, 'message' => 'The booking outcome needs checking. Do not retry or create a duplicate; check your Calendly email or contact the team.']);
     if (($draft['expires'] ?? 0) < time()) voice_finish($file, $state, 409, ['success' => false, 'message' => 'Booking confirmation expired. Check slots again.']);
     // Check the chosen slot again immediately before writing.
+    $bookingLock = voice_booking_lock($config);
+    if (!$bookingLock) voice_finish($file, $state, 503, ['success' => false, 'message' => 'Booking is busy. Nothing was submitted.']);
     $selected = strtotime($draft['payload']['start_time']);
+    if (voice_google_enabled($config)) {
+        $busy = voice_google_busy($config, $selected, $selected + 1800);
+        if ($busy === null || !voice_google_free($busy, $selected) || voice_google_reserved($config, $selected) !== false) voice_finish($file, $state, 409, ['success' => false, 'message' => 'This time is unavailable or needs checking in Google Calendar. Do not submit or switch providers.']);
+    }
     $available = voice_calendly($config, 'GET', '/event_type_available_times?' . http_build_query([
         'event_type' => $eventType, 'start_time' => gmdate('Y-m-d\TH:i:s\Z', $selected - 1), 'end_time' => gmdate('Y-m-d\TH:i:s\Z', $selected + 1800),
     ]));
     $valid = false;
     foreach ($available['data']['collection'] ?? [] as $slot) if (($slot['status'] ?? '') === 'available' && ($slot['start_time'] ?? '') === $draft['payload']['start_time']) $valid = true;
     if ($available['status'] !== 200 || !$valid) voice_finish($file, $state, 409, ['success' => false, 'message' => 'That slot is no longer available. Check new availability.']);
+    if (voice_google_enabled($config) && !voice_google_mark_slot($config, $selected, 'calendly:' . $draft['id'], 'unknown')) voice_finish($file, $state, 503, ['success' => false, 'message' => 'Could not save shared calendar booking state. Nothing was submitted.']);
     $state['booking_attempted'] = true;
     voice_save_session($file, $state); // Persist before POST: uncertain failures must not be blindly retried.
     $result = voice_calendly($config, 'POST', '/invitees', $draft['payload']);
     $booked = $result['data']['resource'] ?? [];
     if ($result['status'] >= 200 && $result['status'] < 300 && ($booked['status'] ?? '') === 'active' && !empty($booked['event'])) {
-        $state['booking_result'] = ['event' => $booked['event'], 'start_time' => $draft['payload']['start_time'],
+        if (voice_google_enabled($config)) voice_google_mark_slot($config, $selected, 'calendly:' . $draft['id'], 'confirmed');
+        $state['booking_result'] = ['provider' => 'calendly', 'event' => $booked['event'], 'start_time' => $draft['payload']['start_time'],
             'timezone' => $draft['payload']['invitee']['timezone'], 'cancel_url' => $booked['cancel_url'] ?? '', 'reschedule_url' => $booked['reschedule_url'] ?? ''];
         unset($state['booking_draft']['payload']); // Do not retain invitee contact details after confirmation.
         voice_metric($config, 'booking_confirmed');
         voice_finish($file, $state, 200, ['success' => true, 'booking' => $state['booking_result']]);
     }
     if ($result['status'] >= 400 && $result['status'] < 500 && $result['status'] !== 408) {
+        if (voice_google_enabled($config)) voice_google_mark_slot($config, $selected, 'calendly:' . $draft['id'], null);
         unset($state['booking_attempted'], $state['booking_draft']);
         voice_finish($file, $state, 409, ['success' => false, 'fallback' => 'calendar', 'message' => 'Calendly did not accept the booking. Recheck details or use the calendar; no confirmation was received.']);
     }
