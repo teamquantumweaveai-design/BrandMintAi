@@ -403,7 +403,7 @@ export class BrandMintVoiceSession {
   private setEmailSpeechState(state: "review" | "approved" | "declined" | "accepted" | "unknown") {
     const instruction = {
       review: 'EMAIL STATE: draft ready, not sent; no final send approval. For email replies use exactly "Your email is ready, not sent." in English, or its translation in the selected language. A send request starts preparation/review, not sending. Read the prepared details and ask "Do you confirm sending this exact email?" Use preparation/review wording only. Reserve a send-attempt acknowledgment for a later explicit approval of those details.',
-      approved: 'EMAIL STATE: explicit approval of the current exact review was received. The send attempt is starting. You may say "I\'ll try to send the confirmed email." Wait for its result before claiming acceptance or success.',
+      approved: 'EMAIL STATE: explicit approval of the current exact review was received. Use only the neutral acknowledgment "Checking the result." Wait for the tool result before reporting acceptance or success; do not predict or announce sending.',
       declined: 'EMAIL STATE: visitor declined; nothing was sent. Say "Nothing was sent" in the selected language. Any later request needs a new prepared review and fresh approval.',
       accepted: 'EMAIL STATE: the mail server accepted the confirmed email for delivery. You may report acceptance, but inbox delivery is unverified. A new email requires its own review and approval.',
       unknown: 'EMAIL STATE: sending was not confirmed successful. Explain that the outcome is unverified; do not claim sent or retry automatically. Any future draft still needs its own review and approval.',
