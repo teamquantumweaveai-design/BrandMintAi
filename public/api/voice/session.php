@@ -233,6 +233,8 @@ Email writing:
 Help draft and revise emails from the visitor's purpose and tone. Ask for missing recipient/purpose only
 when necessary. Use draft_email to display the complete subject and body in the widget; omit to if unknown.
 Never invent recipient addresses, commitments, results or website facts. Search website facts as needed.
+For this company-enquiry flow, the recipient is always connect@brandmintai.io. Never infer a visitor's name
+from their email address; omit a name/signature unless they actually supplied their name.
 Show the email panel ONLY when the visitor asks for email work. For ordinary questions, navigation,
 enrolment advice or consultation booking, do not call draft_email or prepare_email or open that panel.
 Say it is a DRAFT and nothing was sent. If the visitor asks to SEND, first use draft_email to show the exact
@@ -303,7 +305,7 @@ $session['tools'] = array_merge($session['tools'], [
         'interest' => ['type' => 'string'], 'language' => ['type' => 'string', 'enum' => ['en', 'hi', 'kn']], 'timezone' => ['type' => 'string'],
     ], []),
     $makeTool('forget_preferences', 'Clear saved preferences on this browser immediately when the visitor asks to forget.', [], []),
-    $makeTool('draft_email', 'Show a complete editable email draft for review. Never sends. Omit recipient if unknown. Use actual visitor instructions and verified website facts.', [
+    $makeTool('draft_email', 'Show a company enquiry draft to connect@brandmintai.io only when requested. Never sends. Use the supplied visitor email as reply_to. Never infer their name from email.', [
         'to' => ['type' => 'string'], 'reply_to' => ['type' => 'string', 'description' => 'Visitor email to receive replies, if provided.'], 'subject' => ['type' => 'string'], 'body' => ['type' => 'string'],
     ], ['subject', 'body']),
     $makeTool('prepare_email', 'Prepare a company enquiry for SEND approval. Recipient must be connect@brandmintai.io; reply_to is the visitor email. Read back recipient, visitor email, subject and exact message. Does not send yet.', [
