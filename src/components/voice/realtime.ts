@@ -400,6 +400,18 @@ export class BrandMintVoiceSession {
     if (id) { this.callbacks.proposal?.(null); void this.action("discard_proposal", { proposal_id: id }).catch(() => {}); }
   }
 
+  private setEmailSpeechState(state: "review" | "approved" | "declined" | "accepted" | "unknown") {
+    const instruction = {
+      review: 'EMAIL STATE: draft ready, not sent; no final send approval. For email replies use exactly "Your email is ready, not sent." in English, or its translation in the selected language. A send request starts preparation/review, not sending. Read the prepared details and ask "Do you confirm sending this exact email?" Use preparation/review wording only. Reserve a send-attempt acknowledgment for a later explicit approval of those details.',
+      approved: 'EMAIL STATE: explicit approval of the current exact review was received. The send attempt is starting. You may say "I\'ll try to send the confirmed email." Wait for its result before claiming acceptance or success.',
+      declined: 'EMAIL STATE: visitor declined; nothing was sent. Say "Nothing was sent" in the selected language. Any later request needs a new prepared review and fresh approval.',
+      accepted: 'EMAIL STATE: the mail server accepted the confirmed email for delivery. You may report acceptance, but inbox delivery is unverified. A new email requires its own review and approval.',
+      unknown: 'EMAIL STATE: sending was not confirmed successful. Explain that the outcome is unverified; do not claim sent or retry automatically. Any future draft still needs its own review and approval.',
+    }[state];
+    // Scope this instruction to email speech; other website workflows keep their existing rules.
+    this.appendLive("session.instructions.append", instruction);
+  }
+
   async prepareEmail(draft: VoiceEmailDraft) {
     const email = emailDraftSchema.required({ to: true, reply_to: true }).parse(draft);
     this.invalidateEmailProposal(); const revision = this.emailRevision;
@@ -412,6 +424,7 @@ export class BrandMintVoiceSession {
       this.emailPending = { id: result.proposal_id, email: result.email };
       this.callbacks.emailDraft?.(result.email);
       this.callbacks.proposal?.({ id: result.proposal_id, kind: "email", summary: `To: ${result.email.to}\nYour email (Reply-To): ${result.email.reply_to}\nSubject: ${result.email.subject}\n\n${result.email.body}` });
+      this.setEmailSpeechState("review");
     }
     this.sendContext("Email preparation result. Do not send before a new explicit approval of these exact details: " + JSON.stringify(result));
     return result;
@@ -425,8 +438,12 @@ export class BrandMintVoiceSession {
       this.invalidateEmailProposal(); return { success: false, message: "The draft changed. Read back and confirm the updated recipient and message. Nothing was sent." };
     }
     this.emailPending = undefined; this.callbacks.proposal?.(null);
-    if (confirmed !== true) { await this.action("discard_proposal", { proposal_id: id }); return { success: true, message: "Email declined. Nothing was sent." }; }
-    const result = await this.action("confirm_email", { proposal_id: id, confirmed: true });
+    if (confirmed !== true) { await this.action("discard_proposal", { proposal_id: id }); this.setEmailSpeechState("declined"); return { success: true, message: "Email declined. Nothing was sent." }; }
+    this.setEmailSpeechState("approved");
+    let result: Record<string, any>;
+    try { result = await this.action("confirm_email", { proposal_id: id, confirmed: true }); }
+    catch (error) { this.setEmailSpeechState("unknown"); throw error; }
+    this.setEmailSpeechState(result.success ? "accepted" : "unknown");
     if (result.success) this.callbacks.emailSent?.(result.reference);
     return result;
   }
@@ -495,6 +512,7 @@ export class BrandMintVoiceSession {
           this.invalidateEmailProposal();
           const draft = emailDraftSchema.parse({ ...args, to: "team.brandmint@gmail.com" });
           this.callbacks.emailDraft?.(draft);
+          this.setEmailSpeechState("review");
           result = { success: !!this.callbacks.emailDraft, message: "An editable email draft is shown in the widget. Nothing was sent. Sending goes only to team.brandmint@gmail.com with the visitor's confirmed email as Reply-To. If asked to send, collect reply_to, use prepare_email, read back recipient/visitor email/subject/exact message, then obtain approval before confirm_email." };
         } else if (event.name === "prepare_email") {
           result = await this.prepareEmail(args as VoiceEmailDraft);
