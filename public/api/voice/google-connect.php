@@ -2,7 +2,9 @@
 declare(strict_types=1);
 ini_set('display_errors', '0');
 require __DIR__ . '/lib.php';
-header('Cache-Control: no-store'); header('Referrer-Policy: no-referrer');
+// Chrome sends Origin:null for a navigation POST from a no-referrer form.
+// Preserve the same-origin POST check; suppress referrers on OAuth callbacks.
+header('Cache-Control: no-store'); header('Referrer-Policy: same-origin');
 header('X-Content-Type-Options: nosniff'); header('X-Frame-Options: DENY');
 header("Content-Security-Policy: default-src 'none'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
 $config = voice_config();
@@ -26,6 +28,7 @@ function voice_google_setup_page(string $message, int $status = 200): void
 }
 $redirect = 'https://brandmintai.io/api/voice/google-connect.php';
 if (isset($_GET['code']) || isset($_GET['error'])) {
+    header('Referrer-Policy: no-referrer');
     $pending = $_SESSION['google_oauth'] ?? []; unset($_SESSION['google_oauth']);
     if (empty($pending) || ($pending['expires'] ?? 0) < time() || !is_string($_GET['state'] ?? null)
         || !hash_equals($pending['state'], $_GET['state'])) voice_google_setup_page('This authorization link expired. Start the owner connection again.', 400);
