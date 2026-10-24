@@ -154,9 +154,22 @@ or cross-device memory. It stores no transcripts, credentials or submission appr
 storage and tells the active assistant to stop relying on earlier saved details. Avoid shared devices.
 The profile is shared with OpenAI when a new call starts, as context; action details need reconfirmation.
 
-Email requests create an editable draft inside the widget, with copy/open-email-app controls. No arbitrary
-email is sent by the agent. The visitor reviews and sends from their own email app. Drafts stay in tab
-memory and are discarded on closing the voice panel. Existing Contact and handoff sending are separate.
+The email panel appears only for requested email work; normal conversations keep the standard voice UI.
+Email requests create an editable draft, with copy/open-email-app controls. When asked to send an enquiry,
+Ishani collects the visitor's email, prepares the exact recipient/Reply-To/subject/body for read-back, and
+waits for explicit approval before sending to the fixed company inbox `connect@brandmintai.io`.
+The website's company address is the actual From; the visitor's address is Reply-To and included in the
+message. This sends on the visitor's behalf without impersonating their private mailbox. The API rejects
+all other destinations. Editing/discarding the draft invalidates approval. No automatic retry follows an
+uncertain send; duplicate confirmations cannot send twice. One send attempt per call, three per visitor
+address/day, and a global daily cap (default 100, configurable with `email_daily_limit`, maximum 500) apply.
+
+Sending uses Hostinger's PHP mail transport and reports only mail-server acceptance, never verified inbox
+delivery. `email_sending_enabled => false` in private voice-config.php disables it. No mailbox password is
+needed for this fixed company-enquiry flow. If the host rejects email, keep the draft and use Contact or
+the visitor's email app. Server drafts expire in five minutes; content is removed before a send attempt.
+Closing the panel/new conversations discard the local draft. Existing Contact and handoff sending remain
+separate. GPT-Live 1 remains the voice model; this update does not replace it.
 
 When asked to fill Contact, Ishani writes each visitor-provided field immediately and verifies the
 visible value before acknowledging it, even when only a name is available. Later fields and corrections

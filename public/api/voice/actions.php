@@ -16,7 +16,7 @@ $args = is_array($body['args'] ?? null) ? $body['args'] : [];
 $capabilities = voice_capabilities($config);
 if ($action === 'capabilities') voice_finish($file, $state, 200, ['success' => true] + $capabilities);
 if ($action === 'discard_proposal') {
-    foreach (['booking_draft', 'handoff_draft'] as $field) {
+    foreach (['booking_draft', 'handoff_draft', 'email_draft'] as $field) {
         if (!empty($state[$field]) && ($state[$field]['id'] ?? '') === ($args['proposal_id'] ?? '')) unset($state[$field]);
     }
     voice_finish($file, $state, 200, ['success' => true]);
@@ -33,6 +33,7 @@ if ($action === 'metric') {
     voice_finish($file, $state, 200, ['success' => true]);
 }
 
+require __DIR__ . '/email.php';
 if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confirm_consultation'], true)) {
     if (!($action === 'get_consultation_slots' ? $capabilities['calendar_availability'] : $capabilities['voice_booking'])) voice_finish($file, $state, 503, ['success' => false, 'fallback' => 'calendar', 'message' => 'This calendar action is not enabled. Use the embedded Calendly form.']);
     $eventType = voice_calendar_event_type($config);

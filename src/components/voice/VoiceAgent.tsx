@@ -15,11 +15,13 @@ export default function VoiceAgent() {
   const rememberEnabled = useRef(initialMemory !== null);
   const [language, setLanguage] = useState<VoiceLanguage>(initialMemory?.language || "en");
   const [emailDraft, setEmailDraft] = useState<VoiceEmailDraft>();
+  const emailDraftRef = useRef<VoiceEmailDraft | undefined>(undefined);
+  const [emailAccepted, setEmailAccepted] = useState(false);
   const [proposal, setProposal] = useState<VoiceProposal | null>(null);
   const [proposalBusy, setProposalBusy] = useState(false);
   const [bookingResult, setBookingResult] = useState<VoiceBooking | null>(null);
   const [handoffSent, setHandoffSent] = useState(false);
-  const [capabilities, setCapabilities] = useState({ voice_booking: false, handoff: false });
+  const [capabilities, setCapabilities] = useState<{ voice_booking: boolean; handoff: boolean; email_sending?: boolean }>({ voice_booking: false, handoff: false });
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<VoiceStatus | "idle">("idle");
   const [muted, setMuted] = useState(false);
@@ -37,6 +39,8 @@ export default function VoiceAgent() {
   const panel = useRef<HTMLElement>(null);
   const transcript = useRef<HTMLDivElement>(null);
   const active = status !== "idle";
+  const showEmailDraft = (draft?: VoiceEmailDraft) => { emailDraftRef.current = draft; setEmailDraft(draft); setEmailAccepted(false); };
+  const editEmailDraft = (draft?: VoiceEmailDraft) => { session.current?.invalidateEmailProposal(); showEmailDraft(draft); };
 
   const end = () => {
     session.current?.stop();
@@ -44,7 +48,7 @@ export default function VoiceAgent() {
     setStatus("idle"); setMuted(false); setBlocked(false);
   };
   const clearMemory = () => { forgetVoiceMemory(); savedPreferences.current = {}; rememberEnabled.current = false; setRemember(false); session.current?.forgetPreferences(); };
-  const close = () => { end(); setOpen(false); setBooking(false); setCalendarDetails(undefined); setEmailDraft(undefined); launcher.current?.focus(); };
+  const close = () => { end(); setOpen(false); setBooking(false); setCalendarDetails(undefined); showEmailDraft(undefined); launcher.current?.focus(); };
   const openBooking = (details?: VoiceCalendarPrefill) => { setCalendarDetails(details); navigate("/contact"); setBooked(false); setBooking(true); };
 
   useEffect(() => {
@@ -92,6 +96,7 @@ export default function VoiceAgent() {
   const start = async () => {
     if (session.current || !audio.current) return;
     setMessage(""); setCaptions([]); setMuted(false); setBlocked(false); setStatus("connecting");
+    showEmailDraft(undefined);
     setProposal(null); setBookingResult(null); setHandoffSent(false);
     const call = new BrandMintVoiceSession(audio.current, {
       status: setStatus,
@@ -121,7 +126,9 @@ export default function VoiceAgent() {
         savedPreferences.current = next; return true;
       },
       forget: clearMemory,
-      emailDraft: setEmailDraft,
+      emailDraft: showEmailDraft,
+      getEmailDraft: () => emailDraftRef.current,
+      emailSent: () => { showEmailDraft(undefined); setEmailAccepted(true); setMessage("Your message was accepted for delivery to connect@brandmintai.io. The team can reply to your email address."); },
     }, language, savedPreferences.current);
     session.current = call;
     try { await call.start(); } catch (error) {
@@ -171,17 +178,25 @@ export default function VoiceAgent() {
               <small>{remember ? "Basic preferences saved for 30 days. Tell Ishani what to remember. Avoid shared devices." : "Memory is off. Conversation context lasts for this call."} Booking times default to IST.</small>
             </div>
             {emailDraft && <div className="bm-voice-email" aria-label="Email draft">
-              <strong>Email draft · not sent</strong>
-              <label>To<input aria-label="Draft email recipient" value={emailDraft.to || ""} onChange={event => setEmailDraft({ ...emailDraft, to: event.target.value || undefined })} /></label>
-              <label>Subject<input aria-label="Draft email subject" value={emailDraft.subject} onChange={event => setEmailDraft({ ...emailDraft, subject: event.target.value })} /></label>
-              <label>Message<textarea aria-label="Draft email body" value={emailDraft.body} onChange={event => setEmailDraft({ ...emailDraft, body: event.target.value })} /></label>
+              <strong>{emailAccepted ? "Email accepted for delivery" : "Email draft · not sent"}</strong>
+              <label>To<input aria-label="Draft email recipient" value={emailDraft.to || ""} onChange={event => editEmailDraft({ ...emailDraft, to: event.target.value || undefined })} /></label>
+              <label>Your email (for replies)<input aria-label="Your email for replies" type="email" value={emailDraft.reply_to || ""} onChange={event => editEmailDraft({ ...emailDraft, reply_to: event.target.value || undefined })} /></label>
+              <label>Subject<input aria-label="Draft email subject" value={emailDraft.subject} onChange={event => editEmailDraft({ ...emailDraft, subject: event.target.value })} /></label>
+              <label>Message<textarea aria-label="Draft email body" value={emailDraft.body} onChange={event => editEmailDraft({ ...emailDraft, body: event.target.value })} /></label>
+              <small>Website sending goes to connect@brandmintai.io. Replies go to your email above.</small>
+              {!emailAccepted && active && capabilities.email_sending && <button disabled={proposalBusy} onClick={async () => {
+                setProposalBusy(true);
+                try { const result = await session.current?.prepareEmail(emailDraft); if (!result?.success) setMessage(result?.message || "Email preparation failed. Nothing was sent."); }
+                catch { setMessage("Check the recipient, subject and message before preparing to send."); }
+                finally { setProposalBusy(false); }
+              }}>Review before sending</button>}
               <button onClick={async () => { try { await navigator.clipboard.writeText(`To: ${emailDraft.to || ""}\nSubject: ${emailDraft.subject}\n\n${emailDraft.body}`); setMessage("Email draft copied. Nothing was sent."); } catch { setMessage("Select and copy the draft text above."); } }}>Copy draft</button>
               <button onClick={() => { try { const link = emailDraftLink(emailDraft); end(); window.location.href = link; } catch { setMessage("Check the email address, subject and message before opening your email app."); } }}>Open email app</button>
-              <button onClick={() => setEmailDraft(undefined)}>Discard draft</button>
+              <button onClick={() => editEmailDraft(undefined)}>Discard draft</button>
             </div>}
             {active && <p className="bm-voice-context">Helping with: {location.pathname === "/" ? "Home" : location.pathname.slice(1).replace(/-/g, " ")}</p>}
             {proposal && <div className="bm-voice-proposal" role="region" aria-label="Review voice action">
-              <strong>{{ booking: "Confirm your consultation", handoff: "Share this summary with the team?", calendar_prefill: "Review Calendly details", contact_fill: "Review Contact form details", contact_submit: "Send this Contact message?" }[proposal.kind]}</strong>
+              <strong>{{ booking: "Confirm your consultation", handoff: "Share this summary with the team?", calendar_prefill: "Review Calendly details", contact_fill: "Review Contact form details", contact_submit: "Send this Contact message?", email: "Confirm recipient and exact email" }[proposal.kind]}</strong>
               <p>{proposal.summary}</p>
               <div><button disabled={proposalBusy} onClick={async () => {
                 if (!session.current) return;
@@ -189,7 +204,7 @@ export default function VoiceAgent() {
                 try { const result = await session.current.confirmProposal(proposal); if (!result.success) setMessage(result.message || "The action could not be confirmed."); }
                 catch { setMessage("No confirmation received. Do not retry a booking; check your email or contact the team first."); }
                 finally { setProposalBusy(false); }
-              }}>{proposalBusy ? "Checking…" : { booking: "Confirm and send invitation", handoff: "I agree — email this summary", calendar_prefill: "Fill Calendly form", contact_fill: "Fill Contact form", contact_submit: "Confirm and send message" }[proposal.kind]}</button>
+              }}>{proposalBusy ? "Checking…" : { booking: "Confirm and send invitation", handoff: "I agree — email this summary", calendar_prefill: "Fill Calendly form", contact_fill: "Fill Contact form", contact_submit: "Confirm and send message", email: "Confirm and send email" }[proposal.kind]}</button>
               <button disabled={proposalBusy} onClick={async () => {
                 setProposalBusy(true);
                 try { await session.current?.declineProposal(proposal); }

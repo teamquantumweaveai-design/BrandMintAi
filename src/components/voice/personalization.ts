@@ -21,6 +21,7 @@ export function saveVoiceMemory(preferences: VoicePreferences): boolean {
 export function forgetVoiceMemory() { try { localStorage.removeItem(key); } catch {} }
 export const emailDraftSchema = z.object({
   to: z.string().trim().email().max(254).optional(), subject: z.string().trim().min(1).max(200),
+  reply_to: z.string().trim().email().max(254).optional(),
   body: z.string().trim().min(1).max(6000),
 }).strict();
 export type VoiceEmailDraft = z.infer<typeof emailDraftSchema>;

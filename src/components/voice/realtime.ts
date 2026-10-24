@@ -5,7 +5,7 @@ import { preferencesSchema, emailDraftSchema, type VoicePreferences, type VoiceE
 export type VoiceStatus = "connecting" | "listening" | "thinking" | "speaking";
 export type VoiceCaption = { id: string; speaker: "You" | "BrandMint AI"; text: string };
 export type VoiceLanguage = "en" | "hi" | "kn";
-export type VoiceProposal = { id: string; kind: "booking" | "handoff" | "calendar_prefill" | "contact_fill" | "contact_submit"; summary: string };
+export type VoiceProposal = { id: string; kind: "booking" | "handoff" | "calendar_prefill" | "contact_fill" | "contact_submit" | "email"; summary: string };
 export type VoiceBooking = { start_time: string; timezone: string; cancel_url?: string; reschedule_url?: string };
 type Callbacks = {
   status: (status: VoiceStatus) => void;
@@ -22,6 +22,8 @@ type Callbacks = {
   remember?: (details: VoicePreferences) => boolean;
   forget?: () => void;
   emailDraft?: (draft: VoiceEmailDraft) => void;
+  getEmailDraft?: () => VoiceEmailDraft | undefined;
+  emailSent?: () => void;
   capabilities?: (capabilities: { voice_booking: boolean; handoff: boolean }) => void;
 };
 
@@ -49,6 +51,8 @@ export class BrandMintVoiceSession {
   private availableSlots: Record<string, string> = {};
   private slotsChecked = 0;
   private contactAttempted = false;
+  private emailPending?: { id: string; email: VoiceEmailDraft };
+  private emailRevision = 0;
 
   constructor(private audio: HTMLAudioElement, private callbacks: Callbacks, language: VoiceLanguage = "en", private preferences: VoicePreferences = {}) { this.language = language; }
 
@@ -227,6 +231,12 @@ export class BrandMintVoiceSession {
   }
 
   async confirmProposal(proposal: VoiceProposal) {
+    if (proposal.kind === "email") {
+      const result = await this.confirmEmail(proposal.id, true);
+      this.sendContext("Result of explicit email-send approval: " + JSON.stringify(result), true);
+      if (this.protocol === "realtime" && this.channel?.readyState === "open") this.channel.send(JSON.stringify({ type: "response.create" }));
+      return result;
+    }
     if (["calendar_prefill", "contact_fill", "contact_submit"].includes(proposal.kind)) {
       const result = await this.confirmWebsiteAction(proposal.id, true);
       this.sendContext("Result of the visitor's explicit confirmation: " + JSON.stringify(result), true);
@@ -243,6 +253,7 @@ export class BrandMintVoiceSession {
   }
 
   async declineProposal(proposal: VoiceProposal) {
+    if (this.emailPending?.id === proposal.id) this.emailPending = undefined;
     if (this.websiteDraft?.proposal.id === proposal.id) this.websiteDraft = undefined;
     await this.action("discard_proposal", { proposal_id: proposal.id });
     this.callbacks.proposal?.(null);
@@ -276,6 +287,7 @@ export class BrandMintVoiceSession {
         body: JSON.stringify({ action: "metric", args: { event: message?.toLowerCase().includes("connect") ? "connection_failed" : "ended" } }), keepalive: true }).catch(() => {});
     }
     this.closed = true;
+    this.emailPending = undefined;
     this.websiteDraft = undefined;
     this.availableSlots = {};
     this.controller.abort();
@@ -344,6 +356,43 @@ export class BrandMintVoiceSession {
     if (event.type === "response.output_audio_transcript.done") this.updateCaption(event.item_id, "BrandMint AI", event.transcript, false);
   }
 
+  invalidateEmailProposal() {
+    this.emailRevision++;
+    const id = this.emailPending?.id; this.emailPending = undefined;
+    if (id) { this.callbacks.proposal?.(null); void this.action("discard_proposal", { proposal_id: id }).catch(() => {}); }
+  }
+
+  async prepareEmail(draft: VoiceEmailDraft) {
+    const email = emailDraftSchema.required({ to: true, reply_to: true }).parse(draft);
+    this.invalidateEmailProposal(); const revision = this.emailRevision;
+    const result = await this.action("prepare_email", email);
+    if (this.closed || revision !== this.emailRevision) {
+      if (result.proposal_id) await this.action("discard_proposal", { proposal_id: result.proposal_id });
+      return { success: false, message: "The email changed before review. Prepare the current details again. Nothing was sent." };
+    }
+    if (result.success) {
+      this.emailPending = { id: result.proposal_id, email: result.email };
+      this.callbacks.emailDraft?.(result.email);
+      this.callbacks.proposal?.({ id: result.proposal_id, kind: "email", summary: `To: ${result.email.to}\nYour email (Reply-To): ${result.email.reply_to}\nSubject: ${result.email.subject}\n\n${result.email.body}` });
+    }
+    this.sendContext("Email preparation result. Do not send before a new explicit approval of these exact details: " + JSON.stringify(result));
+    return result;
+  }
+
+  private async confirmEmail(id: string, confirmed: boolean): Promise<Record<string, any>> {
+    const pending = this.emailPending;
+    if (!pending || id !== pending.id || this.closed) return { success: false, message: "Email review expired or changed. Review the recipient and exact message again." };
+    const current = this.callbacks.getEmailDraft?.();
+    if (!current || JSON.stringify(emailDraftSchema.parse(current)) !== JSON.stringify(emailDraftSchema.parse(pending.email))) {
+      this.invalidateEmailProposal(); return { success: false, message: "The draft changed. Read back and confirm the updated recipient and message. Nothing was sent." };
+    }
+    this.emailPending = undefined; this.callbacks.proposal?.(null);
+    if (confirmed !== true) { await this.action("discard_proposal", { proposal_id: id }); return { success: true, message: "Email declined. Nothing was sent." }; }
+    const result = await this.action("confirm_email", { proposal_id: id, confirmed: true });
+    if (result.success) this.callbacks.emailSent?.();
+    return result;
+  }
+
   private stageWebsiteAction(kind: "calendar_prefill" | "contact_fill" | "contact_submit", payload: VoiceContactFields | VoiceCalendarPrefill) {
     const summary = Object.entries(payload).filter(([key]) => key !== "scheduling_url").map(([key, value]) => `${key.replace(/_/g, " ")}: ${value}`).join(" · ");
     const proposal = { id: crypto.randomUUID(), kind, summary };
@@ -398,9 +447,14 @@ export class BrandMintVoiceSession {
           this.callbacks.forget?.(); this.forgetPreferences();
           result = { success: true, message: "Cleared saved preferences on this device. Do not reuse earlier remembered details." };
         } else if (event.name === "draft_email") {
+          this.invalidateEmailProposal();
           const draft = emailDraftSchema.parse(args);
           this.callbacks.emailDraft?.(draft);
-          result = { success: !!this.callbacks.emailDraft, message: "An editable email draft is shown in the widget. Nothing was sent. The visitor can copy it or open their email app and review before sending." };
+          result = { success: !!this.callbacks.emailDraft, message: "An editable email draft is shown in the widget. Nothing was sent. Sending goes only to connect@brandmintai.io with the visitor's confirmed email as Reply-To. If asked to send, collect reply_to, use prepare_email, read back recipient/visitor email/subject/exact message, then obtain approval before confirm_email." };
+        } else if (event.name === "prepare_email") {
+          result = await this.prepareEmail(args as VoiceEmailDraft);
+        } else if (event.name === "confirm_email") {
+          result = await this.confirmEmail(args.proposal_id, args.confirmed);
         } else if (["fill_contact_form", "prepare_contact_form"].includes(event.name)) {
           const fields = contactFieldsSchema.parse(args);
           if (!Object.keys(fields).length) throw Error("Please provide at least one Contact field.");
