@@ -47,6 +47,7 @@ export type VoiceCalendarPrefill = { name: string; email: string; start_time?: s
 export function calendarPrefillUrl(details?: VoiceCalendarPrefill, embedded = true): string {
   const base = "https://calendly.com/team-brandmint/30min";
   const url = new URL(details?.scheduling_url || base);
+  url.searchParams.set("timezone", details?.timezone || "Asia/Kolkata");
   if (url.origin !== "https://calendly.com" || !(url.pathname === "/team-brandmint/30min" || url.pathname.startsWith("/team-brandmint/30min/"))) throw Error("Calendar link is not the approved BrandMint event.");
   if (details) {
     const valid = z.object({ name: z.string().trim().min(2).max(150), email: z.string().trim().email().max(254) }).parse(details);

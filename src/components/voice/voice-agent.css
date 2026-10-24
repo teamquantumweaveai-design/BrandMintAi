@@ -9,6 +9,15 @@
 .bm-voice-panel { position: absolute; bottom: 62px; left: 0; width: min(390px, calc(100vw - 32px)); max-height: calc(100dvh - 110px); overflow-y: auto; border: 1px solid #cbd6e2; border-radius: 22px; background: #fff; box-shadow: 0 18px 65px #24384d33; }
 .bm-voice-header { display: flex; align-items: center; gap: 11px; padding: 19px; border-bottom: 1px solid #e9edf1; }
 .bm-voice-header h2 { margin: 0; color: #2e384d; font-size: 16px; letter-spacing: -.3px; }
+.bm-voice-header h2 small { font-size: 10px; font-weight: 400; letter-spacing: 0; }
+.bm-voice-memory { margin: 12px 0; text-align: left; font-size: 11px; }
+.bm-voice-memory input { margin-right: 5px; }
+.bm-voice-memory button, .bm-voice-email button { margin: 5px; padding: 5px 8px; border: 1px solid #cbd6e2; border-radius: 6px; background: #f8f9fa; }
+.bm-voice-memory small { display: block; color: #516f90; }
+.bm-voice-email { padding: 10px; margin: 12px 0; border: 1px solid #cbd6e2; border-radius: 10px; text-align: left; }
+.bm-voice-email label { display: block; margin: 6px 0; font-size: 11px; }
+.bm-voice-email input, .bm-voice-email textarea { display: block; width: 100%; padding: 7px; border: 1px solid #cbd6e2; border-radius: 5px; color: #2e384d; background: white; }
+.bm-voice-email textarea { min-height: 110px; }
 .bm-voice-header p { margin: 2px 0 0; color: #516f90; font-size: 11px; }
 .bm-voice-mark { display: grid; place-items: center; width: 40px; height: 40px; background: #fff0eb; color: #df441f; border-radius: 13px; }
 .bm-voice-icon { margin-left: auto; display: grid; place-items: center; padding: 8px; border: 0; border-radius: 9px; background: #f4f6f8; color: #516f90; }

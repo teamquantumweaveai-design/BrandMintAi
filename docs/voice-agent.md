@@ -143,6 +143,21 @@ The private directory can be set with `storage_dir`; paths under the web root ar
 
 ### Voice form assistance
 
+The panel is titled Ishani (brandmint ai voice). Consultation tools and Calendly links default to
+Asia/Kolkata (IST); returned slots include local times. An explicit visitor timezone takes precedence.
+Enrolment answers use the existing generated public knowledge index and never invent admission rules.
+
+Conversation context remains available during a call. Optional Remember me stores an allowlisted
+profile (name, email, company, interest, language, timezone) in this browser's localStorage for 30 days,
+only after the toggle is enabled and the visitor asks to save details. It is not account authentication
+or cross-device memory. It stores no transcripts, credentials or submission approval. Forget me clears
+storage and tells the active assistant to stop relying on earlier saved details. Avoid shared devices.
+The profile is shared with OpenAI when a new call starts, as context; action details need reconfirmation.
+
+Email requests create an editable draft inside the widget, with copy/open-email-app controls. No arbitrary
+email is sent by the agent. The visitor reviews and sends from their own email app. Drafts stay in tab
+memory and are discarded on closing the voice panel. Existing Contact and handoff sending are separate.
+
 When asked to fill Contact, Ishani writes each visitor-provided field immediately and verifies the
 visible value before acknowledging it, even when only a name is available. Later fields and corrections
 preserve the other entered values. No extra fill-confirmation step is required. Calendly name/email

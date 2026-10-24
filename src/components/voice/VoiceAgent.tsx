@@ -4,11 +4,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { BrandMintVoiceSession, type VoiceCaption, type VoiceStatus, type VoiceLanguage, type VoiceProposal, type VoiceBooking } from "./realtime";
 import "./voice-agent.css";
 import { calendarPrefillUrl, fillVoiceContactForm, submitVoiceContactForm, isVoiceSpaPath, waitForVoicePage, scrollVoiceSection, type VoiceCalendarPrefill } from "./website-actions";
+import { loadVoiceMemory, saveVoiceMemory, forgetVoiceMemory, emailDraftLink, type VoicePreferences, type VoiceEmailDraft } from "./personalization";
 
 export default function VoiceAgent() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [language, setLanguage] = useState<VoiceLanguage>("en");
+  const [initialMemory] = useState(loadVoiceMemory);
+  const savedPreferences = useRef<VoicePreferences>(initialMemory || {});
+  const [remember, setRemember] = useState(initialMemory !== null);
+  const rememberEnabled = useRef(initialMemory !== null);
+  const [language, setLanguage] = useState<VoiceLanguage>(initialMemory?.language || "en");
+  const [emailDraft, setEmailDraft] = useState<VoiceEmailDraft>();
   const [proposal, setProposal] = useState<VoiceProposal | null>(null);
   const [proposalBusy, setProposalBusy] = useState(false);
   const [bookingResult, setBookingResult] = useState<VoiceBooking | null>(null);
@@ -37,7 +43,8 @@ export default function VoiceAgent() {
     session.current = null;
     setStatus("idle"); setMuted(false); setBlocked(false);
   };
-  const close = () => { end(); setOpen(false); setBooking(false); setCalendarDetails(undefined); launcher.current?.focus(); };
+  const clearMemory = () => { forgetVoiceMemory(); savedPreferences.current = {}; rememberEnabled.current = false; setRemember(false); session.current?.forgetPreferences(); };
+  const close = () => { end(); setOpen(false); setBooking(false); setCalendarDetails(undefined); setEmailDraft(undefined); launcher.current?.focus(); };
   const openBooking = (details?: VoiceCalendarPrefill) => { setCalendarDetails(details); navigate("/contact"); setBooked(false); setBooking(true); };
 
   useEffect(() => {
@@ -107,7 +114,15 @@ export default function VoiceAgent() {
       capabilities: setCapabilities,
       booked: result => { setBookingResult(result); setBooked(true); setBooking(false); navigate("/contact"); },
       handoffSent: () => setHandoffSent(true),
-    }, language);
+      remember: details => {
+        if (!rememberEnabled.current) return false;
+        const next = { ...savedPreferences.current, ...details };
+        if (!saveVoiceMemory(next)) return false;
+        savedPreferences.current = next; return true;
+      },
+      forget: clearMemory,
+      emailDraft: setEmailDraft,
+    }, language, savedPreferences.current);
     session.current = call;
     try { await call.start(); } catch (error) {
       call.stop(error instanceof Error ? error.message : "Unable to start voice.");
@@ -129,14 +144,14 @@ export default function VoiceAgent() {
           }}>
           <header className="bm-voice-header">
             <span className="bm-voice-mark"><Mic size={20} aria-hidden="true" /></span>
-            <div><h2 id="bm-voice-title">BrandMint AI Voice</h2><p>Your AI business guide</p></div>
+            <div><h2 id="bm-voice-title">Ishani <small>(brandmint ai voice)</small></h2><p>Your AI business guide</p></div>
             <button ref={closeButton} className="bm-voice-icon" onClick={close} aria-label="Close voice agent and end conversation"><X size={20} /></button>
           </header>
           <div className="bm-voice-body">
             <div className={`bm-voice-orb ${active && !muted ? "bm-voice-active" : ""}`}><Mic size={30} aria-hidden="true" /></div>
             <p className="bm-voice-status" role="status">{muted ? "Microphone muted" : {
               idle: "Let's talk about your business", connecting: "Connecting…", listening: "Listening — go ahead",
-              thinking: "Thinking…", speaking: "BrandMint AI is speaking",
+              thinking: "Thinking…", speaking: "Ishani is speaking",
             }[status]}</p>
             <p className="bm-voice-intro">Explore AI automation, business growth, and the right next step for your team.</p>
             <label className="bm-voice-language">Voice language
@@ -146,6 +161,24 @@ export default function VoiceAgent() {
                 <option value="en">English</option><option value="hi">हिन्दी · Hindi</option><option value="kn">ಕನ್ನಡ · Kannada</option>
               </select>
             </label>
+            <div className="bm-voice-memory">
+              <label><input type="checkbox" checked={remember} onChange={event => {
+                if (!event.target.checked) { clearMemory(); return; }
+                if (!saveVoiceMemory(savedPreferences.current)) { setMessage("Your browser could not save preferences."); return; }
+                rememberEnabled.current = true; setRemember(true);
+              }} /> Remember me on this device</label>
+              <button onClick={clearMemory}>Forget me</button>
+              <small>{remember ? "Basic preferences saved for 30 days. Tell Ishani what to remember. Avoid shared devices." : "Memory is off. Conversation context lasts for this call."} Booking times default to IST.</small>
+            </div>
+            {emailDraft && <div className="bm-voice-email" aria-label="Email draft">
+              <strong>Email draft · not sent</strong>
+              <label>To<input aria-label="Draft email recipient" value={emailDraft.to || ""} onChange={event => setEmailDraft({ ...emailDraft, to: event.target.value || undefined })} /></label>
+              <label>Subject<input aria-label="Draft email subject" value={emailDraft.subject} onChange={event => setEmailDraft({ ...emailDraft, subject: event.target.value })} /></label>
+              <label>Message<textarea aria-label="Draft email body" value={emailDraft.body} onChange={event => setEmailDraft({ ...emailDraft, body: event.target.value })} /></label>
+              <button onClick={async () => { try { await navigator.clipboard.writeText(`To: ${emailDraft.to || ""}\nSubject: ${emailDraft.subject}\n\n${emailDraft.body}`); setMessage("Email draft copied. Nothing was sent."); } catch { setMessage("Select and copy the draft text above."); } }}>Copy draft</button>
+              <button onClick={() => { try { const link = emailDraftLink(emailDraft); end(); window.location.href = link; } catch { setMessage("Check the email address, subject and message before opening your email app."); } }}>Open email app</button>
+              <button onClick={() => setEmailDraft(undefined)}>Discard draft</button>
+            </div>}
             {active && <p className="bm-voice-context">Helping with: {location.pathname === "/" ? "Home" : location.pathname.slice(1).replace(/-/g, " ")}</p>}
             {proposal && <div className="bm-voice-proposal" role="region" aria-label="Review voice action">
               <strong>{{ booking: "Confirm your consultation", handoff: "Share this summary with the team?", calendar_prefill: "Review Calendly details", contact_fill: "Review Contact form details", contact_submit: "Send this Contact message?" }[proposal.kind]}</strong>
