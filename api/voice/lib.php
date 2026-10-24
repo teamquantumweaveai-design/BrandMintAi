@@ -53,8 +53,9 @@ function voice_metric(array $config, string $name, ?int $latency = null): void
     $day = gmdate('Y-m-d');
     $data[$day][$name] = (int) ($data[$day][$name] ?? 0) + 1;
     if ($latency !== null) {
-        $data[$day]['connection_ms_total'] = (int) ($data[$day]['connection_ms_total'] ?? 0) + max(0, min(120000, $latency));
-        $data[$day]['connection_ms_samples'] = (int) ($data[$day]['connection_ms_samples'] ?? 0) + 1;
+        $prefix = $name === 'tool_completed' ? 'tool' : ($name === 'backend_completed' ? 'backend' : 'connection');
+        $data[$day][$prefix . '_ms_total'] = (int) ($data[$day][$prefix . '_ms_total'] ?? 0) + max(0, min(300000, $latency));
+        $data[$day][$prefix . '_ms_samples'] = (int) ($data[$day][$prefix . '_ms_samples'] ?? 0) + 1;
     }
     rewind($file); ftruncate($file, 0); fwrite($file, json_encode($data)); fflush($file);
     flock($file, LOCK_UN); fclose($file);

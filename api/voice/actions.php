@@ -24,11 +24,14 @@ if ($action === 'discard_proposal') {
 
 if ($action === 'metric') {
     $event = $args['event'] ?? '';
-    $allowed = ['connected', 'connection_failed', 'ended', 'knowledge_miss', 'unanswered_pricing', 'unanswered_service', 'unanswered_other', 'navigation', 'embedded_booking_completed', 'language_en', 'language_hi', 'language_kn'];
+    $allowed = ['connected', 'connection_failed', 'ended', 'knowledge_miss', 'unanswered_pricing', 'unanswered_service', 'unanswered_other', 'navigation', 'embedded_booking_completed', 'language_en', 'language_hi', 'language_kn',
+        'tool_completed', 'backend_completed', 'backend_failed', 'knowledge_failed', 'knowledge_refresh_required', 'knowledge_revision_changed', 'navigation_failed', 'contact_fill_failed', 'contact_submit_failed', 'calendar_failed', 'email_failed', 'action_failed'];
     if (!in_array($event, $allowed, true)) voice_finish($file, $state, 400, ['success' => false]);
     // Single-occurrence lifecycle metrics cannot be replayed within the same session.
-    $repeatable = in_array($event, ['knowledge_miss', 'navigation', 'unanswered_pricing', 'unanswered_service', 'unanswered_other'], true);
-    if ($repeatable || empty($state['metrics'][$event])) voice_metric($config, $event, $event === 'connected' ? (int) ($args['latency_ms'] ?? 0) : null);
+    $repeatable = !in_array($event, ['connected', 'connection_failed', 'ended', 'language_en', 'language_hi', 'language_kn', 'knowledge_refresh_required'], true);
+    $state['metric_count'] = (int) ($state['metric_count'] ?? 0) + 1;
+    if ($state['metric_count'] > 200) voice_finish($file, $state, 429, ['success' => false]);
+    if ($repeatable || empty($state['metrics'][$event])) voice_metric($config, $event, in_array($event, ['connected', 'tool_completed', 'backend_completed'], true) ? (int) ($args['latency_ms'] ?? 0) : null);
     $state['metrics'][$event] = true;
     voice_finish($file, $state, 200, ['success' => true]);
 }

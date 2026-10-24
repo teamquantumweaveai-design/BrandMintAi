@@ -1,5 +1,32 @@
 {
   "source_revision": "49508cda50dde23bb2a968b356041ae961ac82f32bde2433b743bce5ceb2ad3e",
+  "generated_at": "2026-10-24T06:03:07.809Z",
+  "source_files": [
+    {
+      "path": "ai-business-faq/index.html",
+      "sha256": "d756237a284a4195659b9e61866a4d18d94dbebbd0709fca40f397f85441ab48"
+    },
+    {
+      "path": "business-workflow-audit/index.html",
+      "sha256": "5fad9a9c46a57bf7647607b05a17ae4b754a04bedf5d8fccc283c589ce6de56c"
+    },
+    {
+      "path": "meta-growth/index.html",
+      "sha256": "52ac9de0af84ceb5654555d02bbfd29fb5bb5835521af42424f4d028e14e591f"
+    },
+    {
+      "path": "meta-growth/thank-you/index.html",
+      "sha256": "3cd7b6531bbb3da4003aad37e2a01958504c5e42dbac81e8934e6c93fc545b01"
+    },
+    {
+      "path": "small-business-automation-ideas/index.html",
+      "sha256": "c0e1305b47272d53df2b4d827d57dcdcbb41b790ff4d8f098ea245b8ecb027d8"
+    },
+    {
+      "path": "whatsapp-lead-follow-up-system/index.html",
+      "sha256": "ce0320f3009e770e2bd9c6599214f22ac3d7c213931183d05de35da047c9fdfc"
+    }
+  ],
   "chunks": [
     {
       "title": "NAV LINKS",
