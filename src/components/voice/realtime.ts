@@ -493,9 +493,9 @@ export class BrandMintVoiceSession {
           result = { success: true, message: "Cleared saved preferences on this device. Do not reuse earlier remembered details." };
         } else if (event.name === "draft_email") {
           this.invalidateEmailProposal();
-          const draft = emailDraftSchema.parse({ ...args, to: "connect@brandmintai.io" });
+          const draft = emailDraftSchema.parse({ ...args, to: "team.brandmint@gmail.com" });
           this.callbacks.emailDraft?.(draft);
-          result = { success: !!this.callbacks.emailDraft, message: "An editable email draft is shown in the widget. Nothing was sent. Sending goes only to connect@brandmintai.io with the visitor's confirmed email as Reply-To. If asked to send, collect reply_to, use prepare_email, read back recipient/visitor email/subject/exact message, then obtain approval before confirm_email." };
+          result = { success: !!this.callbacks.emailDraft, message: "An editable email draft is shown in the widget. Nothing was sent. Sending goes only to team.brandmint@gmail.com with the visitor's confirmed email as Reply-To. If asked to send, collect reply_to, use prepare_email, read back recipient/visitor email/subject/exact message, then obtain approval before confirm_email." };
         } else if (event.name === "prepare_email") {
           result = await this.prepareEmail(args as VoiceEmailDraft);
         } else if (event.name === "confirm_email") {

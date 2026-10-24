@@ -178,7 +178,7 @@ The profile is shared with OpenAI when a new call starts, as context; action det
 The email panel appears only for requested email work; normal conversations keep the standard voice UI.
 Email requests create an editable draft, with copy/open-email-app controls. When asked to send an enquiry,
 Ishani collects the visitor's email, prepares the exact recipient/Reply-To/subject/body for read-back, and
-waits for explicit approval before sending to the fixed company inbox `connect@brandmintai.io`.
+waits for explicit approval before sending to the fixed company inbox `team.brandmint@gmail.com`.
 The website's company address is the actual From; the visitor's address is Reply-To and included in the
 message. This sends on the visitor's behalf without impersonating their private mailbox. The API rejects
 all other destinations. Editing/discarding the draft invalidates approval. No automatic retry follows an

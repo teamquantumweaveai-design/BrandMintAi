@@ -130,7 +130,7 @@ export default function VoiceAgent() {
       forget: clearMemory,
       emailDraft: showEmailDraft,
       getEmailDraft: () => emailDraftRef.current,
-      emailSent: reference => { showEmailDraft(undefined); setEmailAccepted(true); setMessage("Your message was accepted for delivery to connect@brandmintai.io. Inbox delivery is not yet verified. The team can reply to your email address." + (reference ? ` Reference: ${reference}` : "")); },
+      emailSent: reference => { showEmailDraft(undefined); setEmailAccepted(true); setMessage("Your message was accepted for delivery to team.brandmint@gmail.com. Inbox delivery is not yet verified. The team can reply to your email address." + (reference ? ` Reference: ${reference}` : "")); },
       knowledge: setKnowledge,
     }, language, savedPreferences.current);
     session.current = call;
@@ -189,7 +189,7 @@ export default function VoiceAgent() {
               <label>Your email (for replies)<input aria-label="Your email for replies" type="email" value={emailDraft.reply_to || ""} onChange={event => editEmailDraft({ ...emailDraft, reply_to: event.target.value || undefined })} /></label>
               <label>Subject<input aria-label="Draft email subject" value={emailDraft.subject} onChange={event => editEmailDraft({ ...emailDraft, subject: event.target.value })} /></label>
               <label>Message<textarea aria-label="Draft email body" value={emailDraft.body} onChange={event => editEmailDraft({ ...emailDraft, body: event.target.value })} /></label>
-              <small>Website sending goes to connect@brandmintai.io. Replies go to your email above.</small>
+              <small>Website sending goes to team.brandmint@gmail.com. Replies go to your email above.</small>
               {!emailAccepted && active && capabilities.email_sending && <button disabled={proposalBusy} onClick={async () => {
                 setProposalBusy(true);
                 try { const result = await session.current?.prepareEmail(emailDraft); if (!result?.success) setMessage(result?.message || "Email preparation failed. Nothing was sent."); }

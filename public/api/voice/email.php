@@ -23,7 +23,7 @@ function voice_send_email(array $config, array $draft): bool {
     $headers = "From: BrandMint AI <" . $from . ">\r\nReply-To: " . $draft['reply_to'] . "\r\n"
         . "Date: " . gmdate('r') . "\r\nMessage-ID: <" . $draft['id'] . "@brandmintai.io>\r\n"
         . "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64";
-    return mail('connect@brandmintai.io', '=?UTF-8?B?' . base64_encode($draft['subject']) . '?=', chunk_split(base64_encode($body), 76, "\r\n"), $headers);
+    return mail('team.brandmint@gmail.com', '=?UTF-8?B?' . base64_encode($draft['subject']) . '?=', chunk_split(base64_encode($body), 76, "\r\n"), $headers);
 }
 
 if (in_array($action, ['prepare_email', 'confirm_email'], true)) {
@@ -32,18 +32,18 @@ if (in_array($action, ['prepare_email', 'confirm_email'], true)) {
         if (!empty($state['email_attempted'])) voice_finish($file, $state, 409, ['success' => false, 'message' => 'An email was already attempted in this conversation. Do not send another automatically.']);
         $to = trim((string) ($args['to'] ?? '')); $subject = trim((string) ($args['subject'] ?? '')); $body = trim((string) ($args['body'] ?? ''));
         $replyTo = trim((string) ($args['reply_to'] ?? ''));
-        if (strtolower($to) !== 'connect@brandmintai.io' || !filter_var($replyTo, FILTER_VALIDATE_EMAIL) || strlen($replyTo) > 254 || strlen($subject) < 1 || strlen($subject) > 200
+        if (strtolower($to) !== 'team.brandmint@gmail.com' || !filter_var($replyTo, FILTER_VALIDATE_EMAIL) || strlen($replyTo) > 254 || strlen($subject) < 1 || strlen($subject) > 200
             || preg_match('/[\r\n\x00]/', $to . $replyTo . $subject) || strlen($body) < 1 || strlen($body) > 6000 || strpos($body, "\x00") !== false) {
-            voice_finish($file, $state, 400, ['success' => false, 'message' => 'The recipient must be connect@brandmintai.io. Collect a valid visitor email for Reply-To, a subject under 200 bytes and a message under 6000 bytes.']);
+            voice_finish($file, $state, 400, ['success' => false, 'message' => 'The recipient must be team.brandmint@gmail.com. Collect a valid visitor email for Reply-To, a subject under 200 bytes and a message under 6000 bytes.']);
         }
         $id = bin2hex(random_bytes(16));
-        $to = 'connect@brandmintai.io';
+        $to = 'team.brandmint@gmail.com';
         $state['email_draft'] = ['id' => $id, 'to' => $to, 'reply_to' => $replyTo, 'subject' => $subject, 'body' => $body, 'expires' => time() + 300];
         voice_finish($file, $state, 200, ['success' => true, 'proposal_id' => $id, 'email' => ['to' => $to, 'reply_to' => $replyTo, 'subject' => $subject, 'body' => $body],
             'sender' => 'connect@brandmintai.io', 'message' => 'Read back the company recipient, visitor Reply-To email, subject and exact message. Explain the website sends it on their behalf and replies go to their address. Ask explicit permission to SEND. Nothing is sent before confirm_email after approval.']);
     }
     $draft = $state['email_draft'] ?? [];
-    if (!$draft || ($args['proposal_id'] ?? '') !== $draft['id'] || ($args['confirmed'] ?? false) !== true || $draft['expires'] < time()) voice_finish($file, $state, 400, ['success' => false, 'message' => 'A current email draft and explicit approval of its recipient and exact message are required.']);
+    if (!$draft || ($draft['to'] ?? '') !== 'team.brandmint@gmail.com' || ($args['proposal_id'] ?? '') !== $draft['id'] || ($args['confirmed'] ?? false) !== true || $draft['expires'] < time()) voice_finish($file, $state, 400, ['success' => false, 'message' => 'A current email draft and explicit approval of its recipient and exact message are required.']);
     if (!empty($state['email_attempted'])) voice_finish($file, $state, 409, ['success' => false, 'message' => 'This email was already attempted. Do not retry; check with the sender.']);
     if (!voice_email_quota($config, $draft['reply_to'])) voice_finish($file, $state, 429, ['success' => false, 'message' => 'The email sending limit is reached. Keep the draft and contact the team.']);
     $state['email_attempted'] = true; unset($state['email_draft']); voice_save_session($file, $state);
@@ -51,5 +51,5 @@ if (in_array($action, ['prepare_email', 'confirm_email'], true)) {
     voice_metric($config, $sent ? 'email_accepted' : 'email_failed');
     voice_finish($file, $state, $sent ? 200 : 502, ['success' => $sent, 'accepted' => $sent,
         'reference' => $draft['id'],
-        'message' => $sent ? 'The website mail server accepted the confirmed message to connect@brandmintai.io for delivery, with the visitor email as Reply-To. Inbox delivery is not verified.' : 'Email delivery could not be verified. Do not retry automatically; the team should check the mailbox first.']);
+        'message' => $sent ? 'The website mail server accepted the confirmed message to team.brandmint@gmail.com for delivery, with the visitor email as Reply-To. Inbox delivery is not verified.' : 'Email delivery could not be verified. Do not retry automatically; the team should check the mailbox first.']);
 }
