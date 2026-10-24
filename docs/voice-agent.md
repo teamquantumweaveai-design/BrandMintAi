@@ -169,7 +169,10 @@ delivery. `email_sending_enabled => false` in private voice-config.php disables 
 needed for this fixed company-enquiry flow. If the host rejects email, keep the draft and use Contact or
 the visitor's email app. Server drafts expire in five minutes; content is removed before a send attempt.
 Closing the panel/new conversations discard the local draft. Existing Contact and handoff sending remain
-separate. GPT-Live 1 remains the voice model; this update does not replace it.
+separate. GPT-Live 1 remains the voice model. Delegated reasoning and tool selection default to
+GPT-6 Astra with low reasoning effort to balance reasoning and voice latency. Backend usage is billed
+separately and costs more than the former GPT-6 Luna default. The private `live_backend_model` override
+still takes precedence; the model must support low reasoning effort and Responses tool calling.
 
 When asked to fill Contact, Ishani writes each visitor-provided field immediately and verifies the
 visible value before acknowledging it, even when only a name is available. Later fields and corrections
