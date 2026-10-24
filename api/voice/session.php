@@ -243,12 +243,12 @@ Email writing:
 Help draft and revise emails from the visitor's purpose and tone. Ask for missing recipient/purpose only
 when necessary. Use draft_email to display the complete subject and body in the widget; omit to if unknown.
 Never invent recipient addresses, commitments, results or website facts. Search website facts as needed.
-For this company-enquiry flow, the recipient is always connect@brandmintai.io. Never infer a visitor's name
+For this company-enquiry flow, the recipient is always team.brandmint@gmail.com. Never infer a visitor's name
 from their email address; omit a name/signature unless they actually supplied their name.
 Show the email panel ONLY when the visitor asks for email work. For ordinary questions, navigation,
 enrolment advice or consultation booking, do not call draft_email or prepare_email or open that panel.
 Say it is a DRAFT and nothing was sent. If the visitor asks to SEND, first use draft_email to show the exact
-message, then prepare_email with company recipient connect@brandmintai.io, the visitor's confirmed email
+message, then prepare_email with company recipient team.brandmint@gmail.com, the visitor's confirmed email
 as reply_to, subject and body. Read back the company recipient, visitor email, subject and entire message.
 Explain the website sends on their behalf and the team can reply directly to the visitor's email.
 Never put the visitor's email in the actual From header or claim to send from their private mailbox.
@@ -315,11 +315,11 @@ $session['tools'] = array_merge($session['tools'], [
         'interest' => ['type' => 'string'], 'language' => ['type' => 'string', 'enum' => ['en', 'hi', 'kn']], 'timezone' => ['type' => 'string'],
     ], []),
     $makeTool('forget_preferences', 'Clear saved preferences on this browser immediately when the visitor asks to forget.', [], []),
-    $makeTool('draft_email', 'Show a company enquiry draft to connect@brandmintai.io only when requested. Never sends. Use the supplied visitor email as reply_to. Never infer their name from email.', [
+    $makeTool('draft_email', 'Show a company enquiry draft to team.brandmint@gmail.com only when requested. Never sends. Use the supplied visitor email as reply_to. Never infer their name from email.', [
         'to' => ['type' => 'string'], 'reply_to' => ['type' => 'string', 'description' => 'Visitor email to receive replies, if provided.'], 'subject' => ['type' => 'string'], 'body' => ['type' => 'string'],
     ], ['subject', 'body']),
-    $makeTool('prepare_email', 'Prepare a company enquiry for SEND approval. Recipient must be connect@brandmintai.io; reply_to is the visitor email. Read back recipient, visitor email, subject and exact message. Does not send yet.', [
-        'to' => ['type' => 'string', 'enum' => ['connect@brandmintai.io']], 'reply_to' => ['type' => 'string'], 'subject' => ['type' => 'string'], 'body' => ['type' => 'string'],
+    $makeTool('prepare_email', 'Prepare a company enquiry for SEND approval. Recipient must be team.brandmint@gmail.com; reply_to is the visitor email. Read back recipient, visitor email, subject and exact message. Does not send yet.', [
+        'to' => ['type' => 'string', 'enum' => ['team.brandmint@gmail.com']], 'reply_to' => ['type' => 'string'], 'subject' => ['type' => 'string'], 'body' => ['type' => 'string'],
     ], ['to', 'reply_to', 'subject', 'body']),
     $makeTool('confirm_email', 'Send a prepared email ONLY after explicit approval of its exact recipient and message. Never retry an uncertain send. false declines.', [
         'proposal_id' => ['type' => 'string'], 'confirmed' => ['type' => 'boolean'],
@@ -387,7 +387,7 @@ and questions about previously saved details. Use current conversation details n
 Default all consultation times to IST (Asia/Kolkata, UTC+05:30). Ask preferred date/time, not which timezone.
 When offering available times, say "Indian Standard Time" or "IST" once with the date so the timezone is clear.
 Use another timezone only if requested. Open the email panel only for an explicit email request; otherwise keep the normal voice interface.
-For sending email, the recipient is connect@brandmintai.io and the visitor provides their email for Reply-To.
+For sending email, the recipient is team.brandmint@gmail.com and the visitor provides their email for Reply-To.
 The website sends on their behalf; never claim to access or send from the visitor's private mailbox.
 On EVERY request to send an email, generate <|SpawnThinking|> immediately, even when you already have the draft.
 The backend must call prepare_email BEFORE you ask for send approval. Do not simply read the draft and ask
