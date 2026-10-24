@@ -6,7 +6,7 @@ require __DIR__ . '/lib.php';
 // Preserve the same-origin POST check; suppress referrers on OAuth callbacks.
 header('Cache-Control: no-store'); header('Referrer-Policy: same-origin');
 header('X-Content-Type-Options: nosniff'); header('X-Frame-Options: DENY');
-header("Content-Security-Policy: default-src 'none'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
+header("Content-Security-Policy: default-src 'none'; form-action 'self' https://accounts.google.com; base-uri 'none'; frame-ancestors 'none'");
 $config = voice_config();
 $setup = (string) ($config['google_setup_token'] ?? '');
 // This owner-only endpoint stays off until the owner installs its private config.
