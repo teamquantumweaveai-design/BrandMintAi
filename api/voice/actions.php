@@ -43,7 +43,7 @@ if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confir
     if ($type['status'] !== 200 || rtrim($resource['scheduling_url'] ?? '', '/') !== 'https://calendly.com/team-brandmint/30min'
         || empty($resource['active'])) voice_finish($file, $state, 503, ['success' => false, 'fallback' => 'calendar', 'message' => 'The BrandMint calendar connection needs review. Use the calendar instead.']);
     if ($action === 'get_consultation_slots') {
-        $timezone = (string) ($args['timezone'] ?? 'UTC');
+        $timezone = (string) ($args['timezone'] ?? 'Asia/Kolkata');
         if (!in_array($timezone, timezone_identifiers_list(DateTimeZone::ALL_WITH_BC), true)) voice_finish($file, $state, 400, ['success' => false, 'message' => 'Ask for a valid IANA timezone.']);
         $day = isset($args['date']) ? DateTimeImmutable::createFromFormat('!Y-m-d', (string) $args['date'], new DateTimeZone($timezone)) : false;
         if (isset($args['date']) && (!$day || $day->format('Y-m-d') !== $args['date'])) voice_finish($file, $state, 400, ['success' => false, 'message' => 'Use a valid date in YYYY-MM-DD format.']);
@@ -65,7 +65,7 @@ if (in_array($action, ['get_consultation_slots', 'prepare_consultation', 'confir
             }
         }
         $state['slots'] = array_slice($slots, 0, 200); $state['slots_checked'] = time();
-        voice_finish($file, $state, 200, ['success' => true, 'event_type' => $eventType, 'slots_utc' => array_slice($slots, 0, 24), 'slot_links' => array_intersect_key($links, array_flip(array_slice($slots, 0, 24))), 'duration_minutes' => 30, 'message' => 'Use only these actual available slots. Convert to the visitor-confirmed timezone. On the Free Plan use prepare_calendly_form, then the visitor clicks Calendly Schedule; availability alone is not a booking.']);
+        voice_finish($file, $state, 200, ['success' => true, 'event_type' => $eventType, 'slots_utc' => array_slice($slots, 0, 24), 'slot_links' => array_intersect_key($links, array_flip(array_slice($slots, 0, 24))), 'timezone' => $timezone, 'slots_local' => array_map(fn($slot) => (new DateTimeImmutable($slot))->setTimezone(new DateTimeZone($timezone))->format('Y-m-d H:i T'), array_slice($slots, 0, 24)), 'duration_minutes' => 30, 'message' => 'Use only these actual available slots. Default to IST unless another timezone requested. On the Free Plan use prepare_calendly_form, then the visitor clicks Calendly Schedule; availability alone is not a booking.']);
     }
     if ($action === 'prepare_consultation') {
         if (!empty($state['booking_result']) || !empty($state['booking_attempted'])) voice_finish($file, $state, 409, ['success' => false, 'message' => 'A booking was already attempted in this conversation. Check its status before starting another.']);
