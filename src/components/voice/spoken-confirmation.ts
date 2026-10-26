@@ -9,7 +9,9 @@ export function spokenDecision(text: string): boolean | undefined {
   // Deliberately accept whole, unambiguous phrases only. Identifiers, new details,
   // questions and conditional approval go back to the model for clarification.
   const rest = words.replace(/\b(yes|yeah|yep|okay|ok|please|i confirm the recipient and exact message|i confirm the details|i confirm|i approve|confirmed|approved|go ahead|send (?:it|this email|the email|this message|the message)|submit (?:it|this form|the form|the contact form|the message)|now|fill (?:it|the form|the calendly form)|book (?:it|the consultation)|thank you)\b/gu, " ").trim();
-  if (!rest && /^(?:please )?(?:yes|yeah|yep|okay|ok|i confirm|i approve|confirmed|approved|go ahead|send |submit |fill |book )/u.test(words)) return true;
+  // Casual backchannels must not execute a prepared action. An "okay" prefix
+  // is allowed only when accompanied by an explicit decision such as "send it".
+  if (!rest && /\b(?:yes|i confirm|i approve|confirmed|approved|go ahead|send|submit|fill|book)\b/u.test(words)) return true;
   if (/^(हाँ|हां|जी हाँ|जी हां|हाँ भेज दो|हां भेज दीजिए|हाँ भेज दीजिए|हाँ सबमिट कर दो|ಹೌದು|ಹೌದು ಕಳುಹಿಸಿ|ಹೌದು ಸಲ್ಲಿಸಿ)$/u.test(words)) return true;
   return undefined;
 }
