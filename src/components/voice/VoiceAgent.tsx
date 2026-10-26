@@ -24,6 +24,7 @@ export default function VoiceAgent() {
   const [capabilities, setCapabilities] = useState<{ voice_booking: boolean; handoff: boolean; email_sending?: boolean }>({ voice_booking: false, handoff: false });
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<VoiceStatus | "idle">("idle");
+  const [connectionHint, setConnectionHint] = useState("");
   const [muted, setMuted] = useState(false);
   const [message, setMessage] = useState("");
   const [knowledge, setKnowledge] = useState<"checking" | "ready" | "refresh_required" | "unavailable">("checking");
@@ -102,6 +103,7 @@ export default function VoiceAgent() {
     setProposal(null); setBookingResult(null); setHandoffSent(false);
     const call = new BrandMintVoiceSession(audio.current, {
       status: setStatus,
+      connectionHint: setConnectionHint,
       caption: item => setCaptions(previous => {
         const found = previous.some(caption => caption.id === item.id);
         return (found ? previous.map(caption => caption.id === item.id ? item : caption) : [...previous, item]).slice(-30);
@@ -160,7 +162,7 @@ export default function VoiceAgent() {
           <div className="bm-voice-body">
             <div className={`bm-voice-orb ${active && !muted ? "bm-voice-active" : ""}`}><Mic size={30} aria-hidden="true" /></div>
             <p className="bm-voice-status" role="status">{muted ? "Microphone muted" : {
-              idle: "Let's talk about your business", connecting: "Connecting…", listening: "Listening — go ahead",
+              idle: "Let's talk about your business", connecting: connectionHint || "Connecting…", listening: "Listening — go ahead",
               thinking: "Thinking…", speaking: "Ishani is speaking",
             }[status]}</p>
             <p className="bm-voice-intro">Explore AI automation, business growth, and the right next step for your team.</p>

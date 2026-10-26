@@ -10,6 +10,7 @@ export type VoiceProposal = { id: string; kind: "booking" | "handoff" | "calenda
 export type VoiceBooking = { start_time: string; timezone: string; provider?: "google" | "calendly"; meeting_url?: string; cancel_url?: string; reschedule_url?: string };
 type Callbacks = {
   status: (status: VoiceStatus) => void;
+  connectionHint?: (hint: string) => void;
   caption: (caption: VoiceCaption) => void;
   ended: (message?: string) => void;
   playbackBlocked: () => void;
@@ -35,6 +36,8 @@ export class BrandMintVoiceSession {
   private channel?: RTCDataChannel;
   private controller = new AbortController();
   private timers: ReturnType<typeof setTimeout>[] = [];
+  private startupTimer?: ReturnType<typeof setTimeout>;
+  private startupStage: "microphone" | "network" | "service" | "audio" = "microphone";
   private closed = false;
   private captions = new Map<string, VoiceCaption>();
   private speaking = false;
@@ -108,7 +111,8 @@ export class BrandMintVoiceSession {
     }
     this.callbacks.status("connecting");
     this.startedAt = Date.now();
-    this.timers.push(setTimeout(() => this.stop("Connection timed out. Please try again."), 45000));
+    this.connectionStage("microphone");
+    this.armStartupTimeout();
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
@@ -116,6 +120,14 @@ export class BrandMintVoiceSession {
       // Permission can resolve after someone closes the panel.
       if (this.closed) { stream.getTracks().forEach(track => track.stop()); return; }
       this.stream = stream;
+      const microphone = stream.getAudioTracks()[0];
+      if (!microphone || microphone.readyState === "ended") throw new Error("Your microphone is unavailable. Check it is connected and try again.");
+      microphone.addEventListener("ended", () => {
+        if (!this.closed) this.stop("Your microphone disconnected. Reconnect it, then start a new conversation.");
+      }, { once: true });
+      // Permission may take time; allow the network its full connection budget afterward.
+      this.connectionStage("network");
+      this.armStartupTimeout();
       this.peer = new RTCPeerConnection();
       this.peer.ontrack = event => {
         if (this.closed) return;
@@ -150,6 +162,7 @@ export class BrandMintVoiceSession {
       const offer = await this.peer.createOffer();
       if (this.closed) return;
       await this.peer.setLocalDescription(offer);
+      if (this.closed) return;
       if (this.peer.iceGatheringState !== "complete") {
         await new Promise<void>((resolve, reject) => {
           const peer = this.peer!;
@@ -159,6 +172,7 @@ export class BrandMintVoiceSession {
         });
       }
       if (this.closed) return;
+      this.connectionStage("service");
       const response = await fetch("/api/voice/session.php", {
         method: "POST", headers: { "Content-Type": "application/sdp", "X-Voice-Language": this.language, "X-Voice-Protocol": "live" },
         body: this.peer.localDescription!.sdp, signal: this.controller.signal, credentials: "same-origin",
@@ -168,10 +182,12 @@ export class BrandMintVoiceSession {
         throw new Error(data.message || "Voice is temporarily unavailable. Please try again or use WhatsApp.");
       }
       const sdp = await response.text();
+      if (this.closed) return;
       if (!sdp.startsWith("v=0")) throw new Error("Voice isn't configured on this server yet. Please use WhatsApp for now.");
       this.token = response.headers.get("X-Voice-Token") || "";
       this.protocol = response.headers.get("X-Voice-Protocol") === "live" ? "live" : "realtime";
       try { this.callbacks.capabilities?.(JSON.parse(response.headers.get("X-Voice-Capabilities") || '{"voice_booking":false,"handoff":false}')); } catch {}
+      this.connectionStage("audio");
       if (!this.closed) await this.peer.setRemoteDescription({ type: "answer", sdp });
     } catch (error) {
       if (this.closed) return;
@@ -184,6 +200,26 @@ export class BrandMintVoiceSession {
     }
   }
 
+  private connectionStage(stage: typeof this.startupStage) {
+    this.startupStage = stage;
+    this.callbacks.connectionHint?.({
+      microphone: "Waiting for microphone access…",
+      network: "Microphone ready — connecting…",
+      service: "Connecting to Ishani…",
+      audio: "Starting the audio connection…",
+    }[stage]);
+  }
+
+  private armStartupTimeout() {
+    clearTimeout(this.startupTimer);
+    this.startupTimer = setTimeout(() => this.stop({
+      microphone: "Microphone access did not finish. Allow the microphone in your browser, then try again. If this in-app browser cannot open it, use Chrome or Edge.",
+      network: "The audio connection could not be prepared. Check your connection and try again.",
+      service: "Ishani's voice service took too long to respond. Please try again shortly.",
+      audio: "The voice service responded, but the audio connection could not open. Try Chrome or Edge, or another network.",
+    }[this.startupStage]), 45000);
+  }
+
   setMuted(muted: boolean) { this.stream?.getAudioTracks().forEach(track => { track.enabled = !muted; }); }
 
   async resumePlayback() { await this.audio.play(); }
@@ -191,6 +227,8 @@ export class BrandMintVoiceSession {
   private connected() {
     if (this.ready || this.closed) return;
     this.ready = true;
+    clearTimeout(this.startupTimer);
+    this.callbacks.connectionHint?.("");
     this.timers.forEach(clearTimeout);
     this.timers = [setTimeout(() => this.stop("This five-minute conversation has ended. You can start another."), 300000)];
     this.callbacks.status("listening");
@@ -375,6 +413,7 @@ export class BrandMintVoiceSession {
     this.websiteDraft = undefined;
     this.availableSlots = {};
     this.controller.abort();
+    clearTimeout(this.startupTimer);
     this.timers.forEach(clearTimeout);
     clearInterval(this.playbackMonitor);
     clearInterval(this.knowledgeTimer);
