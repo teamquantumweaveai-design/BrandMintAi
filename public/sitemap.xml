@@ -1,4 +1,5 @@
 
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://brandmintai.io/</loc>
@@ -27,7 +28,7 @@
   <url>
     <loc>https://brandmintai.io/business-workflow-audit/</loc>
   </url>
-   <url>
+  <url>
     <loc>https://brandmintai.io/ai-business-faq/</loc>
   </url>
   <url>
@@ -36,5 +37,7 @@
   <url>
     <loc>https://brandmintai.io/meta-growth/</loc>
   </url>
+  <url>
+    <loc>https://brandmintai.io/connect-website-leads-to-crm/</loc>
+  </url>
 </urlset>
-
