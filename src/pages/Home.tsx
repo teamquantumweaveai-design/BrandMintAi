@@ -95,8 +95,8 @@ export default function Home() {
                 variants={fadeIn("up", 0.2, 0.6)}
                 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-display tracking-tight text-[#2E384D] max-w-5xl leading-[1.08] sm:leading-[1.05]"
               >
-                Building Systems That <br />
-                <GradientText>Help People Grow.</GradientText>
+                AI Solutions &amp; Business <br />
+                <GradientText>Automation in Bangalore</GradientText>
               </motion.h1>
 
               {/* Subtitle */}
@@ -104,7 +104,7 @@ export default function Home() {
                 variants={fadeIn("up", 0.25, 0.6)}
                 className="text-[#FF5C35] font-mono text-sm md:text-base font-semibold uppercase tracking-wider mt-2"
               >
-                {HOME_COPY.heroSubtitle}
+                AI Agents • WhatsApp Business Automation • Agentic AI Solutions
               </motion.p>
 
               {/* Description */}
@@ -112,7 +112,7 @@ export default function Home() {
                 variants={fadeIn("up", 0.3, 0.6)}
                 className="text-[#516F90] text-base md:text-lg lg:text-xl max-w-3xl leading-relaxed font-normal mt-2"
               >
-                {HOME_COPY.heroDescription}
+                BrandMint AI provides AI solutions and AI business automation in Bangalore. We design AI agents, WhatsApp Business automation, AI opportunity mapping, AI executive assistant workflows, and AI-powered business growth systems that help teams streamline operations and grow.
               </motion.p>
 
               {/* CTA Buttons */}
