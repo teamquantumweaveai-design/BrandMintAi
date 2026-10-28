@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ArrowRight, ChevronDown } from "lucide-react";
@@ -5,9 +6,41 @@ import { motion, AnimatePresence } from "framer-motion";
 import { HEADER_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
+// BrandMint AI published articles
+const blogArticles = [
+  {
+    label: "Small Business Automation Ideas",
+    href: "/small-business-automation-ideas/",
+  },
+  {
+    label: "WhatsApp Lead Follow-Up System",
+    href: "/whatsapp-lead-follow-up-system/",
+  },
+  {
+    label: "AI Business Automation FAQ",
+    href: "/ai-business-faq/",
+  },
+  {
+    label: "Connect Website Leads to CRM",
+    href: "/connect-website-leads-to-crm/",
+  },
+];
+
+// Add Blog without changing the existing constants file.
+// Avoid duplicates if Blog already exists in HEADER_LINKS.
+const navigationLinks = [
+  ...HEADER_LINKS.filter((link) => link.label !== "Blog"),
+  {
+    label: "Blog",
+    href: "/blog",
+    children: blogArticles,
+  },
+];
+
 export default function Navbar() {
   const location = useLocation();
   const pathname = location.pathname;
+
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -19,13 +52,12 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 20);
     };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -36,7 +68,7 @@ export default function Navbar() {
       height: "auto",
       transition: {
         duration: 0.3,
-        when: "beforeChildren",
+        when: "beforeChildren" as const,
         staggerChildren: 0.08,
       },
     },
@@ -45,7 +77,7 @@ export default function Navbar() {
       height: 0,
       transition: {
         duration: 0.2,
-        when: "afterChildren",
+        when: "afterChildren" as const,
         staggerChildren: 0.05,
         staggerDirection: -1,
       },
@@ -68,8 +100,13 @@ export default function Navbar() {
       )}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+
         {/* Logo */}
-        <Link to="/" onClick={scrollToTop} className="flex items-center gap-3 group shrink-0">
+        <Link
+          to="/"
+          onClick={scrollToTop}
+          className="flex items-center gap-3 group shrink-0"
+        >
           <div className="relative flex items-center justify-center w-9 h-9 overflow-hidden rounded-lg border border-[#CBD6E2]/80 bg-white transition-transform group-hover:scale-95 duration-200 shadow-xs">
             <img
               src="/BrandMint_AI_Logo_Final.png"
@@ -77,16 +114,26 @@ export default function Navbar() {
               className="object-cover w-full h-full"
             />
           </div>
+
           <span className="font-display font-bold text-xl tracking-tight text-[#2E384D] transition-colors group-hover:text-[#FF5C35] duration-200">
             BrandMint <span className="text-gradient">AI</span>
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-1">
-          {HEADER_LINKS.map((link) => {
-            const isActive = pathname === link.href;
-            const isExternal = link.href.startsWith("http") || link.isExternal;
+        <nav
+          className="hidden lg:flex items-center gap-1"
+          aria-label="Main navigation"
+        >
+          {navigationLinks.map((link) => {
+            const isActive =
+              pathname === link.href ||
+              (link.href === "/blog" &&
+                blogArticles.some((article) => article.href === pathname));
+
+            const isExternal =
+              link.href.startsWith("http") || link.isExternal;
+
             const linkClasses = cn(
               "px-3 py-1.5 text-xs font-semibold rounded-full transition-all duration-200",
               isActive
@@ -103,19 +150,37 @@ export default function Navbar() {
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <div className="flex items-center">
-                    <Link to={link.href} onClick={scrollToTop} className={linkClasses}>
+
+                    <Link
+                      to={link.href}
+                      onClick={scrollToTop}
+                      className={linkClasses}
+                    >
                       {link.label}
                     </Link>
+
                     <button
                       type="button"
-                      onClick={() => setOpenDropdown(openDropdown === link.label ? null : link.label)}
+                      onClick={() =>
+                        setOpenDropdown(
+                          openDropdown === link.label
+                            ? null
+                            : link.label
+                        )
+                      }
                       className="-ml-1 mr-1 p-1 text-[#516F90] hover:text-[#FF5C35]"
                       aria-label={`Open ${link.label} menu`}
                       aria-expanded={openDropdown === link.label}
                     >
-                      <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", openDropdown === link.label && "rotate-180")} />
+                      <ChevronDown
+                        className={cn(
+                          "w-3.5 h-3.5 transition-transform",
+                          openDropdown === link.label && "rotate-180"
+                        )}
+                      />
                     </button>
                   </div>
+
                   <AnimatePresence>
                     {openDropdown === link.label && (
                       <motion.div
@@ -123,19 +188,36 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -6 }}
                         transition={{ duration: 0.16 }}
-                        className="absolute left-0 top-full mt-2 min-w-52 rounded-xl border border-[#CBD6E2] bg-white p-2 shadow-xl"
+                        className="absolute left-0 top-full mt-2 min-w-64 rounded-xl border border-[#CBD6E2] bg-white p-2 shadow-xl"
                       >
-                        {link.children.map((child) => (
-                          <a
-                            key={child.href}
-                            href={child.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="block rounded-lg px-3 py-2 text-sm font-medium text-[#516F90] transition-colors hover:bg-[#FF5C35]/10 hover:text-[#DF441F]"
-                          >
-                            {child.label}
-                          </a>
-                        ))}
+                        {link.children.map((child) => {
+                          const childExternal =
+                            child.href.startsWith("http");
+
+                          return childExternal ? (
+                            <a
+                              key={child.href}
+                              href={child.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block rounded-lg px-3 py-2 text-sm font-medium text-[#516F90] transition-colors hover:bg-[#FF5C35]/10 hover:text-[#DF441F]"
+                            >
+                              {child.label}
+                            </a>
+                          ) : (
+                            <Link
+                              key={child.href}
+                              to={child.href}
+                              onClick={() => {
+                                scrollToTop();
+                                setOpenDropdown(null);
+                              }}
+                              className="block rounded-lg px-3 py-2 text-sm font-medium text-[#516F90] transition-colors hover:bg-[#FF5C35]/10 hover:text-[#DF441F]"
+                            >
+                              {child.label}
+                            </Link>
+                          );
+                        })}
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -170,7 +252,7 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* CTA Button */}
+        {/* Desktop CTA */}
         <div className="hidden lg:flex items-center shrink-0">
           <Link
             to="/contact"
@@ -181,13 +263,19 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile Menu Toggle */}
         <button
+          type="button"
           onClick={() => setIsOpen(!isOpen)}
           className="lg:hidden p-2 rounded-lg text-[#2E384D] hover:text-[#FF5C35] bg-black/5 border border-[#CBD6E2]/70"
           aria-label="Toggle menu"
+          aria-expanded={isOpen}
         >
-          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {isOpen ? (
+            <X className="w-5 h-5" />
+          ) : (
+            <Menu className="w-5 h-5" />
+          )}
         </button>
       </div>
 
@@ -203,9 +291,13 @@ export default function Navbar() {
           >
             <div className="px-6 py-8 flex flex-col gap-6 max-h-[calc(100vh-80px)] overflow-y-auto">
               <div className="flex flex-col gap-3">
-                {HEADER_LINKS.map((link) => {
+
+                {navigationLinks.map((link) => {
                   const isActive = pathname === link.href;
-                  const isExternal = link.href.startsWith("http") || link.isExternal;
+
+                  const isExternal =
+                    link.href.startsWith("http") || link.isExternal;
+
                   const mobileLinkClasses = cn(
                     "block py-2 text-base font-semibold font-display border-l-2 pl-3 transition-colors",
                     isActive
@@ -214,9 +306,14 @@ export default function Navbar() {
                   );
 
                   if (link.children) {
-                    const isExpanded = openMobileDropdown === link.label;
+                    const isExpanded =
+                      openMobileDropdown === link.label;
+
                     return (
-                      <motion.div key={link.href} variants={itemVariants}>
+                      <motion.div
+                        key={link.href}
+                        variants={itemVariants}
+                      >
                         <div className="flex items-center justify-between border-l-2 border-transparent pl-3">
                           <Link
                             to={link.href}
@@ -228,16 +325,27 @@ export default function Navbar() {
                           >
                             {link.label}
                           </Link>
+
                           <button
                             type="button"
-                            onClick={() => setOpenMobileDropdown(isExpanded ? null : link.label)}
+                            onClick={() =>
+                              setOpenMobileDropdown(
+                                isExpanded ? null : link.label
+                              )
+                            }
                             className="p-2 text-[#516F90] hover:text-[#FF5C35]"
                             aria-label={`Open ${link.label} menu`}
                             aria-expanded={isExpanded}
                           >
-                            <ChevronDown className={cn("w-4 h-4 transition-transform", isExpanded && "rotate-180")} />
+                            <ChevronDown
+                              className={cn(
+                                "w-4 h-4 transition-transform",
+                                isExpanded && "rotate-180"
+                              )}
+                            />
                           </button>
                         </div>
+
                         <AnimatePresence>
                           {isExpanded && (
                             <motion.div
@@ -246,18 +354,35 @@ export default function Navbar() {
                               exit={{ opacity: 0, height: 0 }}
                               className="ml-4 overflow-hidden border-l border-[#CBD6E2]"
                             >
-                              {link.children.map((child) => (
-                                <a
-                                  key={child.href}
-                                  href={child.href}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  onClick={() => setIsOpen(false)}
-                                  className="block py-2 pl-4 text-sm font-medium text-[#516F90] hover:text-[#FF5C35]"
-                                >
-                                  {child.label}
-                                </a>
-                              ))}
+                              {link.children.map((child) => {
+                                const childExternal =
+                                  child.href.startsWith("http");
+
+                                return childExternal ? (
+                                  <a
+                                    key={child.href}
+                                    href={child.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => setIsOpen(false)}
+                                    className="block py-2 pl-4 text-sm font-medium text-[#516F90] hover:text-[#FF5C35]"
+                                  >
+                                    {child.label}
+                                  </a>
+                                ) : (
+                                  <Link
+                                    key={child.href}
+                                    to={child.href}
+                                    onClick={() => {
+                                      scrollToTop();
+                                      setIsOpen(false);
+                                    }}
+                                    className="block py-2 pl-4 text-sm font-medium text-[#516F90] hover:text-[#FF5C35]"
+                                  >
+                                    {child.label}
+                                  </Link>
+                                );
+                              })}
                             </motion.div>
                           )}
                         </AnimatePresence>
@@ -266,7 +391,10 @@ export default function Navbar() {
                   }
 
                   return (
-                    <motion.div key={link.href} variants={itemVariants}>
+                    <motion.div
+                      key={link.href}
+                      variants={itemVariants}
+                    >
                       {isExternal ? (
                         <a
                           href={link.href}
@@ -294,7 +422,11 @@ export default function Navbar() {
                 })}
               </div>
 
-              <motion.div variants={itemVariants} className="pt-4 border-t border-[#CBD6E2]/40">
+              {/* Mobile CTA */}
+              <motion.div
+                variants={itemVariants}
+                className="pt-4 border-t border-[#CBD6E2]/40"
+              >
                 <Link
                   to="/contact"
                   onClick={() => {
