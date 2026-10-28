@@ -12,9 +12,9 @@ export const NAV_LINKS: NavLink[] = [
   { label: "Business Growth", href: "/business-growth" },
   { label: "Quantum Weave", href: "/quantum-weave" },
   { label: "Ventures", href: "/ventures" },
-  { label: "Academy", href: "/academy" },
-  { label: "Contact", href: "/contact" },
-];
+    { label: "Academy", href: "/academy" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },];
 
 export const HEADER_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
@@ -43,8 +43,36 @@ export const HEADER_LINKS: NavLink[] = [
       { label: "AI Filmmaking", href: "http://brandmintai.io/aifilmmaking", isExternal: true },
     ],
   },
+  
+  {
+    label: "Blog",
+    href: "/blog",
+    children: [
+      {
+        label: "Small Business Automation Ideas",
+        href: "/small-business-automation-ideas/",
+        isExternal: true,
+      },
+      {
+        label: "WhatsApp Lead Follow-Up System",
+        href: "/whatsapp-lead-follow-up-system/",
+        isExternal: true,
+      },
+      {
+        label: "AI Business Automation FAQ",
+        href: "/ai-business-faq/",
+        isExternal: true,
+      },
+      {
+        label: "Connect Website Leads to CRM",
+        href: "/connect-website-leads-to-crm/",
+        isExternal: true,
+      },
+    ],
+  },
   { label: "Contact", href: "/contact" },
 ];
+
 
 export const SITE_METADATA = {
   name: "BrandMint AI",
