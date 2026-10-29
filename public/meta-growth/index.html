@@ -285,34 +285,40 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   @keyframes tick-in{0%{opacity:0;translate:-14px 0}10%,88%{opacity:1;translate:0 0}100%{opacity:0}}
   @keyframes rise{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:1}100%{opacity:0;transform:translateY(-110px) scale(1.1)}}
 
-  /* 04 Plans: tier tag, name, gradient price pill, benefit, deliverables, outcome, CTA, conditions */
-  .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
-  .plan{position:relative;display:flex;flex-direction:column;border:2px solid transparent;border-radius:26px;padding:24px 22px 20px;background:linear-gradient(#fff,#fff) padding-box,var(--ig-diag) border-box;box-shadow:var(--shadow)}
-  .plan.featured{box-shadow:0 28px 60px -26px rgba(225,48,108,.55)}
-  .plan .most{position:absolute;top:-14px;left:50%;translate:-50% 0;display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#14692f;background:#dff5e6;border:1px solid #bfe8cd;padding:5px 12px;border-radius:999px;white-space:nowrap}
-  .plan .most .i{width:15px;height:15px}
-  .tier{align-self:flex-start;margin:0 0 12px;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:#fdeef4;padding:5px 12px;border-radius:999px}
+  /* 04 Plans: plain cards, the featured one highlighted; sections line up across cards (subgrid) */
+  .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+  .plan{position:relative;display:grid;grid-row:span 8;grid-template-rows:subgrid;row-gap:0;background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px 24px 22px;box-shadow:var(--shadow);transition:translate .3s cubic-bezier(.16,1,.3,1),box-shadow .3s}
+  @supports not (grid-template-rows:subgrid){.plan{display:flex;flex-direction:column}.plan-inc{flex:1}}
+  .plan:hover{translate:0 -4px;box-shadow:0 26px 50px -26px rgba(0,0,0,.3)}
+  .plan.featured{border:2px solid transparent;background:linear-gradient(#fff,#fff) padding-box,var(--ig-diag) border-box;box-shadow:0 30px 60px -30px rgba(225,48,108,.55)}
+  .plan-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:26px;margin-bottom:14px}
+  .tier{margin:0;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
   .tier b{color:var(--pink)}
-  .plan h3{margin:0;font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+  .plan .most{position:absolute;top:-13px;left:50%;translate:-50% 0;font-size:12px;font-weight:700;color:#fff;background:var(--ig);padding:5px 14px;border-radius:999px;white-space:nowrap;box-shadow:0 8px 18px -8px rgba(225,48,108,.6)}
+  .plan h3{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
   .svc{margin:2px 0 0;font-size:13px;color:var(--ink-2)}
-  .price-pill{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;margin:14px 0 4px;padding:10px 16px;border-radius:18px;background:linear-gradient(90deg,#fdeaf2,#fff3ea)}
-  .price-pill b{font-size:clamp(36px,3.4vw,44px);font-weight:900;letter-spacing:-.03em;line-height:1.05;background:var(--ig);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
-  .price-pill span{font-size:16px;font-weight:700}
-  .gst{margin:0 0 12px;font-size:12.5px;color:var(--ink-2)}
-  .benefit{margin:0 0 4px;font-size:16px;font-weight:700;line-height:1.35}
-  .vol{margin:0 0 12px;font-weight:600;font-size:14.5px;color:var(--pink)}
-  .feat{list-style:none;margin:0 0 14px;padding:0;flex:1;display:grid;gap:8px;align-content:start;font-size:14px;color:#3a3a3c;line-height:1.35}
-  .feat li{display:flex;gap:10px;align-items:center}
-  .feat span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none;background:#fdeef4;color:var(--pink)}
-  .feat .i{width:16px;height:16px}
-  .outcome{margin:0 0 14px;padding:12px 14px;border-radius:14px;background:#f3fbf6;border:1px solid #d5efdf;font-size:14px;line-height:1.45;color:#2c3b31}
-  .outcome b{display:block;margin-bottom:2px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#14692f}
-  .plan-cta{width:100%;min-height:52px;font-size:16px}
+  .benefit{margin:10px 0 16px;font-size:15px;line-height:1.45;color:#48484a}
+  .price-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;margin:0 0 18px}
+  .price-row b{font-size:clamp(36px,3.4vw,44px);font-weight:900;letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
+  .featured .price-row b{background:var(--ig);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .price-row span{font-size:15px;font-weight:600;color:var(--ink-2)}
+  .price-row small{flex-basis:100%;margin-top:6px;font-size:12.5px;color:var(--ink-2)}
+  .plan-act{padding-bottom:20px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+  .plan-cta{width:100%;min-height:52px;padding:0 18px;font-size:15.5px;white-space:nowrap}
+  .featured .plan-cta.btn-dark{background:var(--ig);box-shadow:0 12px 26px -12px rgba(225,48,108,.6)}
   .plan-cta[aria-busy="true"]{opacity:.6;cursor:progress}
-  .plan-alt{display:block;margin:10px 0 0;text-align:center;font-size:13.5px;font-weight:600;color:var(--ink-2)}
-  .plan-note{display:flex;gap:8px;align-items:flex-start;margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.45;color:var(--ink-2)}
-  .plan-note .i{width:16px;height:16px;margin-top:1px}
-  .plan-state{margin:10px 0 0;font-size:13px;font-weight:600;color:var(--wa)}
+  .plan-alt{display:flex;align-items:center;justify-content:center;min-height:40px;margin-top:4px;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+  .plan-alt:hover{color:var(--ink)}
+  .vol{margin:0 0 12px;font-size:15px;font-weight:700}
+  .feat{list-style:none;margin:0;padding:0;display:grid;gap:9px;align-content:start;font-size:14px;line-height:1.4;color:#3a3a3c}
+  .feat li{display:flex;gap:10px;align-items:flex-start}
+  .feat .i{width:18px;height:18px;margin-top:1px;color:var(--wa);stroke-width:2.6}
+  .outcome{margin:18px 0 0;padding:14px 16px;border-radius:14px;background:var(--soft);font-size:13.5px;line-height:1.5;color:#3a3a3c}
+  .featured .outcome{background:#fff4f8}
+  .outcome b{display:block;margin-bottom:3px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .plan-note{display:flex;gap:8px;align-items:flex-start;margin:14px 0 0;font-size:12px;line-height:1.45;color:var(--ink-2)}
+  .plan-note .i{width:15px;height:15px;margin-top:1px}
+  .plan-state{margin:0 0 10px;font-size:13px;font-weight:600;color:var(--wa)}
   .plan-state:empty{display:none}
   .pay-status{margin:8px 0 0;font-size:13px;color:#c9271f}
   .pay-status:empty{display:none}
@@ -699,74 +705,79 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
         <div class="paid-banner" id="paid-banner" hidden></div>
         <div class="plans-grid">
           <article class="plan" data-plan="trial">
-            <p class="tier"><b>Tier 1</b> · Try before you buy</p>
-            <h3>Try Us Free</h3>
-            <p class="svc">Free Social Media Sprint</p>
-            <div class="price-pill"><b>₹0</b><span>for 7 days</span></div>
-            <p class="gst">No payment or card needed</p>
+            <div class="plan-top"><p class="tier"><b>Tier 1</b> · Try before you buy</p></div>
+            <div class="plan-head"><h3>Try Us Free</h3><p class="svc">Free Social Media Sprint</p></div>
             <p class="benefit">See how good your business can look online.</p>
-            <p class="vol">2 posts + 1 Reel</p>
-            <ul class="feat">
-              <li><span><svg class="i"><use href="#i-image"/></svg></span>2 professionally designed posts</li>
-              <li><span><svg class="i"><use href="#i-video"/></svg></span>1 short Reel made from your photos or videos</li>
-              <li><span><svg class="i"><use href="#i-doc"/></svg></span>Captions and publishing, with your approval</li>
-              <li><span><svg class="i"><use href="#i-search"/></svg></span>A quick Instagram/Facebook profile review</li>
-              <li><span><svg class="i"><use href="#i-cal"/></svg></span>A simple 7-day content plan</li>
-              <li><span><svg class="i"><use href="#i-chat"/></svg></span>Advice on how Meta ads and WhatsApp enquiries could work for you</li>
-            </ul>
+            <p class="price-row"><b>₹0</b><span>for 7 days</span><small>No payment or card needed</small></p>
+            <div class="plan-act">
+              <a class="btn btn-wa plan-cta" data-trial="plan-card" href="https://wa.me/919972965677"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path transform="translate(4.3 4.3) scale(.64)" fill="currentColor" d="M9 7.6c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.1 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5l-2.4-1.2c-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7L9 7.6z"/></svg>Start My Free Trial</a>
+            </div>
+            <div class="plan-inc">
+              <p class="vol">2 posts + 1 Reel</p>
+              <ul class="feat">
+              <li><svg class="i"><use href="#i-check"/></svg>2 professionally designed posts</li>
+              <li><svg class="i"><use href="#i-check"/></svg>1 short Reel made from your photos or videos</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Captions and publishing, with your approval</li>
+              <li><svg class="i"><use href="#i-check"/></svg>A quick Instagram/Facebook profile review</li>
+              <li><svg class="i"><use href="#i-check"/></svg>A simple 7-day content plan</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Advice on how Meta ads and WhatsApp enquiries could work for you</li>
+              </ul>
+            </div>
             <p class="outcome"><b>What you get</b>Your business starts looking more professional online. See our work before spending a rupee.</p>
-            <a class="btn btn-wa plan-cta" data-trial="plan-card" href="https://wa.me/919972965677"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path transform="translate(4.3 4.3) scale(.64)" fill="currentColor" d="M9 7.6c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.1 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5l-2.4-1.2c-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7L9 7.6z"/></svg>Start My Free Trial<svg class="i arrow"><use href="#i-arrow"/></svg></a>
             <p class="plan-note"><svg class="i"><use href="#i-info"/></svg>One-time trial per business. No live ad campaigns, no ad spend, no card and no automatic paid renewal.</p>
           </article>
           <article class="plan" data-plan="starter">
-            <p class="tier"><b>Tier 2</b> · For consistency</p>
-            <h3>Stay Active</h3>
-            <p class="svc">Starter + Ads</p>
-            <div class="price-pill"><b>₹3,999</b><span>/ month</span></div>
-            <p class="gst">Incl. 18% GST</p>
+            <div class="plan-top"><p class="tier"><b>Tier 2</b> · For consistency</p></div>
+            <div class="plan-head"><h3>Stay Active</h3><p class="svc">Starter + Ads</p></div>
             <p class="benefit">Keep your business looking fresh and professional.</p>
-            <p class="vol">8 posts + 2 Reels per month</p>
-            <ul class="feat">
-              <li><span><svg class="i"><use href="#i-image"/></svg></span>Posting on Instagram and Facebook</li>
-              <li><span><svg class="i"><use href="#i-doc"/></svg></span>Branded designs, captions and a content calendar</li>
-              <li><span><svg class="i"><use href="#i-play"/></svg></span>4 Story reshares from your content</li>
-              <li><span><svg class="i"><use href="#i-users"/></svg></span>Help connecting your Meta Ads account and WhatsApp</li>
-              <li><span><svg class="i"><use href="#i-target"/></svg></span>Setup and launch of 1 Click-to-WhatsApp ad campaign</li>
-              <li><span><svg class="i"><use href="#i-send"/></svg></span>Up to 2 ad creatives made from your included posts</li>
-              <li><span><svg class="i"><use href="#i-trend"/></svg></span>One campaign improvement round each month</li>
-              <li><span><svg class="i"><use href="#i-bars"/></svg></span>A simple monthly report</li>
-            </ul>
+            <p class="price-row"><b>₹3,999</b><span>/ month</span><small>Incl. 18% GST</small></p>
+            <div class="plan-act">
+              <p class="plan-state"></p>
+              <button type="button" class="btn btn-dark plan-cta pay-btn" data-plan="starter">Choose Stay Active<svg class="i arrow"><use href="#i-arrow"/></svg></button>
+              <p class="pay-status" role="status" aria-live="polite"></p>
+              <a class="plan-alt" data-wa="Hi Quantum Weave AI! I have a question about the Stay Active plan." href="https://wa.me/919972965677">Prefer to talk first? Ask on WhatsApp</a>
+            </div>
+            <div class="plan-inc">
+              <p class="vol">8 posts + 2 Reels per month</p>
+              <ul class="feat">
+              <li><svg class="i"><use href="#i-check"/></svg>Posting on Instagram and Facebook</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Branded designs, captions and a content calendar</li>
+              <li><svg class="i"><use href="#i-check"/></svg>4 Story reshares from your content</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Help connecting your Meta Ads account and WhatsApp</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Setup and launch of 1 Click-to-WhatsApp ad campaign</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Up to 2 ad creatives made from your included posts</li>
+              <li><svg class="i"><use href="#i-check"/></svg>One campaign improvement round each month</li>
+              <li><svg class="i"><use href="#i-check"/></svg>A simple monthly report</li>
+              </ul>
+            </div>
             <p class="outcome"><b>What you get</b>No more worrying about what to post. Your business stays active, looks professional, and makes it easier for interested customers to message you.</p>
-            <p class="plan-state"></p>
-            <button type="button" class="btn btn-dark plan-cta pay-btn" data-plan="starter">Choose Stay Active<svg class="i arrow"><use href="#i-arrow"/></svg></button>
-            <p class="pay-status" role="status" aria-live="polite"></p>
-            <a class="plan-alt" data-wa="Hi Quantum Weave AI! I have a question about the Stay Active plan." href="https://wa.me/919972965677">Prefer to talk first? Ask on WhatsApp</a>
             <p class="plan-note"><svg class="i"><use href="#i-info"/></svg>Suggested ad test budget: ₹3,000–₹6,000 a month, paid directly to Meta. Not included in the price.</p>
           </article>
           <article class="plan featured" data-plan="growth">
-            <span class="most"><svg class="i"><use href="#i-trend"/></svg>Best for Growth</span>
-            <p class="tier"><b>Tier 3</b> · For visibility and enquiries</p>
-            <h3>Reach More Customers</h3>
-            <p class="svc">Growth + Ads</p>
-            <div class="price-pill"><b>₹6,999</b><span>/ month</span></div>
-            <p class="gst">Incl. 18% GST</p>
+            <div class="plan-top"><p class="tier"><b>Tier 3</b> · For visibility and enquiries</p><span class="most">Best for Growth</span></div>
+            <div class="plan-head"><h3>Reach More Customers</h3><p class="svc">Growth + Ads</p></div>
             <p class="benefit">Be seen more often. Give more people a reason to contact you.</p>
-            <p class="vol">12 posts + 4 Reels per month</p>
-            <ul class="feat">
-              <li><span><svg class="i"><use href="#i-doc"/></svg></span>Everything in Stay Active, with more content</li>
-              <li><span><svg class="i"><use href="#i-play"/></svg></span>8 Story reshares from your content</li>
-              <li><span><svg class="i"><use href="#i-send"/></svg></span>Promotion and offer planning</li>
-              <li><span><svg class="i"><use href="#i-target"/></svg></span>Setup and management of up to 2 Meta ad campaigns</li>
-              <li><span><svg class="i"><use href="#i-image"/></svg></span>Up to 4 ad creatives from your included content</li>
-              <li><span><svg class="i"><use href="#i-trend"/></svg></span>Light weekly ad monitoring and improvements</li>
-              <li><span><svg class="i"><use href="#i-chat"/></svg></span>WhatsApp Business greeting and quick-reply setup</li>
-              <li><span><svg class="i"><use href="#i-bars"/></svg></span>Monthly enquiry and ad report, plus a strategy review</li>
-            </ul>
+            <p class="price-row"><b>₹6,999</b><span>/ month</span><small>Incl. 18% GST</small></p>
+            <div class="plan-act">
+              <p class="plan-state"></p>
+              <button type="button" class="btn btn-dark plan-cta pay-btn" data-plan="growth">Choose Reach More Customers<svg class="i arrow"><use href="#i-arrow"/></svg></button>
+              <p class="pay-status" role="status" aria-live="polite"></p>
+              <a class="plan-alt" data-wa="Hi Quantum Weave AI! I have a question about the Reach More Customers plan." href="https://wa.me/919972965677">Prefer to talk first? Ask on WhatsApp</a>
+            </div>
+            <div class="plan-inc">
+              <p class="vol">12 posts + 4 Reels per month</p>
+              <ul class="feat">
+              <li><svg class="i"><use href="#i-check"/></svg>Everything in Stay Active, with more content</li>
+              <li><svg class="i"><use href="#i-check"/></svg>8 Story reshares from your content</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Promotion and offer planning</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Setup and management of up to 2 Meta ad campaigns</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Up to 4 ad creatives from your included content</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Light weekly ad monitoring and improvements</li>
+              <li><svg class="i"><use href="#i-check"/></svg>WhatsApp Business greeting and quick-reply setup</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Monthly enquiry and ad report, plus a strategy review</li>
+              </ul>
+            </div>
             <p class="outcome"><b>What you get</b>Your business shows up more often, reaches people beyond your followers, and makes it easier for them to enquire about your products or services.</p>
-            <p class="plan-state"></p>
-            <button type="button" class="btn btn-dark plan-cta pay-btn" data-plan="growth">Choose Reach More Customers<svg class="i arrow"><use href="#i-arrow"/></svg></button>
-            <p class="pay-status" role="status" aria-live="polite"></p>
-            <a class="plan-alt" data-wa="Hi Quantum Weave AI! I have a question about the Reach More Customers plan." href="https://wa.me/919972965677">Prefer to talk first? Ask on WhatsApp</a>
             <p class="plan-note"><svg class="i"><use href="#i-info"/></svg>Suggested ad test budget: ₹6,000–₹15,000 a month, paid directly to Meta. Not included in the price.</p>
           </article>
         </div>
