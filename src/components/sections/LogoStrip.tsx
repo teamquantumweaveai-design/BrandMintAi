@@ -6,6 +6,7 @@ const LOGOS = [
   { file: "custom-teamwear.png", name: "Custom Teamwear", height: 40 },
   { file: "minibe.png", name: "Minibé Indiranagar", height: 30 },
   { file: "bluewaters.svg", name: "Bluewater Adventure Sports", height: 44 },
+  { file: "shree-krishna-gaana-nilaya.png", name: "Shree Krishna Gaana Nilaya", height: 52 },
 ];
 
 // Few logos, so each track repeats the set enough times to stay wider than large screens.
