@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ArrowRight, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HEADER_LINKS } from "@/lib/constants";
+import { HEADER_LINKS, type NavLink } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 // BrandMint AI published articles
@@ -28,7 +28,7 @@ const blogArticles = [
 
 // Add Blog without changing the existing constants file.
 // Avoid duplicates if Blog already exists in HEADER_LINKS.
-const navigationLinks = [
+const navigationLinks: NavLink[] = [
   ...HEADER_LINKS.filter((link) => link.label !== "Blog"),
   {
     label: "Blog",
