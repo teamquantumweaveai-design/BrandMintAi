@@ -191,15 +191,17 @@ export default function Navbar() {
                         className="absolute left-0 top-full mt-2 min-w-64 rounded-xl border border-[#CBD6E2] bg-white p-2 shadow-xl"
                       >
                         {link.children.map((child) => {
+                          // isExternal = a page outside the React app (e.g. /meta-growth/): load it for real, same tab.
                           const childExternal =
-                            child.href.startsWith("http");
+                            child.href.startsWith("http") || child.isExternal;
+                          const newTab = child.href.startsWith("http");
 
                           return childExternal ? (
                             <a
                               key={child.href}
                               href={child.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              target={newTab ? "_blank" : undefined}
+                              rel={newTab ? "noopener noreferrer" : undefined}
                               className="block rounded-lg px-3 py-2 text-sm font-medium text-[#516F90] transition-colors hover:bg-[#FF5C35]/10 hover:text-[#DF441F]"
                             >
                               {child.label}
@@ -355,15 +357,17 @@ export default function Navbar() {
                               className="ml-4 overflow-hidden border-l border-[#CBD6E2]"
                             >
                               {link.children.map((child) => {
+                                // isExternal = a page outside the React app (e.g. /meta-growth/): load it for real, same tab.
                                 const childExternal =
-                                  child.href.startsWith("http");
+                                  child.href.startsWith("http") || child.isExternal;
+                                const newTab = child.href.startsWith("http");
 
                                 return childExternal ? (
                                   <a
                                     key={child.href}
                                     href={child.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    target={newTab ? "_blank" : undefined}
+                                    rel={newTab ? "noopener noreferrer" : undefined}
                                     onClick={() => setIsOpen(false)}
                                     className="block py-2 pl-4 text-sm font-medium text-[#516F90] hover:text-[#FF5C35]"
                                   >
