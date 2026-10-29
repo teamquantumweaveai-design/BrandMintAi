@@ -287,17 +287,15 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
 
   /* 04 Plans: plain cards, the featured one highlighted; sections line up across cards (subgrid) */
   .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-  .plan{position:relative;display:grid;grid-row:span 8;grid-template-rows:subgrid;row-gap:0;background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px 24px 22px;box-shadow:var(--shadow);transition:translate .3s cubic-bezier(.16,1,.3,1),box-shadow .3s}
+  .plan{position:relative;display:grid;grid-row:span 7;grid-template-rows:subgrid;row-gap:0;background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px 24px 22px;box-shadow:var(--shadow);transition:translate .3s cubic-bezier(.16,1,.3,1),box-shadow .3s}
   @supports not (grid-template-rows:subgrid){.plan{display:flex;flex-direction:column}.plan-inc{flex:1}}
   .plan:hover{translate:0 -4px;box-shadow:0 26px 50px -26px rgba(0,0,0,.3)}
   .plan.featured{border:2px solid transparent;background:linear-gradient(#fff,#fff) padding-box,var(--ig-diag) border-box;box-shadow:0 30px 60px -30px rgba(225,48,108,.55)}
-  .plan-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:26px;margin-bottom:14px}
-  .tier{margin:0;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+  .tier{margin:0 0 12px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
   .tier b{color:var(--pink)}
   .plan .most{position:absolute;top:-13px;left:50%;translate:-50% 0;font-size:12px;font-weight:700;color:#fff;background:var(--ig);padding:5px 14px;border-radius:999px;white-space:nowrap;box-shadow:0 8px 18px -8px rgba(225,48,108,.6)}
   .plan h3{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
-  .svc{margin:2px 0 0;font-size:13px;color:var(--ink-2)}
-  .benefit{margin:10px 0 16px;font-size:15px;line-height:1.45;color:#48484a}
+  .benefit{margin:6px 0 16px;font-size:15px;line-height:1.45;color:#48484a}
   .price-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;margin:0 0 18px}
   .price-row b{font-size:clamp(36px,3.4vw,44px);font-weight:900;letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
   .featured .price-row b{background:var(--ig);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -313,9 +311,8 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   .feat{list-style:none;margin:0;padding:0;display:grid;gap:9px;align-content:start;font-size:14px;line-height:1.4;color:#3a3a3c}
   .feat li{display:flex;gap:10px;align-items:flex-start}
   .feat .i{width:18px;height:18px;margin-top:1px;color:var(--wa);stroke-width:2.6}
-  .outcome{margin:18px 0 0;padding:14px 16px;border-radius:14px;background:var(--soft);font-size:13.5px;line-height:1.5;color:#3a3a3c}
+  .outcome{margin:18px 0 0;padding:12px 14px;border-radius:12px;background:var(--soft);font-size:14px;font-weight:600;line-height:1.45;color:var(--ink)}
   .featured .outcome{background:#fff4f8}
-  .outcome b{display:block;margin-bottom:3px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
   .plan-note{display:flex;gap:8px;align-items:flex-start;margin:14px 0 0;font-size:12px;line-height:1.45;color:var(--ink-2)}
   .plan-note .i{width:15px;height:15px;margin-top:1px}
   .plan-state{margin:0 0 10px;font-size:13px;font-weight:600;color:var(--wa)}
@@ -324,9 +321,12 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
   .pay-status:empty{display:none}
   .plan.is-current{outline:3px solid var(--wa);outline-offset:2px}
   .plans-foot{margin:32px auto 0;max-width:760px;text-align:center;font-size:13.5px;color:var(--ink-2)}
-  .fine{max-width:760px;margin:14px auto 0;font-size:13.5px;color:var(--ink-2)}
+  .fine{max-width:1000px;margin:14px auto 0;font-size:13.5px;color:var(--ink-2)}
   .fine summary{cursor:pointer;text-align:center;font-weight:600;color:var(--ink);min-height:44px;display:flex;align-items:center;justify-content:center}
-  .fine ul{margin:6px 0 0;padding-left:20px;display:grid;gap:6px}
+  .fine-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:8px 0 14px}
+  .fine-grid b{color:var(--ink)}
+  .fine ul{margin:6px 0 0;padding-left:18px;display:grid;gap:5px}
+  .fine-rules{padding-top:12px;border-top:1px solid var(--line)}
   .paid-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin:0 0 24px;padding:18px 22px;border-radius:18px;background:#fff;box-shadow:var(--shadow);border:1px solid var(--line)}
   .paid-banner[hidden]{display:none}
   .paid-banner b{font-size:18px}
@@ -474,6 +474,7 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
     .k-vis,.k-enq{left:0}
     .k-eng,.k-gro{right:0}
     .plans-grid{grid-template-columns:1fr;max-width:520px;margin:0 auto;gap:30px}
+    .fine-grid{grid-template-columns:1fr}
     .month > div:last-child{display:flex;flex-direction:column;align-items:center}
     .mosaic{width:100%}
     .stats{max-width:520px;width:100%;margin:0 auto}
@@ -705,9 +706,8 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
         <div class="paid-banner" id="paid-banner" hidden></div>
         <div class="plans-grid">
           <article class="plan" data-plan="trial">
-            <div class="plan-top"><p class="tier"><b>Tier 1</b> · Try before you buy</p></div>
-            <div class="plan-head"><h3>Try Us Free</h3><p class="svc">Free Social Media Sprint</p></div>
-            <p class="benefit">See how good your business can look online.</p>
+            <p class="tier"><b>Tier 1</b> · Try first</p>
+            <div class="plan-head"><h3>Try Us Free</h3><p class="benefit">See how good your business can look online.</p></div>
             <p class="price-row"><b>₹0</b><span>for 7 days</span><small>No payment or card needed</small></p>
             <div class="plan-act">
               <a class="btn btn-wa plan-cta" data-trial="plan-card" href="https://wa.me/919972965677"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path transform="translate(4.3 4.3) scale(.64)" fill="currentColor" d="M9 7.6c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.1 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.8-.5l-2.4-1.2c-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7L9 7.6z"/></svg>Start My Free Trial</a>
@@ -715,82 +715,107 @@ Template metrics (3.5x reach, 12.4K followers, +285%) are not shown: they would 
             <div class="plan-inc">
               <p class="vol">2 posts + 1 Reel</p>
               <ul class="feat">
-              <li><svg class="i"><use href="#i-check"/></svg>2 professionally designed posts</li>
-              <li><svg class="i"><use href="#i-check"/></svg>1 short Reel made from your photos or videos</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Captions and publishing, with your approval</li>
-              <li><svg class="i"><use href="#i-check"/></svg>A quick Instagram/Facebook profile review</li>
-              <li><svg class="i"><use href="#i-check"/></svg>A simple 7-day content plan</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Advice on how Meta ads and WhatsApp enquiries could work for you</li>
+              <li><svg class="i"><use href="#i-check"/></svg>2 designed posts</li>
+              <li><svg class="i"><use href="#i-check"/></svg>1 short Reel from your photos</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Captions and publishing</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Profile review</li>
+              <li><svg class="i"><use href="#i-check"/></svg>7-day content plan</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Ads and WhatsApp advice</li>
               </ul>
             </div>
-            <p class="outcome"><b>What you get</b>Your business starts looking more professional online. See our work before spending a rupee.</p>
-            <p class="plan-note"><svg class="i"><use href="#i-info"/></svg>One-time trial per business. No live ad campaigns, no ad spend, no card and no automatic paid renewal.</p>
+            <p class="outcome">See our work before spending a rupee.</p>
+            <p class="plan-note"><svg class="i"><use href="#i-info"/></svg>One per business. No ads, no card, no auto-renewal.</p>
           </article>
           <article class="plan" data-plan="starter">
-            <div class="plan-top"><p class="tier"><b>Tier 2</b> · For consistency</p></div>
-            <div class="plan-head"><h3>Stay Active</h3><p class="svc">Starter + Ads</p></div>
-            <p class="benefit">Keep your business looking fresh and professional.</p>
+            <p class="tier"><b>Tier 2</b> · Stay consistent</p>
+            <div class="plan-head"><h3>Stay Active</h3><p class="benefit">Keep your business looking fresh and professional.</p></div>
             <p class="price-row"><b>₹3,999</b><span>/ month</span><small>Incl. 18% GST</small></p>
             <div class="plan-act">
               <p class="plan-state"></p>
               <button type="button" class="btn btn-dark plan-cta pay-btn" data-plan="starter">Choose Stay Active<svg class="i arrow"><use href="#i-arrow"/></svg></button>
               <p class="pay-status" role="status" aria-live="polite"></p>
-              <a class="plan-alt" data-wa="Hi Quantum Weave AI! I have a question about the Stay Active plan." href="https://wa.me/919972965677">Prefer to talk first? Ask on WhatsApp</a>
+              <a class="plan-alt" data-wa="Hi Quantum Weave AI! I have a question about the Stay Active plan." href="https://wa.me/919972965677">Questions? Ask on WhatsApp</a>
             </div>
             <div class="plan-inc">
-              <p class="vol">8 posts + 2 Reels per month</p>
+              <p class="vol">8 posts + 2 Reels a month</p>
               <ul class="feat">
-              <li><svg class="i"><use href="#i-check"/></svg>Posting on Instagram and Facebook</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Branded designs, captions and a content calendar</li>
-              <li><svg class="i"><use href="#i-check"/></svg>4 Story reshares from your content</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Help connecting your Meta Ads account and WhatsApp</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Setup and launch of 1 Click-to-WhatsApp ad campaign</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Up to 2 ad creatives made from your included posts</li>
-              <li><svg class="i"><use href="#i-check"/></svg>One campaign improvement round each month</li>
-              <li><svg class="i"><use href="#i-check"/></svg>A simple monthly report</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Instagram and Facebook posting</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Designs, captions and calendar</li>
+              <li><svg class="i"><use href="#i-check"/></svg>4 Story reshares</li>
+              <li><svg class="i"><use href="#i-check"/></svg>1 Click-to-WhatsApp ad campaign</li>
+              <li><svg class="i"><use href="#i-check"/></svg>2 ad creatives</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Monthly tune-up and report</li>
               </ul>
             </div>
-            <p class="outcome"><b>What you get</b>No more worrying about what to post. Your business stays active, looks professional, and makes it easier for interested customers to message you.</p>
-            <p class="plan-note"><svg class="i"><use href="#i-info"/></svg>Suggested ad test budget: ₹3,000–₹6,000 a month, paid directly to Meta. Not included in the price.</p>
+            <p class="outcome">No more worrying about what to post.</p>
+            <p class="plan-note"><svg class="i"><use href="#i-info"/></svg>Ad budget ₹3,000–₹6,000/month, paid to Meta separately.</p>
           </article>
           <article class="plan featured" data-plan="growth">
-            <div class="plan-top"><p class="tier"><b>Tier 3</b> · For visibility and enquiries</p><span class="most">Best for Growth</span></div>
-            <div class="plan-head"><h3>Reach More Customers</h3><p class="svc">Growth + Ads</p></div>
-            <p class="benefit">Be seen more often. Give more people a reason to contact you.</p>
+            <span class="most">Best for Growth</span>
+            <p class="tier"><b>Tier 3</b> · Get more enquiries</p>
+            <div class="plan-head"><h3>Reach More Customers</h3><p class="benefit">Be seen more often. Give people a reason to contact you.</p></div>
             <p class="price-row"><b>₹6,999</b><span>/ month</span><small>Incl. 18% GST</small></p>
             <div class="plan-act">
               <p class="plan-state"></p>
               <button type="button" class="btn btn-dark plan-cta pay-btn" data-plan="growth">Choose Reach More Customers<svg class="i arrow"><use href="#i-arrow"/></svg></button>
               <p class="pay-status" role="status" aria-live="polite"></p>
-              <a class="plan-alt" data-wa="Hi Quantum Weave AI! I have a question about the Reach More Customers plan." href="https://wa.me/919972965677">Prefer to talk first? Ask on WhatsApp</a>
+              <a class="plan-alt" data-wa="Hi Quantum Weave AI! I have a question about the Reach More Customers plan." href="https://wa.me/919972965677">Questions? Ask on WhatsApp</a>
             </div>
             <div class="plan-inc">
-              <p class="vol">12 posts + 4 Reels per month</p>
+              <p class="vol">12 posts + 4 Reels a month</p>
               <ul class="feat">
-              <li><svg class="i"><use href="#i-check"/></svg>Everything in Stay Active, with more content</li>
-              <li><svg class="i"><use href="#i-check"/></svg>8 Story reshares from your content</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Promotion and offer planning</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Setup and management of up to 2 Meta ad campaigns</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Up to 4 ad creatives from your included content</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Light weekly ad monitoring and improvements</li>
-              <li><svg class="i"><use href="#i-check"/></svg>WhatsApp Business greeting and quick-reply setup</li>
-              <li><svg class="i"><use href="#i-check"/></svg>Monthly enquiry and ad report, plus a strategy review</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Everything in Stay Active</li>
+              <li><svg class="i"><use href="#i-check"/></svg>8 Story reshares</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Offer and promotion planning</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Up to 2 Meta ad campaigns</li>
+              <li><svg class="i"><use href="#i-check"/></svg>4 ad creatives, checked weekly</li>
+              <li><svg class="i"><use href="#i-check"/></svg>WhatsApp quick replies</li>
               </ul>
             </div>
-            <p class="outcome"><b>What you get</b>Your business shows up more often, reaches people beyond your followers, and makes it easier for them to enquire about your products or services.</p>
-            <p class="plan-note"><svg class="i"><use href="#i-info"/></svg>Suggested ad test budget: ₹6,000–₹15,000 a month, paid directly to Meta. Not included in the price.</p>
+            <p class="outcome">Reach people beyond your followers.</p>
+            <p class="plan-note"><svg class="i"><use href="#i-info"/></svg>Ad budget ₹6,000–₹15,000/month, paid to Meta separately.</p>
           </article>
         </div>
         <p class="plans-foot">Paid plans: pay your first month securely with Razorpay (UPI, cards, net banking). After that we send a payment link each month. No automatic debit and no long-term contract. We don't guarantee leads, sales or followers.</p>
         <details class="fine">
-          <summary>What's included and what isn't</summary>
-          <ul>
-            <li>Post counts are unique designs. Publishing the same design on Instagram and Facebook counts as one post.</li>
-            <li>Story reshares and ad creatives are made from the content already in your plan, not extra designs.</li>
-            <li>Reels are made from photos and videos you share with us. Each design includes one round of changes.</li>
-            <li>Meta ad setup is only in the paid plans. Ad spend is always separate, and ads depend on Meta's approval and your account access.</li>
-            <li>WhatsApp quick replies are simple greeting and reply messages, not a chatbot or WhatsApp API setup.</li>
-            <li>Not included: onsite shoots, custom photography, advanced animation, unlimited revisions, daily message handling, CRMs and custom automation.</li>
+          <summary>Full plan details</summary>
+          <div class="fine-grid">
+            <div><b>Try Us Free</b><ul>
+              <li>2 professionally designed posts</li>
+              <li>1 short Reel made from your photos or videos</li>
+              <li>Captions and help publishing approved content</li>
+              <li>A brief Instagram/Facebook profile review</li>
+              <li>A simple 7-day content plan</li>
+              <li>A recommendation for how Meta ads and WhatsApp enquiries could work for you</li>
+            </ul></div>
+            <div><b>Stay Active</b><ul>
+              <li>8 designed posts and 2 short Reels a month</li>
+              <li>Captions and publishing on Instagram and Facebook</li>
+              <li>4 Story reshares from the included content</li>
+              <li>Content planning and scheduling</li>
+              <li>Help connecting your Meta Ads account and WhatsApp</li>
+              <li>Setup and basic management of 1 Click-to-WhatsApp ad campaign</li>
+              <li>Up to 2 ad creatives adapted from your included posts</li>
+              <li>One campaign improvement round a month, and a simple monthly report</li>
+            </ul></div>
+            <div><b>Reach More Customers</b><ul>
+              <li>12 designed posts and 4 short Reels a month</li>
+              <li>Captions and publishing on Instagram and Facebook</li>
+              <li>8 Story reshares from the included content</li>
+              <li>Content planning, including promotions and offers</li>
+              <li>Setup and management of up to 2 Meta ad campaigns</li>
+              <li>Up to 4 ad creatives adapted from your included content</li>
+              <li>Light weekly ad monitoring and improvements</li>
+              <li>WhatsApp Business greeting and quick-reply setup</li>
+              <li>Monthly report with available enquiries and ad results, plus a strategy review</li>
+            </ul></div>
+          </div>
+          <ul class="fine-rules">
+            <li>Post counts are unique designs. One design on Instagram and Facebook counts once.</li>
+            <li>Story reshares and ad creatives reuse your plan's content. Reels use your own photos and videos. One round of changes per design.</li>
+            <li>Ads are only in paid plans. Ad spend is separate and depends on Meta's approval and your account access.</li>
+            <li>Quick replies are simple WhatsApp messages, not a chatbot or WhatsApp API setup.</li>
+            <li>Not included: shoots, custom photography, advanced animation, unlimited revisions, daily message handling, CRMs or custom automation.</li>
           </ul>
         </details>
       </div>
