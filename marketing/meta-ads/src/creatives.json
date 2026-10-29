@@ -1,0 +1,17 @@
+[
+  {"id": "01", "slug": "salon", "category": "SALON OWNERS", "outcome": "Make your salon easier to discover. <em>Fill more appointment slots.</em>"},
+  {"id": "02", "slug": "gym", "category": "GYM OWNERS", "outcome": "Get noticed by locals. <em>Bring more membership enquiries to WhatsApp.</em>"},
+  {"id": "03", "slug": "cafe", "category": "CAFÉ OWNERS", "outcome": "Show your best dishes. <em>Turn attention into enquiries.</em>"},
+  {"id": "04", "slug": "boutique", "category": "BOUTIQUE OWNERS", "outcome": "Make new arrivals visible. <em>Bring shoppers to WhatsApp.</em>"},
+  {"id": "05", "slug": "real-estate", "category": "REAL ESTATE AGENTS", "outcome": "Showcase listings. <em>Start more conversations with interested buyers.</em>"},
+  {"id": "06", "slug": "yoga", "category": "YOGA COACHES", "outcome": "Reach people looking for <em>yoga classes near them.</em>"},
+  {"id": "07", "slug": "pilates", "category": "PILATES STUDIOS", "outcome": "Help locals discover <em>your next trial class.</em>"},
+  {"id": "08", "slug": "nutrition", "category": "NUTRITION COACHES", "outcome": "Build trust. <em>Invite enquiries for nutrition consultations.</em>"},
+  {"id": "09", "slug": "skin-clinic", "category": "SKIN CLINICS", "outcome": "Help nearby clients discover <em>your services and appointments.</em>"},
+  {"id": "10", "slug": "career-coach", "category": "CAREER COACHES", "outcome": "Turn your expertise into <em>more discovery call enquiries.</em>"},
+  {"id": "11", "slug": "dental", "category": "DENTAL CLINICS", "outcome": "Make it easier for locals to <em>enquire about appointments.</em>"},
+  {"id": "12", "slug": "physio", "category": "PHYSIOTHERAPY CENTRES", "outcome": "Be discovered by people <em>searching for physiotherapy services.</em>"},
+  {"id": "13", "slug": "interior", "category": "INTERIOR DESIGNERS", "outcome": "Showcase your projects. <em>Start more design enquiries.</em>"},
+  {"id": "14", "slug": "pet-grooming", "category": "PET GROOMERS", "outcome": "Help nearby pet owners <em>discover your grooming services.</em>"},
+  {"id": "15", "slug": "coaching", "category": "COACHING CENTRES", "outcome": "Help parents discover <em>your next admission batch.</em>"}
+]

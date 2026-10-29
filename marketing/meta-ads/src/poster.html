@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quantum Weave AI poster</title>
+<!-- Renders one free-trial poster. Query: ?i=<index into creatives.json>&size=portrait|square.
+     Rendered to PNG by generate.py with headless Chrome; edit copy in creatives.json, not here. -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=block" rel="stylesheet">
+<style>
+  :root{--neon:#EFFF00;--w:1080px;--h:1350px;--pad:96px;--cat:150px;--out:56px;--gap:56px}
+  .square{--h:1080px;--pad:80px;--cat:128px;--out:46px;--gap:40px}
+  html,body{margin:0;background:#000}
+  .p{box-sizing:border-box;width:var(--w);height:var(--h);padding:var(--pad);display:flex;flex-direction:column;background:#000;color:#fff;font-family:Montserrat,Arial,sans-serif;overflow:hidden}
+  .brand{display:flex;align-items:center;gap:18px;font-weight:700;font-size:34px;letter-spacing:-.01em}
+  .brand img{height:52px;width:auto}
+  .body{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+  .tag{align-self:flex-start;margin:0 0 var(--gap);padding:10px 22px;border:3px solid var(--neon);border-radius:999px;color:var(--neon);font-weight:800;font-size:28px;letter-spacing:.14em}
+  .cat{margin:0;font-weight:900;font-size:var(--cat);line-height:.98;letter-spacing:-.025em;overflow-wrap:normal}
+  .bar{width:140px;height:12px;margin:var(--gap) 0;background:var(--neon);border-radius:6px}
+  .out{margin:0;max-width:860px;font-weight:700;font-size:var(--out);line-height:1.22;letter-spacing:-.01em}
+  .out em{font-style:normal;color:var(--neon)}
+  .cta{align-self:flex-start;display:flex;align-items:center;gap:20px;padding:28px 46px;border-radius:999px;background:var(--neon);color:#000;font-weight:900;font-size:44px;letter-spacing:-.01em}
+  .cta svg{width:40px;height:40px}
+</style>
+</head>
+<body>
+<script src="creatives.js"></script>
+<div class="p" id="p">
+  <div class="brand"><img src="qw-mark.png" alt="">Quantum Weave AI</div>
+  <div class="body">
+    <div class="tag">7 DAYS FREE</div>
+    <h1 class="cat" id="cat"></h1>
+    <div class="bar"></div>
+    <p class="out" id="out"></p>
+  </div>
+  <div class="cta">Start Free Trial<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+</div>
+<script>
+(async function(){
+  var q = new URLSearchParams(location.search);
+  var list = window.CREATIVES;
+  var c = list[+q.get('i') || 0];
+  var p = document.getElementById('p'), cat = document.getElementById('cat'), out = document.getElementById('out');
+  if(q.get('size') === 'square') p.classList.add('square');
+  cat.textContent = c.category;
+  out.innerHTML = c.outcome;
+  await document.fonts.ready;
+  // Shrink the category until every word fits on its line and the whole poster fits the canvas.
+  var size = parseFloat(getComputedStyle(cat).fontSize), outSize = parseFloat(getComputedStyle(out).fontSize);
+  var fits = function(){ return cat.scrollWidth <= cat.clientWidth + 1 && p.scrollHeight <= p.clientHeight + 1 && document.querySelector('.body').scrollHeight <= document.querySelector('.body').clientHeight + 1; };
+  while(!fits() && size > 60){ size -= 2; cat.style.fontSize = size + 'px'; }
+  while(!fits() && outSize > 30){ outSize -= 1; out.style.fontSize = outSize + 'px'; }
+  document.title = fits() ? 'ok' : 'overflow';
+})();
+</script>
+</body>
+</html>
