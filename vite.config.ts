@@ -10,4 +10,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      // /ai-workforce/ is its own page with its own CSS, outside the React Router app.
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        aiWorkforce: path.resolve(__dirname, "ai-workforce/index.html"),
+      },
+    },
+  },
 });

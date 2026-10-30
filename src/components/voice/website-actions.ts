@@ -4,7 +4,7 @@ import { z } from "zod";
 export const voicePages: Record<string, string> = {
   home: "/", about: "/about", solutions: "/solutions", business_growth: "/business-growth",
   quantum_weave: "/quantum-weave", ventures: "/ventures", academy: "/academy", contact: "/contact",
-  meta_growth: "/meta-growth/", ai_business_faq: "/ai-business-faq/", business_workflow_audit: "/business-workflow-audit/",
+  meta_growth: "/meta-growth/", ai_workforce: "/ai-workforce/", ai_business_faq: "/ai-business-faq/", business_workflow_audit: "/business-workflow-audit/",
   small_business_automation_ideas: "/small-business-automation-ideas/", whatsapp_lead_follow_up: "/whatsapp-lead-follow-up-system/",
   whatsapp_automation: "/freemium", ai_powered_films: "/filmsuccess", ai_powered_marketing: "/instaskills",
   ai_full_stack_developer: "/fullai", igr_academy: "/igr.academy", appu_ai: "/appuai", ai_filmmaking: "/aifilmmaking",
