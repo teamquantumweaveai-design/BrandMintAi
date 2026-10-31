@@ -17,8 +17,8 @@ The Quantum Weave Meta Growth System landing page is a static page served at
 | Plan id | Public name (service name) | Price | Each month |
 |---|---|---|---|
 | `trial` | Try Us Free (Free Social Media Sprint) | ₹0, 7 days, once per business | 2 posts, 1 short Reel, captions + publishing with approval, profile review, 7-day plan, Meta ads / WhatsApp recommendation. No live ads, no ad spend. |
-| `starter` | Stay Active (Starter + Ads) | ₹3,999 incl. GST | 8 posts, 2 Reels, 4 Story reshares, planning and scheduling, setup + basic management of 1 Click-to-WhatsApp campaign, up to 2 ad creatives, 1 optimisation round, simple report. Suggested ad budget ₹3,000–₹6,000 paid to Meta. |
-| `growth` | Reach More Customers (Growth + Ads), "Best for Growth" | ₹6,999 incl. GST | 12 posts, 4 Reels, 8 Story reshares, promotions/offer planning, up to 2 Meta campaigns, up to 4 ad creatives, light weekly monitoring, WhatsApp Business greeting + quick replies, report + monthly strategy review. Suggested ad budget ₹6,000–₹15,000 paid to Meta. |
+| `starter` | Stay Active (Starter + Ads) | ₹3,999 incl. GST | 8 posts, 2 AI videos (30 seconds each), 4 Story reshares, planning and scheduling, setup + basic management of 1 Click-to-WhatsApp campaign, up to 2 ad creatives, 1 optimisation round, simple report. Suggested ad budget ₹3,000–₹6,000 paid to Meta. |
+| `growth` | Reach More Customers (Growth + Ads), "Best for Growth" | ₹6,999 incl. GST | 12 posts, 4 AI videos (30 seconds each), 8 Story reshares, promotions/offer planning, up to 2 Meta campaigns, up to 4 ad creatives, light weekly monitoring, WhatsApp Business greeting + quick replies, report + monthly strategy review. Suggested ad budget ₹6,000–₹15,000 paid to Meta. |
 
 The old Starter/Growth/Scale (26/54/82 posts) packages are retired. `scale` is no longer accepted by the server.
 
