@@ -23,6 +23,18 @@
   .btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:54px;border-radius:12px;background:var(--wa-btn);color:#fff;font-weight:700;font-size:17px;text-decoration:none}
   .btn:hover{background:#157a3e}
   .back{display:block;text-align:center;margin-top:14px;color:var(--ink-soft);font-size:14px}
+  .ob{margin:8px 0 28px;padding-top:24px;border-top:1px solid #eee6ee}
+  .ob h2{font-size:22px;letter-spacing:-.02em;margin:0 0 6px}
+  .ob label{display:block;font-weight:600;font-size:15px;margin:18px 0 6px}
+  .ob label small{font-weight:400;color:var(--ink-soft)}
+  .ob input,.ob textarea,.ob select{width:100%;font:inherit;font-size:16px;color:var(--ink);padding:12px 14px;border:1px solid #d9d0dc;border-radius:10px;background:#fff}
+  .ob textarea{min-height:88px;resize:vertical}
+  .ob input:focus,.ob textarea:focus,.ob select:focus{outline:2px solid #962fbf;outline-offset:1px;border-color:transparent}
+  .ob .send{width:100%;margin-top:22px;min-height:54px;border:0;border-radius:12px;background:var(--ink);color:#fff;font:inherit;font-weight:700;font-size:17px;cursor:pointer}
+  .ob .send:disabled{opacity:.6;cursor:default}
+  .ob .status{margin:12px 0 0;font-size:15px}
+  .ob .status.err{color:#b3261e}
+  .ob .done{background:#eef8f1;color:#1a6b3a;border-radius:10px;padding:14px 16px;margin:0}
 </style>
 </head>
 <body>
@@ -34,10 +46,42 @@
     <p class="ref" id="ref" hidden></p>
     <p><strong>What happens next</strong></p>
     <ol>
+      <li>Tell us about your business in the short form below.</li>
       <li>Message us on WhatsApp so we can start onboarding.</li>
-      <li>We go through your business, offers and important dates.</li>
       <li>You approve your first content calendar before anything is published.</li>
     </ol>
+    <form class="ob" id="ob" hidden novalidate>
+      <h2>Your business</h2>
+      <p>This helps us write posts that sound like you. Only the two starred questions are required.</p>
+      <label for="ob-business_name">Business name</label>
+      <input id="ob-business_name" name="business_name" maxlength="160" autocomplete="organization">
+      <label for="ob-link">Website or Instagram link <small>(we read it to learn your products and wording)</small></label>
+      <input id="ob-link" name="link" maxlength="250" placeholder="yourbusiness.in">
+      <label for="ob-business_type">What kind of business</label>
+      <input id="ob-business_type" name="business_type" maxlength="150" placeholder="Home bakery, dental clinic, boutique…">
+      <label for="ob-area">City or area you serve</label>
+      <input id="ob-area" name="area" maxlength="150" placeholder="Koramangala, Bengaluru">
+      <label for="ob-sell">What do you sell? *</label>
+      <textarea id="ob-sell" name="sell" required minlength="3" maxlength="1500" placeholder="Eggless cakes and cardamom buns, made to order. Delivery within 5 km."></textarea>
+      <label for="ob-buyers">Who buys from you? *</label>
+      <textarea id="ob-buyers" name="buyers" required minlength="3" maxlength="1500" placeholder="Working parents ordering for birthdays; offices ordering on Fridays."></textarea>
+      <label for="ob-why_you">Why do people pick you over others?</label>
+      <textarea id="ob-why_you" name="why_you" maxlength="1500" placeholder="Everything baked the same morning. No preservatives. Owner answers every DM."></textarea>
+      <label for="ob-offers">Offers or launches coming up <small>(we keep offers to about 1 in 5 posts)</small></label>
+      <textarea id="ob-offers" name="offers" maxlength="1500" placeholder="Diwali hampers from 1 Nov. 10% off first order."></textarea>
+      <label for="ob-tone">How should you sound?</label>
+      <select id="ob-tone" name="tone">
+        <option>Warm and friendly</option><option>Expert and reassuring</option><option>Playful and bold</option><option>Calm and premium</option>
+      </select>
+      <label for="ob-language">Language for captions</label>
+      <select id="ob-language" name="language">
+        <option>English</option><option>English with some Hindi (Hinglish)</option><option>Hindi</option>
+      </select>
+      <label for="ob-never">Anything we should never say or show?</label>
+      <textarea id="ob-never" name="never" maxlength="1500" placeholder="No discount talk on wedding cakes. Don't show staff faces."></textarea>
+      <button class="send" type="submit">Send my details</button>
+      <p class="status" id="ob-status" role="status" aria-live="polite"></p>
+    </form>
     <a class="btn" id="wa" href="https://wa.me/919972965677">Start onboarding on WhatsApp</a>
     <a class="back" href="/meta-growth/">Back to the Meta Growth System</a>
   </main>
@@ -51,6 +95,30 @@
   if(payment){ var ref = document.getElementById('ref'); ref.textContent = 'Payment ID: ' + payment; ref.hidden = false; }
   var msg = 'Hi Quantum Weave AI, I just paid for ' + (plan || 'the Meta Growth System') + (payment ? ' (Payment ID: ' + payment + ')' : '') + '. I’d like to start onboarding.';
   document.getElementById('wa').href = 'https://wa.me/919972965677?text=' + encodeURIComponent(msg);
+
+  // Onboarding form: only for a paid plan, so the server can check the payment.
+  var form = document.getElementById('ob');
+  if(!payment) return;
+  form.hidden = false;
+  var status = document.getElementById('ob-status');
+  var btn = form.querySelector('.send');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var bad = [].filter.call(form.querySelectorAll('[required]'), function(f){ return f.value.trim().length < 3; });
+    if(bad.length){ status.className = 'status err'; status.textContent = 'Please answer the starred questions.'; bad[0].focus(); return; }
+    var data = { payment_id: payment };
+    [].forEach.call(form.elements, function(f){ if(f.name) data[f.name] = f.value; });
+    btn.disabled = true; status.className = 'status'; status.textContent = 'Sending…';
+    fetch('/api/razorpay/onboarding.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok || !j.success) throw new Error(j.message || ''); }); })
+      .then(function(){
+        form.innerHTML = '<p class="done">Thank you. We’ve got your details and will use them for your first content calendar.</p>';
+      })
+      .catch(function(err){
+        btn.disabled = false; status.className = 'status err';
+        status.textContent = err.message || 'We couldn’t send your details. Please try again or message us on WhatsApp.';
+      });
+  });
 })();
 </script>
 </body>
