@@ -7,18 +7,19 @@ The Quantum Weave Meta Growth System landing page is a static page served at
 |---|---|
 | `public/meta-growth/index.html` | The landing page (free trial, plans, calendar, FAQ, checkout buttons) |
 | `public/meta-growth/assets/clients/` | Client logos for the scrolling strip |
-| `public/meta-growth/thank-you/index.html` | Shown after a verified payment |
+| `public/meta-growth/thank-you/index.html` | Shown after a verified payment, with the onboarding form |
 | `public/api/razorpay/create-order.php` | Creates a Razorpay order for the chosen plan |
 | `public/api/razorpay/verify-payment.php` | Verifies Razorpay's signature, returns the plan |
 | `public/api/razorpay/lib.php` | Shared helpers and the price table |
+| `public/api/razorpay/onboarding.php` | Saves the post-payment onboarding form to the Google Sheet (see `docs/meta-growth-onboarding.md`) |
 
 ## Packages (Oct 2026 offer)
 
 | Plan id | Public name (service name) | Price | Each month |
 |---|---|---|---|
 | `trial` | Try Us Free (Free Social Media Sprint) | ₹0, 7 days, once per business | 2 posts, 1 short Reel, captions + publishing with approval, profile review, 7-day plan, Meta ads / WhatsApp recommendation. No live ads, no ad spend. |
-| `starter` | Stay Active (Starter + Ads) | ₹3,999 incl. GST | 8 posts, 2 AI videos (30 seconds each), 4 Story reshares, planning and scheduling, setup + basic management of 1 Click-to-WhatsApp campaign, up to 2 ad creatives, 1 optimisation round, simple report. Suggested ad budget ₹3,000–₹6,000 paid to Meta. |
-| `growth` | Reach More Customers (Growth + Ads), "Best for Growth" | ₹6,999 incl. GST | 12 posts, 4 AI videos (30 seconds each), 8 Story reshares, promotions/offer planning, up to 2 Meta campaigns, up to 4 ad creatives, light weekly monitoring, WhatsApp Business greeting + quick replies, report + monthly strategy review. Suggested ad budget ₹6,000–₹15,000 paid to Meta. |
+| `starter` | Stay Active (Starter + Ads) | ₹3,999 incl. GST | 8 AI image posts, 2 AI videos (30 seconds each), 4 Story reshares, planning and scheduling, setup + basic management of 1 Click-to-WhatsApp campaign, up to 2 ad creatives, 1 optimisation round, simple report. Suggested ad budget ₹3,000–₹6,000 paid to Meta. |
+| `growth` | Reach More Customers (Growth + Ads), "Best for Growth" | ₹6,999 incl. GST | 12 AI image posts, 4 AI videos (30 seconds each), 8 Story reshares, promotions/offer planning, 1 Meta campaign (content, strategy, optimisation), up to 4 ad creatives, light weekly monitoring, weekly reports, WhatsApp Business greeting + quick replies, monthly strategy review. Suggested ad budget ₹6,000–₹15,000 paid to Meta. |
 
 The old Starter/Growth/Scale (26/54/82 posts) packages are retired. `scale` is no longer accepted by the server.
 
@@ -51,7 +52,9 @@ The page is static HTML, so plan details live in a few places. Change them toget
 2. Razorpay Checkout collects the payment (UPI, cards, net banking). The trial never opens checkout.
 3. `verify-payment.php` checks Razorpay's HMAC signature and reads the plan back from the order. Only then does the
    page record the payment and open `/meta-growth/thank-you/`.
-4. Later months: we send a Razorpay payment link each month. No auto-debit, no subscription.
+4. The thank-you page asks for the business details; `onboarding.php` checks the payment and adds a row to the
+   onboarding Google Sheet.
+5. Later months: we send a Razorpay payment link each month. No auto-debit, no subscription.
 
 ## WhatsApp behaviour
 
@@ -119,8 +122,8 @@ people to WhatsApp, so nothing breaks.
 
 - Price comes only from `lib.php`; a tampered `amount` from the browser is ignored.
 - Payment is confirmed only by Razorpay's HMAC signature (`hash_equals`), and the plan is read back from the order.
-- Endpoints accept only `POST` with a JSON body under 4 KB; requests from other sites (foreign `Origin`) get 403.
-- `public/api/razorpay/.htaccess` blocks everything in that folder except the two endpoints (including `lib.php` and PHP `error_log` files).
+- Endpoints accept only `POST` with a JSON body under 4 KB (16 KB for the onboarding form); requests from other sites (foreign `Origin`) get 403.
+- `public/api/razorpay/.htaccess` blocks everything in that folder except the three endpoints (including `lib.php` and PHP `error_log` files).
 - Razorpay errors go to the server log, never to the visitor.
 - GSAP and Lenis load with Subresource Integrity hashes; Razorpay's `checkout.js` cannot be pinned (Razorpay updates it).
 - Keys live outside the web root and `razorpay-config.php` is git-ignored.

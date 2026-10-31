@@ -46,4 +46,5 @@ next-env.d.ts
 # Razorpay keys must never be committed
 razorpay-config.php
 workforce-enquiries.jsonl
+onboarding.jsonl
 voice-config.php
