@@ -26,7 +26,7 @@ function respond(int $status, array $payload): void
     exit;
 }
 
-function require_post_json(): array
+function require_post_json(int $maxBytes = 4096): array
 {
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
         header('Allow: POST');
@@ -41,7 +41,7 @@ function require_post_json(): array
     if (stripos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== 0) {
         respond(415, ['success' => false, 'message' => 'Invalid request.']);
     }
-    $raw = file_get_contents('php://input', false, null, 0, 4096) ?: '';
+    $raw = file_get_contents('php://input', false, null, 0, $maxBytes) ?: '';
     $body = json_decode($raw, true);
     if (!is_array($body)) {
         respond(400, ['success' => false, 'message' => 'Invalid request.']);
