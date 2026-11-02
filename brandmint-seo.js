@@ -2,9 +2,9 @@
 (function () {
   const pages = {
     "/": {
-      title: "AI Solutions & Business Automation in Bangalore | BrandMint AI",
+      title: "AI, Business & WhatsApp Automation in Bangalore | BrandMint AI",
       description:
-        "BrandMint AI offers AI solutions, AI agents, WhatsApp Business automation, CRM integrations and business growth systems in Bangalore."
+        "BrandMint AI provides AI automation, business automation and WhatsApp automation in Bangalore. Automate leads, customer support and business workflows."
     },
     "/solutions": {
       title: "AI Automation Solutions for Businesses | BrandMint AI",
