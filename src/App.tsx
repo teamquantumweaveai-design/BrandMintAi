@@ -2,6 +2,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// SEO Manager
+import SEOManager from "./components/SEOManager";
+
 // Import pages
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -22,12 +25,21 @@ import VoiceAgent from "./components/voice/VoiceAgent";
 export default function App() {
   return (
     <Router>
+      {/* Manage SEO metadata for each route */}
+      <SEOManager />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/solutions" element={<Solutions />} />
-        <Route path="/business-growth" element={<BusinessGrowth />} />
-        <Route path="/quantum-weave" element={<QuantumWeave />} />
+        <Route
+          path="/business-growth"
+          element={<BusinessGrowth />}
+        />
+        <Route
+          path="/quantum-weave"
+          element={<QuantumWeave />}
+        />
         <Route path="/ventures" element={<Ventures />} />
         <Route path="/academy" element={<Academy />} />
 
@@ -35,9 +47,13 @@ export default function App() {
         <Route path="/blog" element={<Blog />} />
 
         <Route path="/contact" element={<Contact />} />
-        <Route path="/admin/leads" element={<AdminLeads />} />
+        <Route
+          path="/admin/leads"
+          element={<AdminLeads />}
+        />
       </Routes>
 
+      {/* Existing floating components */}
       <FloatingButtons />
       <ExitIntentModal />
       <VoiceAgent />
