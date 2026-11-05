@@ -5,7 +5,7 @@ The Quantum Weave Meta Growth System landing page is a static page served at
 
 | Path | What it is |
 |---|---|
-| `public/meta-growth/index.html` | The landing page (free trial, plans, calendar, FAQ, checkout buttons) |
+| `public/meta-growth/index.html` | The landing page (packages, comparison table, FAQ, checkout buttons) |
 | `public/meta-growth/assets/clients/` | Client logos for the scrolling strip |
 | `public/meta-growth/thank-you/index.html` | Shown after a verified payment, with the onboarding form |
 | `public/api/razorpay/create-order.php` | Creates a Razorpay order for the chosen plan |
@@ -13,21 +13,22 @@ The Quantum Weave Meta Growth System landing page is a static page served at
 | `public/api/razorpay/lib.php` | Shared helpers and the price table |
 | `public/api/razorpay/onboarding.php` | Saves the post-payment onboarding form to the Google Sheet (see `docs/meta-growth-onboarding.md`) |
 
-## Packages (Oct 2026 offer)
+## Packages (Nov 2026, master report v2.0)
 
-| Plan id | Public name (service name) | Price | Each month |
-|---|---|---|---|
-| `trial` | Try Us Free (Free Social Media Sprint) | ₹0, 7 days, once per business | 2 posts, 1 short Reel, captions + publishing with approval, profile review, 7-day plan, Meta ads / WhatsApp recommendation. No live ads, no ad spend. |
-| `starter` | Stay Active (Starter + Ads) | ₹3,999 incl. GST | 8 AI image posts, 2 AI videos (30 seconds each), 4 Story reshares, planning and scheduling, setup + basic management of 1 Click-to-WhatsApp campaign, up to 2 ad creatives, 1 optimisation round, simple report. Suggested ad budget ₹3,000–₹6,000 paid to Meta. |
-| `growth` | Reach More Customers (Growth + Ads), "Best for Growth" | ₹6,999 incl. GST | 12 AI image posts, 4 AI videos (30 seconds each), 8 Story reshares, promotions/offer planning, 1 Meta campaign (content, strategy, optimisation), up to 4 ad creatives, light weekly monitoring, weekly reports, WhatsApp Business greeting + quick replies, monthly strategy review. Suggested ad budget ₹6,000–₹15,000 paid to Meta. |
+AI-powered Meta ads: AI ad images, 30-second AI video ads, and Meta campaigns set up and managed.
+The free 7-day trial and the Stay Active / Reach More Customers plans were retired on 5 Nov 2026.
 
-The old Starter/Growth/Scale (26/54/82 posts) packages are retired. `scale` is no longer accepted by the server.
+| Plan id | Name | Agency fee (incl. GST) | Shown struck through | Each month | Meta ad budget (paid by client to Meta) |
+|---|---|---|---|---|---|
+| `starter` | Starter | ₹9,750 | ₹13,650 | 15 AI images (4:5), 2 AI videos (30 s), 1 campaign, 1 revision round | ₹15,000 per campaign × 1 = ₹15,000 |
+| `growth` | Growth ("Recommended") | ₹15,870 | ₹20,750 | 25 AI images, 4 AI videos, 2 campaigns, 2 revision rounds | ₹21,000 per campaign × 2 = ₹42,000 |
+| `premium` | Premium | ₹24,950 | ₹32,850 | 40 AI images, 6 AI videos, 3 campaigns, 3 revision rounds | ₹30,000 per campaign × 3 = ₹90,000 |
 
-Package rules shown on the page ("What's included and what isn't"): post counts are unique designs (one design on
-Instagram + Facebook counts once); Story reshares and ad creatives reuse the included content; Reels use client footage;
-one revision round per design; ad spend is always separate and depends on Meta approval and client access; quick replies
-are not a chatbot or WhatsApp API; no shoots, custom photography, advanced animation, unlimited revisions, daily message
-handling, CRM or custom automation. No guarantees of leads, sales or followers.
+- The agency fee is charged GST-inclusive (owner's decision), although the master report lists fees "excluding taxes".
+- The struck-through reference prices are shown at the owner's request. Never call them a previous price, MRP or a saving.
+- Ad budgets are always shown "per campaign". They are agency-recommended, not Meta minimums.
+- Not included yet (report section 9): reports, WhatsApp lead setup, Instant Forms, retargeting, CRM integrations.
+- Still open in the report: extra-revision and extra-campaign prices, reporting frequency, client approval timelines.
 
 ## Where to change prices and plan details
 
@@ -37,19 +38,20 @@ The page is static HTML, so plan details live in a few places. Change them toget
    number the payment uses; the browser cannot change it.
 2. **Plan cards, FAQ, structured data:** `public/meta-growth/index.html` (the source copy is `C:\QW-Social\index.html`,
    synced into the repo with asset paths rewritten to `/meta-growth/assets/`).
-3. **Sample-month calendar:** `CAL_PLANS` in the page script (posts, Reels, Story reshares, offers).
+3. **Comparison table:** the "Compare the Packages" section of the page.
 4. **Plan names after payment:** `PLAN_NAMES` in the page script and `names` in `thank-you/index.html`.
 
 | Plan | Charged (incl. GST) | Before GST | GST (18%) |
 |---|---|---|---|
-| Stay Active | ₹3,999 | ₹3,388.98 | ₹610.02 |
-| Reach More Customers | ₹6,999 | ₹5,931.35 | ₹1,067.65 |
+| Starter | ₹9,750 | ₹8,262.71 | ₹1,487.29 |
+| Growth | ₹15,870 | ₹13,449.15 | ₹2,420.85 |
+| Premium | ₹24,950 | ₹21,144.06 | ₹3,805.94 |
 
 ## Payment flow
 
 1. A paid plan's "Choose …" button sends only the plan id to `create-order.php`; the server creates a Razorpay order
    for the fixed price and stores plan, before-GST and GST amounts in the order notes.
-2. Razorpay Checkout collects the payment (UPI, cards, net banking). The trial never opens checkout.
+2. Razorpay Checkout collects the payment (UPI, cards, net banking).
 3. `verify-payment.php` checks Razorpay's HMAC signature and reads the plan back from the order. Only then does the
    page record the payment and open `/meta-growth/thank-you/`.
 4. The thank-you page asks for the business details; `onboarding.php` checks the payment and adds a row to the
@@ -59,11 +61,8 @@ The page is static HTML, so plan details live in a few places. Change them toget
 ## WhatsApp behaviour
 
 - One number for the page: `WA_NUMBER` in the page script (+91 99729 65677).
-- Every "Start My Free Trial" button (`data-trial`) opens WhatsApp with:
-  "Hi Quantum Weave AI! I'd like to start the free 7-day social media trial for my business. Please share the next steps."
-- With `?industry=<slug>` in the URL (from the Meta ads), the message names the business type, e.g.
-  "I run a yoga business…". Slugs: `INDUSTRIES` in the page script; they match `marketing/meta-ads/landing-urls.csv`.
-- Other WhatsApp links (`data-wa`) carry their own message (plan questions, footer).
+- "Talk to Us on WhatsApp" buttons open WhatsApp with: "Hi Quantum Weave AI! I'd like to know more about your AI Meta ads packages."
+- Other WhatsApp links (`data-wa`) carry their own message (package questions, footer).
 - Nothing is sent automatically. Visitors start the chat; the team replies.
 
 ## Analytics
@@ -72,21 +71,19 @@ GA4 property `G-Z1HB1R50YF` (same as the main site). Events sent from the page, 
 
 | Event | When |
 |---|---|
-| `free_trial_cta_click` | A "Start My Free Trial" link is clicked (`cta_location`, `industry`) |
 | `whatsapp_contact_click` | Any WhatsApp link is clicked (`cta_location`) |
 | `plan_selected` | A paid plan button is clicked (`plan`) |
 | `checkout_initiated` | Razorpay Checkout opens (`plan`, `value`) |
 | `payment_success` | Only after the server verified the signature (`plan`, `transaction_id`, `value`) |
-| `industry_landing_visit` | Page opened with a known `?industry=` value |
 
-UTM parameters on ad links are picked up by GA4 automatically. Mark `payment_success` and `free_trial_cta_click`
+UTM parameters on ad links are picked up by GA4 automatically. Mark `payment_success` and `whatsapp_contact_click`
 as key events in GA4 if you want them in conversion reports.
 
 ## Meta ad creatives
 
 `marketing/meta-ads/` (not deployed with the site):
 
-- `portrait-1080x1350/` and `square-1080x1080/`: 15 free-trial posters per size, one per industry.
+- `portrait-1080x1350/` and `square-1080x1080/`: 15 posters per size, one per industry. **They advertise the retired free trial: do not run them until they are updated.**
 - `contact-sheet.png`: preview of all 15.
 - `landing-urls.csv`: the landing URL with `industry` and UTM parameters to use as each ad's destination.
 - `src/`: `creatives.json` (copy), `poster.html` (design), `generate.py` (renders with headless Chrome) and `og.html`

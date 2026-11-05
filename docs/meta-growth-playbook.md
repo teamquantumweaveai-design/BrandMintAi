@@ -1,5 +1,8 @@
 # Meta Growth System: internal playbook
 
+> **Outdated since 5 Nov 2026.** The free trial and the Stay Active / Reach More Customers plans were replaced by the
+> Starter / Growth / Premium AI Meta ads packages (see `docs/meta-growth.md`). Rewrite this playbook before using it.
+
 How Quantum Weave AI finds small businesses, runs the free 7-day trial and turns it into a paid plan.
 Internal only. Prices, limits and the payment flow are in `docs/meta-growth.md`.
 

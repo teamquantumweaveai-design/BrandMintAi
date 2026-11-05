@@ -35,5 +35,5 @@ respond(200, [
     'order_id' => $order['id'],
     'amount' => $amount,
     'currency' => 'INR',
-    'description' => $plan['name'] . ' · first month service fee (incl. 18% GST; ad spend separate)',
+    'description' => $plan['name'] . ' package · first month agency fee (incl. 18% GST; Meta ad budget separate)',
 ]);
