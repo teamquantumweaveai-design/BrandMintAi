@@ -48,11 +48,11 @@
     <ol>
       <li>Tell us about your business in the short form below.</li>
       <li>Message us on WhatsApp so we can start onboarding.</li>
-      <li>You approve your first content calendar before anything is published.</li>
+      <li>You review your first batch of AI ads before any campaign goes live.</li>
     </ol>
     <form class="ob" id="ob" hidden novalidate>
       <h2>Your business</h2>
-      <p>This helps us write posts that sound like you. Only the two starred questions are required.</p>
+      <p>This helps us make ads that sound like you. Only the two starred questions are required.</p>
       <label for="ob-business_name">Business name</label>
       <input id="ob-business_name" name="business_name" maxlength="160" autocomplete="organization">
       <label for="ob-link">Website or Instagram link <small>(we read it to learn your products and wording)</small></label>
@@ -67,13 +67,13 @@
       <textarea id="ob-buyers" name="buyers" required minlength="3" maxlength="1500" placeholder="Working parents ordering for birthdays; offices ordering on Fridays."></textarea>
       <label for="ob-why_you">Why do people pick you over others?</label>
       <textarea id="ob-why_you" name="why_you" maxlength="1500" placeholder="Everything baked the same morning. No preservatives. Owner answers every DM."></textarea>
-      <label for="ob-offers">Offers or launches coming up <small>(we keep offers to about 1 in 5 posts)</small></label>
+      <label for="ob-offers">Offers or launches coming up <small>(we can build ads around them)</small></label>
       <textarea id="ob-offers" name="offers" maxlength="1500" placeholder="Diwali hampers from 1 Nov. 10% off first order."></textarea>
       <label for="ob-tone">How should you sound?</label>
       <select id="ob-tone" name="tone">
         <option>Warm and friendly</option><option>Expert and reassuring</option><option>Playful and bold</option><option>Calm and premium</option>
       </select>
-      <label for="ob-language">Language for captions</label>
+      <label for="ob-language">Language for your ads</label>
       <select id="ob-language" name="language">
         <option>English</option><option>English with some Hindi (Hinglish)</option><option>Hindi</option>
       </select>
@@ -87,7 +87,7 @@
   </main>
 <script>
 (function(){
-  var names = { starter: 'Stay Active', growth: 'Reach More Customers' };
+  var names = { starter: 'the Starter package', growth: 'the Growth package', premium: 'the Premium package' };
   var q = new URLSearchParams(location.search);
   var plan = names[q.get('plan')] || '';
   var payment = (q.get('payment') || '').replace(/[^A-Za-z0-9_]/g, '');
@@ -112,7 +112,7 @@
     fetch('/api/razorpay/onboarding.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
       .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok || !j.success) throw new Error(j.message || ''); }); })
       .then(function(){
-        form.innerHTML = '<p class="done">Thank you. We’ve got your details and will use them for your first content calendar.</p>';
+        form.innerHTML = '<p class="done">Thank you. We’ve got your details and will use them for your first ads.</p>';
       })
       .catch(function(err){
         btn.disabled = false; status.className = 'status err';
