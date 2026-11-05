@@ -13,9 +13,10 @@ header('Cache-Control: no-store');
 
 // Prices are fixed here, never taken from the browser. Amounts are the full price in paise, 18% GST included.
 const SOCIAL_GROWTH_PLANS = [
-    // The free 7-day trial has no checkout; it goes to WhatsApp. Meta ad spend is never part of these fees.
-    'starter' => ['name' => 'Stay Active (Starter + Ads)', 'price' => 399900],
-    'growth'  => ['name' => 'Reach More Customers (Growth + Ads)', 'price' => 699900],
+    // AI Meta ads packages (master report v2.0). Agency fee only, GST included; the Meta ad budget is paid by the client to Meta.
+    'starter' => ['name' => 'Starter', 'price' => 975000],
+    'growth'  => ['name' => 'Growth', 'price' => 1587000],
+    'premium' => ['name' => 'Premium', 'price' => 2495000],
 ];
 const GST_PERCENT = 18;
 
