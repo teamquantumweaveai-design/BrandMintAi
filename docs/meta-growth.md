@@ -15,18 +15,18 @@ The Quantum Weave Meta Growth System landing page is a static page served at
 
 ## Packages (Nov 2026, master report v2.0)
 
-AI-powered Meta ads: AI ad images, 30-second AI video ads, and Meta campaigns set up and managed.
+AI-powered Meta ads: AI images, 30-second AI videos and Meta ad campaign setup (the page says "setup", never "managed").
 The free 7-day trial and the Stay Active / Reach More Customers plans were retired on 5 Nov 2026.
 
 | Plan id | Name | Agency fee (incl. GST) | Shown struck through | Each month | Meta ad budget (paid by client to Meta) |
 |---|---|---|---|---|---|
-| `starter` | Starter | ₹9,750 | ₹13,650 | 15 AI images (4:5), 2 AI videos (30 s), 1 campaign, 1 revision round | ₹15,000 per campaign × 1 = ₹15,000 |
-| `growth` | Growth ("Recommended") | ₹15,870 | ₹20,750 | 25 AI images, 4 AI videos, 2 campaigns, 2 revision rounds | ₹21,000 per campaign × 2 = ₹42,000 |
-| `premium` | Premium | ₹24,950 | ₹32,850 | 40 AI images, 6 AI videos, 3 campaigns, 3 revision rounds | ₹30,000 per campaign × 3 = ₹90,000 |
+| `starter` | Starter | ₹9,750 | ₹13,650 | 15 AI images (4:5), 2 AI videos (30 s), 1 campaign, 1 revision round | ₹15,000 |
+| `growth` | Growth ("Recommended") | ₹15,870 | ₹20,750 | 25 AI images, 4 AI videos, 2 campaigns, 2 revision rounds | ₹21,000 |
+| `premium` | Premium | ₹24,950 | ₹32,850 | 40 AI images, 6 AI videos, 3 campaigns, 3 revision rounds | ₹30,000 |
 
 - The agency fee is charged GST-inclusive (owner's decision), although the master report lists fees "excluding taxes".
 - The struck-through reference prices are shown at the owner's request. Never call them a previous price, MRP or a saving.
-- Ad budgets are always shown "per campaign". They are agency-recommended, not Meta minimums.
+- The page shows only the ad budget amount (₹15,000 / ₹21,000 / ₹30,000): no "per campaign", no ×2 / ×3 totals and no monthly total (owner's decision, 5 Nov 2026). They are agency-recommended, not Meta minimums.
 - Not included yet (report section 9): reports, WhatsApp lead setup, Instant Forms, retargeting, CRM integrations.
 - Still open in the report: extra-revision and extra-campaign prices, reporting frequency, client approval timelines.
 
