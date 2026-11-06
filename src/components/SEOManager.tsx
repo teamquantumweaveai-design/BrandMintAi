@@ -9,9 +9,9 @@ const pages: Record<string, {
   description: string;
 }> = {
   "/": {
-    title: "AI, Business & WhatsApp Automation in Bangalore | BrandMint AI",
+    title: "AI Automation Company in Bangalore | BrandMint AI",
     description:
-      "BrandMint AI provides AI automation, business automation and WhatsApp automation in Bangalore. Automate leads, customer support and business workflows."
+      "BrandMint AI provides AI agents, WhatsApp automation, CRM integration and business process automation in Bangalore. Explore AI solutions for your business."
   },
 
   // WhatsApp Automation Bangalore Landing Page
