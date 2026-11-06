@@ -1,0 +1,49 @@
+/* Scoped to .bmwa: designed not to disturb existing site styles. */
+.bmwa { --ink:#f5f7fb; --muted:#acbac8; --bg:#07121a; --panel:#10212a; --stroke:#23404a; --mint:#67efd0; --mint-dark:#123d35; color:var(--ink); background:var(--bg); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.6; }
+.bmwa * { box-sizing:border-box; }
+.bmwa a { color:inherit; text-decoration:none; }
+.bmwa h1,.bmwa h2,.bmwa h3,.bmwa p { margin-top:0; }
+.bmwa h1,.bmwa h2,.bmwa h3 { letter-spacing:-.04em; line-height:1.12; }
+.bmwa h1 { font-size:clamp(2.6rem,5.6vw,5.7rem); font-weight:780; margin-bottom:25px; }
+.bmwa h2 { font-size:clamp(2rem,4vw,3.55rem); font-weight:760; margin-bottom:22px; }
+.bmwa h3 { font-size:1.25rem; margin-bottom:12px; }
+.bmwa em { color:var(--mint); font-style:normal; }
+.bmwa-wrap { width:min(1160px,calc(100% - 40px)); margin-inline:auto; }
+.bmwa-topbar { min-height:82px; display:flex; align-items:center; justify-content:space-between; gap:22px; width:min(1250px,calc(100% - 40px)); margin-inline:auto; }
+.bmwa-logo { display:inline-flex; align-items:center; gap:12px; font-weight:800; line-height:1.02; font-size:1.18rem; letter-spacing:-.035em; }
+.bmwa-logo b { color:var(--mint); }.bmwa-logo small { display:block; font-size:.54rem; letter-spacing:.19em; margin-top:5px; color:var(--muted); }
+.bmwa-logo-icon { width:42px; height:42px; display:grid; place-items:center; background:var(--mint); color:#0b2922; font-weight:900; border-radius:12px; font-size:1.5rem; }
+.bmwa-topbar nav { display:flex; gap:27px; color:#ced7de; font-size:.89rem; }
+.bmwa-topbar nav a:hover,.bmwa-footer a:hover { color:var(--mint); }
+.bmwa-nav-cta { border:1px solid #43766a; padding:11px 17px; border-radius:8px; font-size:.88rem; font-weight:700; }
+.bmwa-hero { padding:93px 0 100px; background:radial-gradient(ellipse at 74% 30%,#164b44 0%,transparent 38%),linear-gradient(140deg,#07121a 45%,#0d272a); }
+.bmwa-hero-grid { display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:62px; }
+.bmwa-eyebrow,.bmwa-kicker { color:var(--mint); font-weight:750; letter-spacing:.16em; font-size:.74rem; }
+.bmwa-eyebrow { margin-bottom:20px; }.bmwa-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--mint); margin-right:8px; }
+.bmwa-lede { color:#c5d3dd; font-size:1.09rem; max-width:590px; line-height:1.85; }
+.bmwa-actions { display:flex; align-items:center; flex-wrap:wrap; gap:25px; margin-top:33px; }
+.bmwa-button { display:inline-flex; justify-content:center; align-items:center; gap:18px; background:var(--mint); color:#09291f!important; padding:15px 22px; border-radius:10px; font-weight:800; font-size:.94rem; box-shadow:0 8px 38px #40e0b91f; transition:transform .2s,background .2s; }
+.bmwa-button:hover { transform:translateY(-2px); background:#a2ffe7; }.bmwa-button-outline { background:transparent; color:var(--mint)!important; border:1px solid var(--mint); box-shadow:none; }
+.bmwa-link { color:#d5e9e4!important; font-size:.91rem; font-weight:650; }
+.bmwa-hero-points { display:flex; flex-wrap:wrap; gap:11px 20px; font-size:.78rem; color:#bed3d3; margin-top:31px; }
+.bmwa-illustration { border:1px solid #326159; border-radius:20px; background:#0b1c22; padding:14px; box-shadow:0 32px 100px #0006; transform:rotate(1deg); }
+.bmwa-illus-top { display:flex; align-items:center; gap:12px; padding:12px 13px 18px; border-bottom:1px solid #274348; }
+.bmwa-avatar { display:grid; place-items:center; background:var(--mint); color:#0c2822; width:39px; height:39px; border-radius:50%; font-weight:900; }
+.bmwa-illus-top strong,.bmwa-illus-top small { display:block; }.bmwa-illus-top small { color:#91acae; font-size:.72rem; }.bmwa-online { color:var(--mint); margin-left:auto; }
+.bmwa-chat-body { padding:22px 13px 18px; display:flex; flex-direction:column; gap:13px; min-height:333px; background:radial-gradient(circle at 50% 90%,#122f31,transparent 65%); }
+.bmwa-bubble { max-width:83%; border-radius:12px; font-size:.85rem; padding:11px 14px; line-height:1.45; }
+.bmwa-bubble.incoming { background:#21333a; align-self:flex-start; }.bmwa-bubble.outgoing { background:#1c5949; align-self:flex-end; }
+.bmwa-options { display:flex; gap:8px; align-self:flex-end; flex-wrap:wrap; justify-content:flex-end; }.bmwa-options span { font-size:.71rem; color:var(--mint); border:1px solid #407a69; border-radius:8px; padding:7px 9px; }
+.bmwa-flow { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:13px 8px; border-top:1px solid #274348; font-size:.69rem; color:#b6d8cc; }.bmwa-flow span { background:#153c36; border-radius:6px; padding:7px 8px; }.bmwa-flow b { color:var(--mint); }.bmwa-illus-caption { text-align:center; color:#748f94; font-size:.67rem; margin:4px 0 0; }
+.bmwa-strip { background:#0e2528; border-top:1px solid #214247; border-bottom:1px solid #214247; }.bmwa-strip-inner { padding:22px 0; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; color:#c0dbd7; font-size:.85rem; font-weight:650; }
+.bmwa-section { padding:104px 0; }.bmwa-section-heading { max-width:735px; margin-bottom:42px; }.bmwa-section-heading>p:last-child,.bmwa-muted { color:var(--muted); font-size:1.02rem; max-width:650px; }
+.bmwa-card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }.bmwa-card { border:1px solid var(--stroke); padding:33px 26px; border-radius:15px; background:linear-gradient(155deg,#13252c,#0c1b24); min-height:220px; }.bmwa-card-num { display:block; color:var(--mint); font-size:.82rem; font-weight:750; margin-bottom:31px; }.bmwa-card p { color:var(--muted); font-size:.91rem; margin-bottom:0; }
+.bmwa-section-alt { background:#0c1e25; }.bmwa-split { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }.bmwa-split .bmwa-button { margin-top:18px; }.bmwa-usecases { display:grid; gap:12px; }.bmwa-usecases div { display:flex; align-items:flex-start; gap:13px; padding:22px; border:1px solid #2b4b50; background:#122a30; border-radius:11px; color:#d4e4e6; font-size:.95rem; }.bmwa-usecases span { color:var(--mint); font-weight:850; }
+.bmwa-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:17px; }.bmwa-steps article { padding-top:26px; border-top:2px solid #3f706a; }.bmwa-steps article>span { color:var(--mint); font-weight:800; font-size:.85rem; }.bmwa-steps h3 { margin-top:18px; }.bmwa-steps p { font-size:.92rem; color:var(--muted); }
+.bmwa-banner { background:#163d38; padding:55px 0; }.bmwa-banner-inner { display:flex; align-items:center; justify-content:space-between; gap:24px; }.bmwa-banner h2 { font-size:clamp(1.8rem,3vw,2.65rem); }.bmwa-banner p:last-child { color:#c9e0dd; margin-bottom:0; }
+.bmwa-faq-list { max-width:850px; }.bmwa-faq details { border-bottom:1px solid #27454b; padding:19px 0; }.bmwa-faq summary { cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:18px; font-weight:700; list-style:none; font-size:1.02rem; }.bmwa-faq summary::-webkit-details-marker { display:none; }.bmwa-faq summary span { font-size:1.4rem; color:var(--mint); }.bmwa-faq details[open] summary span { transform:rotate(45deg); }.bmwa-faq details p { color:var(--muted); margin:13px 38px 0 0; }
+.bmwa-last { text-align:center; padding:100px 0 105px; background:radial-gradient(ellipse at 50% 100%,#154e47,transparent 65%); }.bmwa-last h2 { max-width:780px; margin-inline:auto; }.bmwa-last p:not(.bmwa-kicker) { color:#c1d1d2; margin-bottom:30px; }.bmwa-contact { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; color:#c4e6df; margin-top:28px; font-size:.9rem; }
+.bmwa-footer { border-top:1px solid #24414a; padding:35px 0; }.bmwa-footer>.bmwa-wrap { display:flex; justify-content:space-between; gap:30px; align-items:center; }.bmwa-footer p { max-width:570px; font-size:.79rem; color:var(--muted); margin:5px 0 0; }.bmwa-footer .bmwa-wrap>div:last-child { display:flex; gap:18px; font-size:.85rem; }
+@media(max-width:900px){ .bmwa-hero-grid,.bmwa-split { grid-template-columns:1fr; gap:45px; }.bmwa-illustration { max-width:560px; transform:none; }.bmwa-card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.bmwa-steps { grid-template-columns:repeat(2,minmax(0,1fr)); }.bmwa-banner-inner { align-items:flex-start; flex-direction:column; } }
+@media(max-width:620px){ .bmwa-wrap { width:min(100% - 32px,1160px); }.bmwa-topbar { width:calc(100% - 32px); min-height:72px; }.bmwa-topbar nav { display:none; }.bmwa-nav-cta { font-size:.76rem; padding:9px 10px; }.bmwa-logo { font-size:1rem; }.bmwa-logo-icon { width:33px; height:33px; }.bmwa-hero { padding:62px 0 70px; }.bmwa-hero-grid { gap:38px; }.bmwa-section { padding:72px 0; }.bmwa-card-grid,.bmwa-steps { grid-template-columns:1fr; }.bmwa-card { min-height:0; }.bmwa-card-num { margin-bottom:20px; }.bmwa-strip-inner { display:grid; gap:8px; }.bmwa-actions { align-items:flex-start; gap:18px; flex-direction:column; }.bmwa-illustration { padding:8px; }.bmwa-bubble { font-size:.77rem; }.bmwa-illus-caption { font-size:.61rem; }.bmwa-flow { font-size:.59rem; }.bmwa-flow span { padding:6px 5px; }.bmwa-footer>.bmwa-wrap { align-items:flex-start; flex-direction:column; }.bmwa-footer .bmwa-wrap>div:last-child { flex-wrap:wrap; }.bmwa-last { padding:75px 0; } }
+@media(prefers-reduced-motion:reduce){ .bmwa-button { transition:none; } }
