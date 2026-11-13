@@ -59,6 +59,12 @@ export default function App() {
   path="/whatsapp-automation-bangalore"
   element={<WhatsAppAutomationBangalore />}
 />
+        
+<Route
+  path="/ai-agents-bangalore"
+  element={<AIAgentsBangalore />}
+/>
+
       </Routes>
 
       {/* Existing floating components */}
