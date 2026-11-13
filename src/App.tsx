@@ -18,6 +18,9 @@ import Contact from "./pages/Contact";
 import AdminLeads from "./pages/AdminLeads";
 import WhatsAppAutomationBangalore
   from "./pages/WhatsAppAutomationBangalore";
+
+import AIAgentsBangalore from "./pages/AIAgentsBangalore";
+
 // Floating components
 import FloatingButtons from "./components/floating/FloatingButtons";
 import ExitIntentModal from "./components/floating/ExitIntentModal";
