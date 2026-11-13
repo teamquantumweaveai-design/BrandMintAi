@@ -22,6 +22,14 @@ const pages: Record<string, {
       "WhatsApp automation services in Bangalore by BrandMint AI. Automate customer enquiries, lead qualification, CRM integrations and follow-ups."
   },
 
+  // NEW: AI Agents Bangalore Landing Page
+  "/ai-agents-bangalore": {
+    title:
+      "AI Agents Company in Bangalore | BrandMint AI",
+    description:
+      "Build AI agents for customer support, lead follow-ups and business automation in Bangalore. BrandMint AI designs practical AI workflows for businesses."
+  },
+
   "/solutions": {
     title: "Business Automation Services in Bangalore | BrandMint AI",
     description:
