@@ -99,7 +99,7 @@ export default function Navbar() {
           : "bg-[#F8F9FA]/80 backdrop-blur-xs border-transparent py-4.5"
       )}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 2xl:px-10 flex items-center justify-between gap-4">
 
         {/* Logo */}
         <Link
@@ -122,7 +122,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <nav
-          className="hidden lg:flex items-center gap-1"
+          className="hidden min-[1440px]:flex flex-1 min-w-0 items-center justify-center gap-0.5 2xl:gap-1"
           aria-label="Main navigation"
         >
           {navigationLinks.map((link) => {
@@ -135,7 +135,7 @@ export default function Navbar() {
               link.href.startsWith("http") || link.isExternal;
 
             const linkClasses = cn(
-              "px-3 py-1.5 text-xs font-semibold rounded-full transition-all duration-200",
+              "whitespace-nowrap px-2 2xl:px-3 py-2 text-xs font-semibold rounded-full transition-all duration-200",
               isActive
                 ? "text-[#FF5C35] bg-[#FF5C35]/10 border border-[#FF5C35]/25"
                 : "text-[#516F90] hover:text-[#2E384D] hover:bg-black/5"
@@ -255,7 +255,7 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop CTA */}
-        <div className="hidden lg:flex items-center shrink-0">
+        <div className="hidden min-[1440px]:flex items-center shrink-0">
           <Link
             to="/contact"
             className="group relative flex items-center gap-1.5 px-5 py-2.5 rounded-full overflow-hidden text-sm font-semibold transition-all duration-300 bg-[#FF5C35] hover:bg-[#DF441F] hover:shadow-[0_4px_16px_rgba(255,92,53,0.35)] hover:scale-102 text-white"
@@ -269,7 +269,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden p-2 rounded-lg text-[#2E384D] hover:text-[#FF5C35] bg-black/5 border border-[#CBD6E2]/70"
+          className="min-[1440px]:hidden min-h-11 min-w-11 p-2 rounded-lg text-[#2E384D] hover:text-[#FF5C35] bg-black/5 border border-[#CBD6E2]/70"
           aria-label="Toggle menu"
           aria-expanded={isOpen}
         >
@@ -289,7 +289,7 @@ export default function Navbar() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="lg:hidden absolute top-full left-0 right-0 bg-white/98 backdrop-blur-xl border-b border-[#CBD6E2] shadow-xl overflow-hidden w-full"
+            className="min-[1440px]:hidden absolute top-full left-0 right-0 bg-white/98 backdrop-blur-xl border-b border-[#CBD6E2] shadow-xl overflow-hidden w-full"
           >
             <div className="px-6 py-8 flex flex-col gap-6 max-h-[calc(100vh-80px)] overflow-y-auto">
               <div className="flex flex-col gap-3">

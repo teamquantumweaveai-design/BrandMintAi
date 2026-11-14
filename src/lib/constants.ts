@@ -19,7 +19,7 @@ export const NAV_LINKS: NavLink[] = [
 export const HEADER_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Our Work", href: "/our-works/", isExternal: true },
+  { label: "Our Works", href: "/our-works/", isExternal: true },
   {
     label: "Solutions",
     href: "/solutions",
