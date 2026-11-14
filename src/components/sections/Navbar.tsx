@@ -232,8 +232,8 @@ export default function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   className={linkClasses}
                 >
                   {link.label}
@@ -402,8 +402,8 @@ export default function Navbar() {
                       {isExternal ? (
                         <a
                           href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          target={link.href.startsWith("http") ? "_blank" : undefined}
+                          rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                           onClick={() => setIsOpen(false)}
                           className={mobileLinkClasses}
                         >
