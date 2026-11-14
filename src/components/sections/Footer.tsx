@@ -310,7 +310,10 @@ export default function Footer() {
         <div>
           © {new Date().getFullYear()} {SITE_METADATA.name} Pvt. Ltd. All rights reserved.
         </div>
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:justify-end">
+          <a href="/privacy-policy/" className="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="/cookie-policy/" className="hover:text-white transition-colors">Cookie Policy</a>
+          <button type="button" data-cookie-settings className="min-h-11 hover:text-white transition-colors">Cookie settings</button>
           <Link to="/contact" className="hover:text-white transition-colors">
             Inquiry Portal
           </Link>
