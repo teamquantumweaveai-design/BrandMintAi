@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
@@ -69,6 +68,10 @@
   <!-- NEW: AI Agents Bangalore Landing Page -->
   <url>
     <loc>https://brandmintai.io/ai-agents-bangalore</loc>
+  </url>
+
+  <url>
+    <loc>https://brandmintai.io/our-works/</loc>
   </url>
 
 </urlset>
