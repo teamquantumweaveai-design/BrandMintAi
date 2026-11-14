@@ -32,10 +32,22 @@ const smoothScroll = typeof window.Lenis === 'function' ? new window.Lenis({
   lerp: 0.085,
   smoothWheel: true,
   syncTouch: false,
-  anchors: true,
+  anchors: false,
   respectReducedMotion: true,
   prevent: node => Boolean(node.closest?.('[data-lenis-prevent]'))
 }) : null;
+document.addEventListener('click', event => {
+  const link = event.target.closest('a[href^="#"]:not(.skip)');
+  if (!smoothScroll || reducedMotion.matches || !link || event.defaultPrevented ||
+      event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+  const target = document.getElementById(link.hash.slice(1));
+  if (!target) return;
+  event.preventDefault();
+  if (location.hash !== link.hash) history.pushState(null, '', link.hash);
+  if (!target.hasAttribute('tabindex')) target.tabIndex = -1;
+  target.focus({ preventScroll: true });
+  smoothScroll.scrollTo(target);
+});
 window.addEventListener('pagehide', () => smoothScroll?.stop());
 window.addEventListener('pageshow', () => {
   if (!document.querySelector('dialog[open]')) smoothScroll?.start();
@@ -46,9 +58,7 @@ if ('IntersectionObserver' in window && !reducedMotion.matches) {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        // Replay when returning to a section without hiding focused content.
-      } else if (!entry.target.contains(document.activeElement)) {
-        entry.target.classList.remove('is-visible');
+        revealObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0, rootMargin: '0px' });
@@ -109,6 +119,7 @@ function openPopup(content) {
   clearTimeout(closeTimer);
   dialog.classList.remove('closing');
   dialogContent.replaceChildren(content);
+  dialog.classList.toggle('letter-cinema', Boolean(dialogContent.querySelector('.letter-preview')));
   dialogOpener = document.activeElement;
   previousOverflow = document.body.style.overflow;
   document.body.style.overflow = 'hidden';
@@ -174,6 +185,26 @@ document.querySelectorAll('[data-letter]').forEach(button => {
   });
 });
 
+const profileVideo = document.querySelector('[data-profile-video]');
+profileVideo.addEventListener('click', event => {
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  const content = document.createDocumentFragment();
+  popupHeading(content, '', 'Meet Kaaranji Shreedhar');
+  const video = element('video', 'dialog-video');
+  video.controls = true;
+  video.playsInline = true;
+  video.preload = 'metadata';
+  video.src = profileVideo.href;
+  video.setAttribute('aria-label', 'Kaaranji Shreedhar introduction');
+  const external = element('a', 'text-link', 'Open video in a new tab');
+  external.href = profileVideo.href;
+  external.target = '_blank';
+  external.rel = 'noopener noreferrer';
+  content.append(video, external);
+  openPopup(content);
+});
+
 document.querySelectorAll('[data-video]').forEach(link => {
   link.setAttribute('aria-haspopup', 'dialog');
   link.addEventListener('click', event => {
@@ -229,43 +260,6 @@ document.querySelectorAll('[data-consult], a[href^="mailto:"][href*="subject="]'
   control.addEventListener('click', showConsultation);
 });
 
-// Animate headings by word while preserving a coherent screen-reader label.
-document.querySelectorAll('.section-heading h2, .brand-family h2, .contact h2').forEach(heading => {
-  heading.setAttribute('aria-label', heading.innerText.replace(/\s+/g, ' ').trim());
-  let index = 0;
-  function splitWords(parent) {
-    [...parent.childNodes].forEach(child => {
-      if (child.nodeType === Node.TEXT_NODE) {
-        const fragment = document.createDocumentFragment();
-        child.textContent.split(/(\s+)/).forEach(word => {
-          if (!word.trim()) fragment.append(document.createTextNode(word));
-          else {
-            const span = element('span', 'text-heading-word', word);
-            span.style.setProperty('--word-index', index++);
-            span.setAttribute('aria-hidden', 'true');
-            fragment.append(span);
-          }
-        });
-        child.replaceWith(fragment);
-      } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== 'BR') splitWords(child);
-    });
-  }
-  splitWords(heading);
-});
-
-// A subtle section transition, with native hash navigation and reduced-motion support.
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', () => {
-    if (reducedMotion.matches) return;
-    const section = document.getElementById(link.hash.slice(1));
-    const title = section?.querySelector('h2');
-    if (title && typeof title.animate === 'function') title.animate([
-      { opacity: .25, transform: 'translateY(14px)' },
-      { opacity: 1, transform: 'translateY(0)' }
-    ], { duration: 650, easing: 'cubic-bezier(.16,1,.3,1)' });
-  });
-});
-
 // The AI circuits animate only while the hero is visible, with reduced-motion support.
 const heroMotion = document.querySelector('.hero-art');
 let heroInView = true;
@@ -289,59 +283,213 @@ document.querySelectorAll('.founder summary, .expertise-list summary').forEach(s
   });
 });
 
-const approachStrip=document.querySelector('.principle-strip');
-const approachPause=document.querySelector('.principle-pause');
-approachPause.addEventListener('click',()=>{const paused=approachStrip.classList.toggle('is-paused');approachPause.setAttribute('aria-pressed',String(paused));approachPause.setAttribute('aria-label',paused?'Resume scrolling approach':'Pause scrolling approach');});
-let approachInView=true;
-const syncApproachMotion=()=>approachStrip.classList.toggle('motion-paused',document.hidden||!approachInView);
-new IntersectionObserver(entries=>{approachInView=entries[0].isIntersecting;syncApproachMotion();}).observe(approachStrip);
-document.addEventListener('visibilitychange',syncApproachMotion);
 
-// Text entrances replay on each viewport crossing, in either scroll direction.
-if ('IntersectionObserver' in window) {
-  let lastTextScroll=scrollY;
-  const copyObserver=new IntersectionObserver(entries=>{
-    const upward=scrollY<lastTextScroll;
-    lastTextScroll=scrollY;
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.style.setProperty('--text-from',upward?'-22px':'22px');
-        entry.target.classList.add('copy-in-view');
-      }else if(!entry.target.contains(document.activeElement))entry.target.classList.remove('copy-in-view');
-    });
-  },{threshold:0,rootMargin:'0px'});
-  document.querySelectorAll('main section h1, main section h2, main section h3, main section p:not(.eyebrow):not(.role)').forEach(node=>{
-    node.classList.add('scroll-copy');
-    copyObserver.observe(node);
+
+
+// Repeat the visual sequence around the seven real, keyboard-accessible cards.
+const rail = document.querySelector('.experience-track');
+const cards = [...rail.children];
+function duplicateCards() {
+  return cards.map(card => {
+    const copy = card.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    const original = card.querySelector('button');
+    const button = copy.querySelector('button');
+    button.removeAttribute('data-letter');
+    button.tabIndex = -1;
+    button.addEventListener('click', () => original.click());
+    return copy;
   });
 }
+const beforeCards = duplicateCards();
+const afterCards = duplicateCards();
+rail.prepend(...beforeCards);
+rail.append(...afterCards);
+const visuals = [...rail.children];
 
-// Stronger, reversible scene entrances without moving the section's anchor box.
-if ('IntersectionObserver' in window) {
-  let lastSceneScroll=scrollY;
-  const sceneObserver=new IntersectionObserver(entries=>{
-    const upward=scrollY<lastSceneScroll;
-    lastSceneScroll=scrollY;
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.style.setProperty('--scene-from',upward?'-72px':'72px');
-        entry.target.classList.add('scene-active');
-      }else if(!entry.target.contains(document.activeElement))entry.target.classList.remove('scene-active');
-    });
-  },{threshold:0,rootMargin:'-140px 0px -10% 0px'});
-  document.querySelectorAll('main>section.section, main>section.brand-family').forEach(section=>sceneObserver.observe(section));
+let drag;
+let suppressClick = false;
+let cycle = 0;
+let visible = false;
+let hovered = false;
+let holdUntil = 0;
+let frame = 0;
+let lastTime = 0;
+let position = null;
+let settleTimer;
+function wrapPosition(value) {
+  return cycle ? cycle + ((value - cycle) % cycle + cycle) % cycle : value;
 }
+function holdRail() {
+  holdUntil = performance.now() + 2200;
+  position = null;
+}
+function resizeRail() {
+  const oldCycle = cycle;
+  const phase = oldCycle ? ((rail.scrollLeft / oldCycle) % 1 + 1) % 1 : 0;
+  cycle = cards[0].offsetLeft - beforeCards[0].offsetLeft;
+  if (cycle && cycle !== oldCycle) {
+    rail.scrollLeft = cycle * (1 + phase);
+    position = null;
+  }
+  queueRailPaint();
+}
+function tick(now) {
+  const elapsed = Math.min(now - lastTime, 32);
+  lastTime = now;
+  if (!visible) return;
+  if (cycle > rail.clientWidth  && !hovered && !drag && !dialog.open &&
+      !document.hidden && !reducedMotion.matches &&
+      !rail.contains(document.activeElement) && now > holdUntil) {
+    position = wrapPosition((position ?? rail.scrollLeft) + elapsed * .074);
+    rail.scrollLeft = position;
+  } else {
+    position = null;
+  }
+  frame = requestAnimationFrame(tick);
+}
+new IntersectionObserver(([entry]) => {
+  visible = entry.isIntersecting;
+  cancelAnimationFrame(frame);
+  if (visible) {
+    lastTime = performance.now();
+    frame = requestAnimationFrame(tick);
+  }
+}, {threshold:.25}).observe(rail);
+rail.addEventListener('pointerenter', event => { hovered = event.pointerType === 'mouse'; });
+rail.addEventListener('pointerleave', () => { hovered = false; });
+for (const event of ['wheel', 'focusin']) rail.addEventListener(event, holdRail, {passive:true});
+rail.addEventListener('scroll', () => {
+  if (position !== null || drag || rail.contains(document.activeElement)) return;
+  clearTimeout(settleTimer);
+  settleTimer = setTimeout(() => {
+    if (!drag && !rail.contains(document.activeElement) && cycle &&
+        (rail.scrollLeft < cycle || rail.scrollLeft >= cycle * 2)) {
+      rail.scrollLeft = wrapPosition(rail.scrollLeft);
+    }
+  }, 140);
+}, {passive:true});
 
-// Seven real cards in one horizontal track; no duplicated letter collections.
-const clientTrack=document.querySelector('.experience-track');
-const clientPause=document.querySelector('[data-carousel="pause"]');
-let clientPaused=false,clientVisible=false,clientHover=false,clientDirection=1,clientHold=0,clientFrame=0,clientLast=0;
-function moveClientCard(direction){clientHold=performance.now()+8000;const card=clientTrack.querySelector('.experience-card');clientTrack.scrollBy({left:direction*(card.getBoundingClientRect().width+24),behavior:reducedMotion.matches?'instant':'smooth'});}
-document.querySelector('[data-carousel="previous"]').addEventListener('click',()=>moveClientCard(-1));
-document.querySelector('[data-carousel="next"]').addEventListener('click',()=>moveClientCard(1));
-clientPause.addEventListener('click',()=>{clientPaused=!clientPaused;clientPause.textContent=clientPaused?'Play':'Pause';clientPause.setAttribute('aria-pressed',String(clientPaused));clientPause.setAttribute('aria-label',clientPaused?'Resume client cards':'Pause client cards');});
-clientTrack.addEventListener('pointerenter',()=>{clientHover=true;});clientTrack.addEventListener('pointerleave',()=>{clientHover=false;});
-for(const type of ['pointerdown','wheel','touchstart'])clientTrack.addEventListener(type,()=>{clientHold=performance.now()+8000;},{passive:true});
-function clientTick(time){const dt=Math.min(time-clientLast,50);clientLast=time;const focused=clientTrack.contains(document.activeElement);if(clientVisible&&!document.hidden&&!clientPaused&&!clientHover&&!focused&&!dialog.open&&!reducedMotion.matches&&time>clientHold){const max=clientTrack.scrollWidth-clientTrack.clientWidth;if(clientTrack.scrollLeft>=max-1)clientDirection=-1;else if(clientTrack.scrollLeft<=1)clientDirection=1;clientTrack.scrollLeft+=clientDirection*dt*.035;}clientFrame=requestAnimationFrame(clientTick);}
-new IntersectionObserver(entries=>{clientVisible=entries[0].isIntersecting;}).observe(clientTrack);
-clientFrame=requestAnimationFrame(clientTick);
+rail.addEventListener('keydown', event => {
+  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+  event.preventDefault();
+  const direction = event.key === 'ArrowLeft' ? -1 : 1;
+  const width = rail.firstElementChild.offsetWidth + parseFloat(getComputedStyle(rail).columnGap);
+  const left = event.key === 'Home' ? cycle : event.key === 'End' ? cycle * 2 - rail.clientWidth + width : rail.scrollLeft + direction * width;
+  rail.scrollTo({ left, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+});
+rail.addEventListener('pointerdown', event => {
+  holdRail();
+  suppressClick = false;
+  if (event.pointerType === 'mouse' && event.button === 0) {
+    drag = { id: event.pointerId, x: event.clientX, left: rail.scrollLeft, moved: false };
+  }
+});
+window.addEventListener('pointermove', event => {
+  if (!drag || drag.id !== event.pointerId) return;
+  const distance = event.clientX - drag.x;
+  if (!drag.moved && Math.abs(distance) < 7) return;
+  if (!drag.moved) {
+    drag.moved = true;
+    rail.setPointerCapture(event.pointerId);
+    rail.classList.add('is-dragging');
+  }
+  rail.scrollLeft = wrapPosition(drag.left - distance);
+});
+function finishDrag(event) {
+  if (!drag || drag.id !== event.pointerId) return;
+  suppressClick = drag.moved;
+  drag = null;
+  rail.classList.remove('is-dragging');
+  holdRail();
+}
+window.addEventListener('pointerup', finishDrag);
+window.addEventListener('pointercancel', finishDrag);
+rail.addEventListener('lostpointercapture', finishDrag);
+rail.addEventListener('click', event => {
+  if (!suppressClick || event.detail === 0) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  suppressClick = false;
+}, true);
+
+
+let railPaint = 0;
+function paintRail() {
+  railPaint = 0;
+  if (reducedMotion.matches) return;
+  const first = visuals[0].offsetLeft;
+  const width = rail.clientWidth;
+  const center = rail.scrollLeft + width / 2;
+  const shifts = visuals.map(card => {
+    const position = card.offsetLeft - first + card.offsetWidth / 2 - center;
+    return Math.max(-1, Math.min(1, position / (width * .65))) * -24;
+  });
+  visuals.forEach((card, index) => card.style.setProperty('--art-pan', shifts[index].toFixed(1) + 'px'));
+}
+function queueRailPaint() {
+  if (!railPaint) railPaint = requestAnimationFrame(paintRail);
+}
+rail.addEventListener('scroll', queueRailPaint, { passive: true });
+new ResizeObserver(resizeRail).observe(rail);
+resizeRail();
+
+// Loop visual copies around the seven original review excerpts.
+const reviewTrack = document.querySelector('.review-track');
+const originals = [...reviewTrack.children];
+function copyReviews() {
+  return originals.map(card => {
+    const copy = card.cloneNode(true);
+    copy.setAttribute('aria-hidden','true');
+    return copy;
+  });
+}
+const reviewBefore = copyReviews();
+reviewTrack.prepend(...reviewBefore);
+reviewTrack.append(...copyReviews());
+let reviewVisible = false, reviewHovered = false;
+let reviewFrame = 0, reviewTime = 0, reviewPosition = null, reviewHold = 0, reviewCycle = 0;
+function wrapReview(value) {
+  return reviewCycle ? reviewCycle + ((value-reviewCycle)%reviewCycle+reviewCycle)%reviewCycle : value;
+}
+function resizeReviews() {
+  const old = reviewCycle;
+  const phase = old ? ((reviewTrack.scrollLeft/old)%1+1)%1 : 0;
+  reviewCycle = originals[0].offsetLeft-reviewBefore[0].offsetLeft;
+  if (reviewCycle !== old) {
+    reviewTrack.scrollLeft = reviewCycle*(1+phase);
+    reviewPosition = null;
+  }
+}
+function animateReviews(now) {
+  const elapsed = Math.min(32, now-reviewTime);
+  reviewTime = now;
+  if (!reviewVisible) return;
+  if (!reviewHovered && !document.hidden && !dialog.open && !reducedMotion.matches &&
+      !reviewTrack.contains(document.activeElement) && now>reviewHold) {
+    reviewPosition = wrapReview((reviewPosition ?? reviewTrack.scrollLeft)+elapsed*.045);
+    reviewTrack.scrollLeft = reviewPosition;
+  } else reviewPosition = null;
+  reviewFrame = requestAnimationFrame(animateReviews);
+}
+new IntersectionObserver(([entry]) => {
+  reviewVisible = entry.isIntersecting;
+  cancelAnimationFrame(reviewFrame);
+  if (reviewVisible) {
+    reviewTime = performance.now();
+    reviewFrame = requestAnimationFrame(animateReviews);
+  }
+}).observe(reviewTrack);
+new ResizeObserver(resizeReviews).observe(reviewTrack);
+resizeReviews();
+reviewTrack.addEventListener('pointerenter', event => {reviewHovered = event.pointerType==='mouse';});
+reviewTrack.addEventListener('pointerleave', () => {reviewHovered = false;});
+for (const event of ['wheel','pointerdown','focusin']) reviewTrack.addEventListener(event, () => {
+  reviewHold = performance.now()+3000;
+  reviewPosition = null;
+}, {passive:true});
+reviewTrack.addEventListener('keydown', event => {
+  if (!['ArrowLeft','ArrowRight'].includes(event.key)) return;
+  event.preventDefault();
+  reviewTrack.scrollBy({left:(event.key==='ArrowLeft'?-1:1)*(originals[0].offsetWidth+18),behavior:reducedMotion.matches?'instant':'smooth'});
+});
