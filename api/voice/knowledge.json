@@ -1,6 +1,6 @@
 {
   "source_revision": "911f78dbf71e0edbe6f0882a2122dceef8d7bb83fb432f8418227eaa8cc64cc5",
-  "generated_at": "2026-11-14T06:12:29.615Z",
+  "generated_at": "2026-11-14T06:23:15.447Z",
   "source_files": [
     {
       "path": "ai-business-faq/index.html",
@@ -28,7 +28,7 @@
     },
     {
       "path": "our-works/index.html",
-      "sha256": "14af90cb677780f68b85bf95c64ba1eea80aa1b4c2ef7e0c2762a153c8d22bee"
+      "sha256": "a479d8d1ec1f0718b0f0adfe2bd31600fd6060616c3e65369a4be7fa6627a9a9"
     },
     {
       "path": "small-business-automation-ideas/index.html",
