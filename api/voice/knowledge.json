@@ -1,42 +1,50 @@
 {
-  "source_revision": "911f78dbf71e0edbe6f0882a2122dceef8d7bb83fb432f8418227eaa8cc64cc5",
-  "generated_at": "2026-11-14T06:23:15.447Z",
+  "source_revision": "b60d39f88c0fc3109fa139793da6ffa3a12fad08e66e5775aac3df37c84235cb",
+  "generated_at": "2026-11-14T11:13:38.124Z",
   "source_files": [
     {
       "path": "ai-business-faq/index.html",
-      "sha256": "d756237a284a4195659b9e61866a4d18d94dbebbd0709fca40f397f85441ab48"
+      "sha256": "1d576bf108aaf36916e2457956417f93774b7204ac0d66bbc846be849fcebe0d"
     },
     {
       "path": "ai-workforce/privacy/index.html",
-      "sha256": "ec9f4735e7d5c4569e2d1cb8d0c8e01552c5cfae39d612763a2938b47d7cde5e"
+      "sha256": "bf62d2a6f9e036fd4b31d77d81a90e188b79354dbf0f89b49b14a2397ea0b4bb"
     },
     {
       "path": "business-workflow-audit/index.html",
-      "sha256": "5fad9a9c46a57bf7647607b05a17ae4b754a04bedf5d8fccc283c589ce6de56c"
+      "sha256": "3aaa687e9606a65191d9ca86e005223388cdcddea7cc857984963694c3e5a390"
     },
     {
       "path": "connect-website-leads-to-crm/index.html",
-      "sha256": "abe3fa1f4c8567820abd068bb64543b113c24839f1b9fed7414a73bfc5e41158"
+      "sha256": "015e1a58dc138188b59d5b9c3c46af0f2ff537a024be370c7abeaa9419f1e7ae"
+    },
+    {
+      "path": "cookie-policy/index.html",
+      "sha256": "b94d3071f19dd795db1c0e750154e3e7bafb3302c8d289a7c50db0fd29b427e2"
     },
     {
       "path": "meta-growth/index.html",
-      "sha256": "b3b004ebef554495e1779f3fedd53c38240493f06a18a19bd6a273a5789470eb"
+      "sha256": "388570b1077bc732a2563add298fc5c9367ecf295127a68ea661b99cd5959eb9"
     },
     {
       "path": "meta-growth/thank-you/index.html",
-      "sha256": "fc6d58db5fd85248ad68fe75f15564f6b8e88c4554f713760e7f537bebb58756"
+      "sha256": "da731d65aa2300fda657f7c8ab1de6461238e841207cdc1df3760e15ea0eb19e"
     },
     {
       "path": "our-works/index.html",
-      "sha256": "a479d8d1ec1f0718b0f0adfe2bd31600fd6060616c3e65369a4be7fa6627a9a9"
+      "sha256": "ab07fb97287d0dfed032231fa13e381cbce4d025bacb9beb33074257b365187b"
+    },
+    {
+      "path": "privacy-policy/index.html",
+      "sha256": "4b32f1765ed25e36bc6a0ded3cf43e3134dd4cde99b44f1ce6e7b7ac1d7879db"
     },
     {
       "path": "small-business-automation-ideas/index.html",
-      "sha256": "c0e1305b47272d53df2b4d827d57dcdcbb41b790ff4d8f098ea245b8ecb027d8"
+      "sha256": "032dfb018cb5d16c8315480d1b5bf12eb1fa854ae616bb8ef1357071cf14af5b"
     },
     {
       "path": "whatsapp-lead-follow-up-system/index.html",
-      "sha256": "ce0320f3009e770e2bd9c6599214f22ac3d7c213931183d05de35da047c9fdfc"
+      "sha256": "6c673a3799f464d95a00856f2c97994692030998a0e93f5143b763b31abb257a"
     }
   ],
   "chunks": [
@@ -221,6 +229,16 @@
       "text": "A connected lead workflow gives the customer a timely, coherent response and gives the team one reliable view of what should happen next. Start with the events, data, and ownership. Configure the tools to serve that design.\nUse the Connected Lead System Blueprint in this article to map your current tools and the information that should move between them. To review the journey with BrandMint AI, visit brandmintai.io and book a consultation.\nReview your connected lead workflow Explore BrandMint AI to discuss your website, CRM, email and WhatsApp journey.\nVisit BrandMint AI\nSources referenced\nOpenAI Small Business Jam Report, for its emphasis on connecting everyday business tools to unlock larger gains.\nMeta business engagement and support updates, for current WhatsApp Business App and Platform context. Verify eligibility and product requirements before implementation."
     },
     {
+      "title": "Cookie Policy | BrandMint AI",
+      "url": "/cookie-policy/",
+      "text": "Skip to policy content BrandMint AI\nCookie Policy\nUnderstand the storage used by this website and choose whether optional analytics runs.\nEffective date: 14 November 2026 · Last updated: 14 November 2026\nHow cookies and storage work\nCookies are small values saved by a website in your browser. Local storage remains in a browser until it expires or is removed; session storage generally lasts for the current tab or browser session. Both may support site features.\nThis policy covers brandmintai.io. External services you open, including WhatsApp, Google, Calendly and YouTube, have their own privacy and storage practices.\nYour choices\nOptional Google Analytics is off by default. The Google Analytics script is not requested until you accept analytics. You can reject optional analytics, accept it, or customize your choice using the banner. Rejecting analytics does not prevent you from reading the site or using requested enquiry features.\nOpen cookie settings\nYour choice is remembered in this browser for up to 180 days, after which we ask again. If browser storage is blocked, your choice applies on the current page and may need to be repeated. Changing a choice on one device does not change another device or browser.\nStorage used by this website\nStorage / provider Purpose and control Duration\nbrandmint-cookie-consent-v1 BrandMint AI local storage Remembers your analytics choice and its date. Necessary to honor privacy preferences. Up to 180 days\n_ga , _ga_* Google Analytics cookies Measures visits and interactions. Enabled only after accepting analytics. Advertising features are disabled in our configuration. Google Analytics generally uses an expiry of up to two years; actual cookies and expiry can vary with configuration and visits.\nbrandmint-ishani-memory-v1 BrandMint AI local storage Voice preferences you explicitly choose to save. Use the voice assistant’s forget option to remove them. Up to 30 days\nbrandmint_exit_intent_shown BrandMint AI session storage Avoids repeating a consultation prompt during a session. Browser / tab session"
+    },
+    {
+      "title": "Cookie Policy | BrandMint AI",
+      "url": "/cookie-policy/",
+      "text": "brandmint_exit_leads , brandmint_newsletter_subscribers BrandMint AI local storage Local backups of details you submit through relevant enquiry or newsletter features. May include name, email, interest and submission time. Until cleared from the browser; no automatic expiry is set for these backups.\nRequested payment-flow state BrandMint AI local storage Relevant Meta Growth flows can remember a selected plan or payment reference. This preference is separate from analytics and does not store card credentials. Until removed by the flow or cleared in your browser.\nHosting, security, authentication and external services may use additional necessary cookies when those services are used. This list describes the website features configured in our code; it is not a guarantee of every cookie a third-party service may use.\nThird-party services\nSome pages request Google Fonts when loading. Choosing to open a third-party page, start an AI session or play an external video can send information to that provider even when Google Analytics is rejected. Analytics consent does not grant microphone permission, newsletter consent or permission to send a WhatsApp message.\nWe do not load advertising pixels through our cookie controls. The Privacy Policy describes providers and the information involved in requested services.\nChange or withdraw consent\nUse “Cookie settings” at the bottom of a page or in its footer to change your choice. Rejecting analytics disables further Google Analytics collection on this site and removes accessible first-party Google Analytics cookies at the site root. The next page load will not load the analytics script unless you opt in again.\nWithdrawal cannot retract information already sent to Google. Browser controls can remove cookies or local storage that this site cannot access. Clearing site data removes saved privacy choices and can remove saved preferences and local backups. It does not delete records already submitted to BrandMint AI or another provider.\nQuestions and updates\nThis policy may change as website features change. The date above identifies the current version. Email connect@brandmintai.io for cookie questions or privacy requests."
+    },
+    {
       "title": "AI-Powered Meta Ads for Businesses | Quantum Weave AI",
       "url": "/meta-growth/",
       "text": "Quantum Weave AI\nHow it works\nPlans\nCompare packages\nFAQ\nTalk to Us on WhatsApp\nAI-Powered Meta Ads\nYour Business Deserves to Be Seen.\nAI Images, Videos + Meta Campaigns, From ₹9,750/month.\nAI-generated images and 30-second videos, with Facebook and Instagram campaigns set up for you.\nWe create the ads. You focus on your business.\nVisibility\nEngagement\nEnquiries\nGrowth\nB&B brewandbloom.cafe Café · Bengaluru\n142 posts 3,850 followers 412 avg. likes\nFollow\n8.6K 5.2K 12.4K 3.9K 7.1K 4.4K 6.8K 15.2K 5.7K\nIllustrative sample account, not a client result\nTalk to Us on WhatsApp\nView Plans\nNo long-term contract\nNo automatic renewal\nAd budget paid directly to Meta\nBrands our group has delivered for\nWork delivered across BrandMint AI ventures.\nSound Familiar?\nWant More People to Find Your Business?\nGood ads take time to make and set up. We create AI images and videos and run them as Meta campaigns, so the right people see what you offer.\nBefore YB your.business Last post 3 weeks ago\n12 posts 214 followers 9 avg. likes\nFollow\n63 118 41 204 87 152 39 96 71\nAfter B&B brewandbloom.cafe Café · Bengaluru\n142 posts 3,850 followers 412 avg. likes\nFollow\n8.6K 5.2K 12.4K 3.9K 7.1K 4.4K 6.8K 15.2K 5.7K\nIllustrative example, not actual client results\nScroll-stopping ads, made with AI. AI images and 30-second videos made for your business.\nCampaigns set up for you. Meta ad campaign setup on Facebook and Instagram.\nMore chances for customers to find you. Results depend on your offer, budget and market.\n“ We keep your business visible online, so you can focus on serving your customers.\nHow It Works\nThree Simple Steps\nFrom your first message to ads that are live.\nBusiness name\nInstagram page\nLogo & photos\nYour services\n01 Step 1 Tell Us About Your Business\nShare your business name, Instagram page, logo, photographs and services.\nAI images AI videos Revisions\n02 Step 2 We Create Your Ads\nWe make AI images (4:5) and 30-second AI videos. You review them, with revision rounds included.\n03 Step 3 Your Campaigns Go Live\nWe set up your Meta campaigns. You pay the ad budget directly to Meta.\nSimple, Honest Pricing\nChoose Your Package"
@@ -264,6 +282,26 @@
       "title": "Our Work & Founders | BrandMint AI Private Limited",
       "url": "/our-works/",
       "text": "BrandMint AI Private Limited Parent company · Founded by Vishak B. Kashyap and Kaaranji Shreedhar\n↳ Quantumweave AI A brand under BrandMint AI Private Limited\nCustom Teamwear is a separate, independent business founded by Vishak B. Kashyap.\nLet’s build what’s next.\n↗\nTell us where your business is today. Let’s explore where it could go.\nRequest a free business consultation ↗ connect@brandmintai.io +91 9972965677\nLet’s build something ↗\n✕\nLet’s talk possibilities.\nA little context helps us start the right conversation.\nYour name Work email\nWhat would you like to explore? AI solutions & automation Brand strategy & storytelling Filmmaking & creative production Digital marketing & communication Let’s figure it out together\nA little about your idea\nPrepare my email ↗\nOpens a draft in your email app. You review and send it.\nPrefer to talk? +91 9972965677 ↗"
+    },
+    {
+      "title": "Privacy Policy | BrandMint AI",
+      "url": "/privacy-policy/",
+      "text": "Skip to policy content BrandMint AI\nPrivacy Policy\nHow BrandMint AI handles your information, the services involved and the choices available to you.\nEffective date: 14 November 2026 · Last updated: 14 November 2026\nWho we are\nBrandMint AI Pvt. Ltd. (“BrandMint AI”, “we”, “us” or “our”) provides AI, automation, business growth and learning services. This policy describes personal information handled through brandmintai.io, our direct enquiries and the services described here.\nWe determine how information from our website and direct enquiries is used. When we process information for a business client, the client’s instructions, privacy notice and service agreement may also apply.\nOffice: No. 3, Lingappa Layout, 1st Cross, Sri Sri Sri Shivakumara Swamiji Road, Bengaluru – 560090, Karnataka, India. Email: connect@brandmintai.io Phone / WhatsApp: +91 99729 65677\nInformation we collect\nEnquiries and consultations: your name, email, phone number, company, project needs and other details you choose to enter or share.\nLearning and service requests: information needed to discuss enrolment, deliver agreed services and provide support.\nMessages and subscriptions: communications you send by email or WhatsApp and email addresses submitted for newsletter updates.\nAI interactions: questions, messages and information shared with our assistants. Voice features process microphone audio only when you choose to start them and allow access.\nTechnical information: hosting and security systems may process connection information, such as IP addresses, request times and browser details, to deliver and protect the website. Google Analytics is loaded only after an analytics opt-in through our cookie controls.\nShare only information needed for your enquiry. Do not enter passwords, payment credentials, confidential client records or sensitive personal information into AI assistants.\nHow we use information"
+    },
+    {
+      "title": "Privacy Policy | BrandMint AI",
+      "url": "/privacy-policy/",
+      "text": "We use information to respond to enquiries, arrange requested consultations, scope and deliver services, support Academy activities, send requested updates, maintain security and meet applicable obligations. Where a service requires consent, we seek it separately from optional analytics consent.\nSubmitting an enquiry does not by itself subscribe you to unrelated marketing. Newsletter sign-ups and optional marketing choices relate to the updates you request. You can ask to stop those communications using the message’s unsubscribe option or our contact details.\nAI assistants and saved preferences\nOur voice assistant uses OpenAI to process audio and provide responses. Starting a voice session shares the audio and relevant context with that provider. Captions are displayed in your tab. Contact, email or booking actions have their own review and confirmation steps.\nIf you explicitly choose to save voice preferences, the website stores them in your browser for up to 30 days. They may include the details you select, such as your name, email, company, interests, language and time zone. You can use the assistant’s forget option to remove saved preferences.\nService records and anonymous voice-quality counts may be processed separately from Google Analytics. Turning off analytics does not delete an enquiry, end a requested AI session or withdraw an independently approved booking or communication.\nService providers and external links\nRelevant providers may receive information needed for a feature you use:\nHosting and data services: Hostinger delivers the website; Supabase supports contact and newsletter workflows. Some forms use our server endpoints or connected workflow services.\nOpenAI: processes voice assistant interactions when you start a session.\nWhatsApp / Meta: receives information when you open WhatsApp and send a message. Some website actions prepare a draft for you to review and send.\nScheduling: Calendly, Google Calendar or other displayed booking providers process the details needed for the booking flow you choose."
+    },
+    {
+      "title": "Privacy Policy | BrandMint AI",
+      "url": "/privacy-policy/",
+      "text": "Google: Google Analytics receives visit information only after analytics consent. Google Fonts is requested by some pages when they load; this is separate from analytics.\nExternal links and visitor-initiated video players, such as YouTube, can contact third-party services. Their privacy notices apply to their own processing. Providers may process information outside India, subject to the arrangements and law applicable to the service.\nWe do not sell or rent personal information to data brokers. We may disclose information when necessary for service delivery, a legal obligation or protection against misuse.\nProvider notices: Google , OpenAI , WhatsApp , Supabase and Calendly .\nCookies and browser storage\nOur cookie controls let you accept or reject optional Google Analytics and change that choice later. Analytics is off until accepted. Advertising storage and advertising personalization are not enabled by these controls.\nRequested features may use browser storage independently of analytics: privacy choices, saved voice preferences, enquiry or newsletter backups, session prompts and payment-flow state. Some of this storage can contain details you submitted. See the Cookie Policy for purposes, duration and how to clear it.\nManage cookie preferences\nSecurity and retention\nWe use HTTPS for this website and take reasonable steps to restrict access to information and protect it against misuse. No website, transmission or storage method can be guaranteed completely secure.\nWe retain enquiry and service information as needed to respond, deliver agreed work, maintain relevant business records or meet applicable legal obligations. Retention depends on the record and purpose; contact us for details or to request deletion. Browser storage has separate lifetimes described in our Cookie Policy. Clearing it does not remove copies already submitted to us or a service provider.\nYour choices and privacy requests"
+    },
+    {
+      "title": "Privacy Policy | BrandMint AI",
+      "url": "/privacy-policy/",
+      "text": "Depending on the applicable law and circumstances, you may request information about the personal data we process, correction, completion, deletion, withdrawal of consent or grievance redressal. Where applicable, you may also exercise a right to nominate another person to act on your behalf.\nEmail connect@brandmintai.io with the subject “Privacy Request”. Describe your request without sending passwords or unnecessary identity documents. We may ask for information reasonably needed to confirm your identity and locate the relevant records. We will explain any limitations, such as records that must be retained, and respond within applicable timelines.\nYou can change analytics preferences at any time. To stop optional email or WhatsApp updates, unsubscribe where available, reply STOP or contact us. Withdrawal does not undo processing already lawfully performed or remove information required for agreed services or legal records.\nChildren’s information\nOur enterprise website and direct business services are intended for business professionals and adult learners. Please contact us before providing information about a person under 18. Where a learning initiative involves children, the relevant institution, service agreement and any legally required parent or guardian consent must be addressed before processing their information.\nIf you believe a child’s information has been provided improperly, contact us so we can review the situation and take appropriate action.\nUpdates and grievance contact\nWe may revise this policy when our services or data practices change. The updated date at the top identifies the current version. Material changes will be communicated where required.\nPrivacy questions and grievances can be sent to the Privacy & Grievance Redressal Desk, BrandMint AI Pvt. Ltd. , at the office address above, connect@brandmintai.io , or +91 99729 65677 . We will acknowledge and review requests and work to resolve them within the timelines applicable to the request."
     },
     {
       "title": "7 Small Business Automation Ideas That Save Time",
