@@ -209,6 +209,58 @@ export default function SolutionsPage() {
           </div>
         </section>
 
+        {/* AI Agents Bangalore — dedicated internal SEO link */}
+        <section
+          aria-labelledby="ai-agents-heading"
+          className="py-20 bg-white w-full relative z-10 border-t border-[#CBD6E2]/60"
+        >
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="rounded-3xl border border-[#CBD6E2] bg-[#F8F9FA] p-8 md:p-12 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <div>
+                <span className="text-xs uppercase font-semibold text-[#FF5C35] tracking-widest">
+                  AI Agent Development · Bengaluru
+                </span>
+                <h2
+                  id="ai-agents-heading"
+                  className="text-3xl md:text-4xl font-bold font-display text-[#2E384D] mt-4 mb-5"
+                >
+                  AI Agent Solutions for Businesses in Bangalore
+                </h2>
+                <p className="text-[#516F90] text-base leading-relaxed mb-7">
+                  Explore custom AI agents that help businesses handle enquiries,
+                  qualify leads, support customers and automate repetitive workflows,
+                  with clear handoff to your team when needed.
+                </p>
+                <Link
+                  to="/ai-agents-bangalore"
+                  className="inline-flex items-center justify-center gap-3 rounded-full bg-[#FF5C35] hover:bg-[#DF441F] px-7 py-3.5 text-white font-semibold text-sm transition-colors"
+                >
+                  Explore AI Agent Solutions in Bangalore
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[
+                  "AI voice agents",
+                  "WhatsApp AI agents",
+                  "AI lead qualification",
+                  "Custom workflow automation",
+                ].map((feature) => (
+                  <div
+                    key={feature}
+                    className="flex items-start gap-3 rounded-2xl border border-[#CBD6E2] bg-white p-5"
+                  >
+                    <CheckCircle2 className="w-5 h-5 text-[#FF5C35] shrink-0 mt-0.5" />
+                    <span className="text-sm font-semibold text-[#2E384D]">
+                      {feature}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Business Model Division Section */}
         <section className="py-20 bg-[#F8F9FA] w-full relative z-10 border-t border-[#CBD6E2]/60">
           <div className="max-w-7xl mx-auto px-6">
