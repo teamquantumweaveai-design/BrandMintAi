@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -16,10 +15,9 @@ import Academy from "./pages/Academy";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import AdminLeads from "./pages/AdminLeads";
-import WhatsAppAutomationBangalore
-  from "./pages/WhatsAppAutomationBangalore";
-
+import WhatsAppAutomationBangalore from "./pages/WhatsAppAutomationBangalore";
 import AIAgentsBangalore from "./pages/AIAgentsBangalore";
+import CRMAutomationBangalore from "./pages/CRMAutomationBangalore";
 
 // Floating components
 import FloatingButtons from "./components/floating/FloatingButtons";
@@ -36,14 +34,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/solutions" element={<Solutions />} />
-        <Route
-          path="/business-growth"
-          element={<BusinessGrowth />}
-        />
-        <Route
-          path="/quantum-weave"
-          element={<QuantumWeave />}
-        />
+        <Route path="/business-growth" element={<BusinessGrowth />} />
+        <Route path="/quantum-weave" element={<QuantumWeave />} />
         <Route path="/ventures" element={<Ventures />} />
         <Route path="/academy" element={<Academy />} />
 
@@ -51,20 +43,19 @@ export default function App() {
         <Route path="/blog" element={<Blog />} />
 
         <Route path="/contact" element={<Contact />} />
+        <Route path="/admin/leads" element={<AdminLeads />} />
         <Route
-          path="/admin/leads"
-          element={<AdminLeads />}
+          path="/whatsapp-automation-bangalore"
+          element={<WhatsAppAutomationBangalore />}
         />
         <Route
-  path="/whatsapp-automation-bangalore"
-  element={<WhatsAppAutomationBangalore />}
-/>
-        
-<Route
-  path="/ai-agents-bangalore"
-  element={<AIAgentsBangalore />}
-/>
-
+          path="/ai-agents-bangalore"
+          element={<AIAgentsBangalore />}
+        />
+        <Route
+          path="/crm-automation-bangalore"
+          element={<CRMAutomationBangalore />}
+        />
       </Routes>
 
       {/* Existing floating components */}
