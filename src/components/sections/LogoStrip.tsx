@@ -5,7 +5,7 @@ import React from "react";
 // Original files remain available in the public directory.
 const LOGOS = [
   {
-    file: "tag.png",
+    file: "tag.webp",
     name: "TAG",
     height: 32,
   },
@@ -20,7 +20,7 @@ const LOGOS = [
     height: 30,
   },
   {
-    file: "bluewaters.svg",
+    file: "bluewaters.webp",
     name: "Bluewater Adventure Sports",
     height: 44,
   },
