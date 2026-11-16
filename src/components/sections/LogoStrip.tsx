@@ -5,27 +5,27 @@ import React from "react";
 // Original files remain available in the public directory.
 const LOGOS = [
   {
-    file: "tag.webp",
+    file: "tag.png",
     name: "TAG",
     height: 32,
   },
   {
-    file: "custom-teamwear.webp",
+    file: "custom-teamwear.png",
     name: "Custom Teamwear",
     height: 40,
   },
   {
-    file: "minibe.webp",
+    file: "minibe.png",
     name: "Minibé Indiranagar",
     height: 30,
   },
   {
-    file: "bluewaters.webp",
+    file: "bluewaters.svg",
     name: "Bluewater Adventure Sports",
     height: 44,
   },
   {
-    file: "shree-krishna-gaana-nilaya.webp",
+    file: "shree-krishna-gaana-nilaya.png",
     name: "Shree Krishna Gaana Nilaya",
     height: 52,
   },
