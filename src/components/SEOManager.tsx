@@ -42,6 +42,21 @@ const pages: Record<string, {
       "Learn about BrandMint AI, a Bangalore-based company building AI solutions, WhatsApp automation, CRM integrations and business growth systems."
   },
 
+  "/ventures": {
+    title: "AI Ventures & Products | BrandMint AI",
+    description: "Explore ventures and AI-powered products developed by BrandMint AI, alongside business automation services and technology solutions."
+  },
+
+  "/academy": {
+    title: "AI & Digital Skills Training | BrandMint AI Academy",
+    description: "Explore BrandMint AI Academy programs and practical training in AI tools, digital marketing and business technology skills."
+  },
+
+  "/quantum-weave": {
+    title: "Quantum Weave AI | BrandMint AI",
+    description: "Explore Quantum Weave AI, a BrandMint AI initiative focused on artificial intelligence, automation and business growth."
+  },
+
   "/blog": {
     title: "AI Automation & Business Growth Blog | BrandMint AI",
     description:
@@ -113,6 +128,29 @@ export default function SEOManager() {
     }
 
     canonical.href = SITE_URL + path;
+
+    // Keep social metadata consistent after client-side navigation.
+    const setSocialMeta = (
+      attribute: "property" | "name",
+      key: string,
+      content: string
+    ) => {
+      let meta = document.querySelector<HTMLMetaElement>(
+        'meta[' + attribute + '="' + key + '"]'
+      );
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.setAttribute(attribute, key);
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+
+    setSocialMeta("property", "og:title", page.title);
+    setSocialMeta("property", "og:description", page.description);
+    setSocialMeta("property", "og:url", canonical.href);
+    setSocialMeta("name", "twitter:title", page.title);
+    setSocialMeta("name", "twitter:description", page.description);
   }, [pathname]);
 
   return null;
