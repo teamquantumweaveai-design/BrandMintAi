@@ -5,6 +5,7 @@ import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import CTA from "@/components/sections/CTA";
 import Footer from "@/components/sections/Footer";
+import { Link } from "react-router-dom";
 import GlowCard from "@/components/ui/GlowCard";
 import GradientText from "@/components/ui/GradientText";
 import { ABOUT_COPY, BELIEF_COPY, WHY_BRANDMINT_COPY, WHAT_WE_DO } from "@/lib/constants";
@@ -191,9 +192,48 @@ export default function AboutPage() {
           </div>
         </section>
 
+
+        {/* SEO: Explore Our AI Automation Services */}
+        <section
+          aria-labelledby="about-services-heading"
+          className="py-16 bg-[#F8F9FA] border-t border-[#CBD6E2]/60"
+        >
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <h2
+              id="about-services-heading"
+              className="text-3xl md:text-4xl font-bold font-display text-[#2E384D] mb-4"
+            >
+              Explore Our AI Automation Services
+            </h2>
+
+            <p className="text-[#516F90] text-base md:text-lg leading-relaxed max-w-3xl mx-auto mb-8">
+              Discover how BrandMint AI helps businesses in Bangalore
+              simplify customer communication, automate repetitive
+              workflows, and build practical AI-powered systems.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                to="/whatsapp-automation-bangalore"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-full bg-white border border-[#CBD6E2] text-[#2E384D] font-semibold hover:border-[#FF5C35] transition-colors"
+              >
+                WhatsApp Automation in Bangalore
+              </Link>
+
+              <Link
+                to="/ai-agents-bangalore"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-full bg-white border border-[#CBD6E2] text-[#2E384D] font-semibold hover:border-[#FF5C35] transition-colors"
+              >
+                AI Agents in Bangalore
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <CTA />
       </main>
       <Footer />
+
     </>
   );
 }
