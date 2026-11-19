@@ -5,6 +5,7 @@ import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import CTA from "@/components/sections/CTA";
 import Footer from "@/components/sections/Footer";
+import { Link } from "react-router-dom";
 import GlowCard from "@/components/ui/GlowCard";
 import GradientText from "@/components/ui/GradientText";
 import { ABOUT_COPY, BELIEF_COPY, WHY_BRANDMINT_COPY, WHAT_WE_DO } from "@/lib/constants";
