@@ -35,19 +35,10 @@ function ContactButton({ children = 'Book a WhatsApp demo', secondary = false })
 
 export default function WhatsAppAutomationBangalore() {
   useEffect(() => {
-    // The site's global brandmint-seo.js should also have a matching route entry.
+    // Page metadata is managed centrally by SEOManager.tsx.
+    // These values are retained for the structured data below.
     const title = 'WhatsApp Automation Company in Bangalore | BrandMint AI';
-    const description = 'WhatsApp automation services in Bangalore by BrandMint AI. Automate enquiries, lead qualification, CRM updates and human handoffs. Book a demo.';
-    document.title = title;
-    const setMeta = (selector, attr, value) => {
-      let el = document.head.querySelector(selector);
-      if (!el) { el = document.createElement('meta'); el.setAttribute(attr, selector.includes('property=') ? 'og:description' : selector.includes('name="robots"') ? 'robots' : 'description'); document.head.appendChild(el); }
-      el.setAttribute('content', value);
-    };
-    setMeta('meta[name="description"]', 'name', description);
-    let canonical = document.head.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = 'https://brandmintai.io/whatsapp-automation-bangalore';
+    const description = 'WhatsApp automation services in Bangalore by BrandMint AI. Automate customer enquiries, lead qualification, CRM integrations and follow-ups.';
     const ld = document.createElement('script');
     ld.type = 'application/ld+json';
     ld.id = 'bmwa-structured-data';

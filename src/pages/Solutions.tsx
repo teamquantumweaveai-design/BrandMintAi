@@ -45,8 +45,8 @@ export default function SolutionsPage() {
         <Hero
           title={
             <>
-              Practical Solutions <br />
-              <GradientText>For Immediate Growth</GradientText>
+              Business Automation Services <br />
+              <GradientText>in Bangalore</GradientText>
             </>
           }
           subtitle={SOLUTIONS_COPY.heroSubtitle}
