@@ -98,7 +98,7 @@ const pages: Record<string, PageSEO> = {
 };
 
 // Service-specific structured data.
-// The Organization schema already exists in index.html.
+// Organization schema already exists in index.html.
 
 const serviceSchemas: Record<
   string,
@@ -108,14 +108,14 @@ const serviceSchemas: Record<
     "@context": "https://schema.org",
     "@type": "Service",
     "@id":
-      "https://brandmintai.io/ai-agents-bangalore#service",
+      "https://brandmintai.io/ai-agents-bangalore/#service",
     name: "AI Agent Development Services in Bangalore",
     serviceType:
       "AI Agent Development and Business Automation",
     description:
       "BrandMint AI provides AI agent development in Bangalore for customer enquiries, lead qualification, customer support and business workflow automation.",
     url:
-      "https://brandmintai.io/ai-agents-bangalore",
+      "https://brandmintai.io/ai-agents-bangalore/",
     provider: {
       "@id": "https://brandmintai.io/#organization"
     },
@@ -129,13 +129,13 @@ const serviceSchemas: Record<
     "@context": "https://schema.org",
     "@type": "Service",
     "@id":
-      "https://brandmintai.io/whatsapp-automation-bangalore#service",
+      "https://brandmintai.io/whatsapp-automation-bangalore/#service",
     name: "WhatsApp Automation Services in Bangalore",
     serviceType: "WhatsApp Business Automation",
     description:
       "BrandMint AI provides WhatsApp automation in Bangalore for customer enquiries, lead qualification, automated follow-ups and CRM integration.",
     url:
-      "https://brandmintai.io/whatsapp-automation-bangalore",
+      "https://brandmintai.io/whatsapp-automation-bangalore/",
     provider: {
       "@id": "https://brandmintai.io/#organization"
     },
@@ -146,26 +146,28 @@ const serviceSchemas: Record<
   }
 };
 
+const trailingSlashRoutes = new Set([
+  "/ai-agents-bangalore",
+  "/whatsapp-automation-bangalore"
+]);
+
 export default function SEOManager() {
   const { pathname } = useLocation();
 
   useEffect(() => {
     const path = pathname.replace(/\/+$/, "") || "/";
-
     const page = pages[path];
 
     // Remove schema from the previously visited service page.
-    // This prevents incorrect structured data after navigation.
     const schemaId = "brandmint-service-schema";
-
     document.getElementById(schemaId)?.remove();
 
     if (!page) return;
 
-    // Update the page title.
+    // Update page title.
     document.title = page.title;
 
-    // Update the meta description.
+    // Update meta description.
     let description =
       document.querySelector<HTMLMetaElement>(
         'meta[name="description"]'
@@ -179,8 +181,7 @@ export default function SEOManager() {
 
     description.content = page.description;
 
-    // Update the canonical URL.
-    // Keep the existing canonical format for now.
+    // Update canonical URL.
     let canonical =
       document.querySelector<HTMLLinkElement>(
         'link[rel="canonical"]'
@@ -192,8 +193,14 @@ export default function SEOManager() {
       document.head.appendChild(canonical);
     }
 
-    canonical.href =
-      SITE_URL + (path === "/" ? "/" : path);
+    const canonicalPath =
+      path === "/"
+        ? "/"
+        : trailingSlashRoutes.has(path)
+          ? `${path}/`
+          : path;
+
+    canonical.href = SITE_URL + canonicalPath;
 
     // Update social sharing metadata.
     const setSocialMeta = (
@@ -245,7 +252,7 @@ export default function SEOManager() {
       page.description
     );
 
-    // Add structured data for applicable service pages.
+    // Add Service structured data only on relevant pages.
     const serviceSchema = serviceSchemas[path];
 
     if (serviceSchema) {
@@ -259,7 +266,6 @@ export default function SEOManager() {
 
       document.head.appendChild(schemaScript);
     }
-
   }, [pathname]);
 
   return null;
