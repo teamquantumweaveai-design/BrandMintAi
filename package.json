@@ -5,8 +5,9 @@
   "scripts": {
     "prebuild": "node scripts/build-voice-knowledge.cjs",
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build && node scripts/prerender.mjs",
+    "preview": "vite preview",
+    "seo:check": "node scripts/seo-check.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.3",
