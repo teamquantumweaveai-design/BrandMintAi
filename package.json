@@ -1,3 +1,4 @@
+
 {
   "name": "brandmint-ai",
   "version": "0.1.0",
@@ -5,7 +6,7 @@
   "scripts": {
     "prebuild": "node scripts/build-voice-knowledge.cjs",
     "dev": "vite",
-    "build": "tsc && vite build && node scripts/prerender.mjs",
+    "build": "tsc && vite build",
     "preview": "vite preview",
     "seo:check": "node scripts/seo-check.mjs"
   },
