@@ -1,3 +1,4 @@
+
 name: Auto Build & Deploy to Hostinger Branch
 
 on:
@@ -9,9 +10,15 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: brandmint-production-deployment
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -19,16 +26,45 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
           cache: 'npm'
 
       - name: Install Dependencies
         run: npm ci
 
+      - name: Install Playwright
+        run: npm install --no-save playwright
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
       - name: Build Production Assets
         run: npm run build
 
-      - name: Deploy Compiled Files to 'deploy' Branch
+      - name: Generate Prerendered HTML
+        run: node scripts/prerender.mjs
+
+      - name: Verify Critical SEO Pages
+        shell: bash
+        run: |
+          set -e
+
+          test -s dist/index.html
+          test -s dist/ai-agents-bangalore/index.html
+          test -s dist/whatsapp-automation-bangalore/index.html
+          test -s dist/sitemap.xml
+
+          grep -Fq \
+            'https://brandmintai.io/ai-agents-bangalore/' \
+            dist/ai-agents-bangalore/index.html
+
+          grep -Fq \
+            'https://brandmintai.io/whatsapp-automation-bangalore/' \
+            dist/whatsapp-automation-bangalore/index.html
+
+          echo "Critical SEO pages verified."
+
+      - name: Deploy Compiled Files to deploy Branch
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: deploy
