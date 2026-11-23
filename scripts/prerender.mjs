@@ -119,8 +119,20 @@ async function prerender() {
       );
     }
 
-    const html = await page.content();
+await page.evaluate(() => {
+  // Remove runtime cookie UI from the static snapshot.
+  // The consent script will recreate it in the browser.
+  document.querySelectorAll(
+    ".bm-privacy-controls"
+  ).forEach(element => element.remove());
 
+  // Avoid duplicating dynamically injected styles.
+  document.querySelectorAll(
+    'link[href^="/privacy/privacy.css"]'
+  ).forEach(element => element.remove());
+});
+
+const html = await page.content();
     const directory = route === "/"
       ? "dist"
       : join("dist", route.slice(1));
