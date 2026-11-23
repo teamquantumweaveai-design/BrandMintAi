@@ -1,0 +1,46 @@
+
+name: BrandMint SEO Prerender Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  seo-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npm install --no-save playwright
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build existing website
+        run: npm run build
+
+      - name: Run SEO prerendering test
+        run: node scripts/prerender.mjs
+
+      - name: Upload test results
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: brandmint-seo-test
+          path: dist/
+          retention-days: 3
