@@ -54,7 +54,6 @@ export default function WhatsAppAutomationBangalore() {
     ld.textContent = JSON.stringify({
       '@context': 'https://schema.org', '@graph': [
         { '@type': 'WebPage', '@id': 'https://brandmintai.io/whatsapp-automation-bangalore#webpage', url: 'https://brandmintai.io/whatsapp-automation-bangalore', name: title, description, inLanguage: 'en-IN' },
-        { '@type': 'Service', name: 'WhatsApp Automation Services in Bangalore', serviceType: 'WhatsApp business workflow automation and integrations', provider: { '@type': 'Organization', name: 'BrandMint AI Pvt. Ltd.', url: 'https://brandmintai.io/' }, areaServed: { '@type': 'City', name: 'Bengaluru' }, url: 'https://brandmintai.io/whatsapp-automation-bangalore' },
         { '@type': 'FAQPage', mainEntity: faqs.map(({q,a}) => ({ '@type': 'Question', name: q, acceptedAnswer: {'@type': 'Answer', text: a} })) }
       ]
     });
