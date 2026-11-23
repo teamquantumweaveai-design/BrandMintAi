@@ -47,13 +47,13 @@ export default function WhatsAppAutomationBangalore() {
     setMeta('meta[name="description"]', 'name', description);
     let canonical = document.head.querySelector('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = 'https://brandmintai.io/whatsapp-automation-bangalore';
+    canonical.href = 'https://brandmintai.io/whatsapp-automation-bangalore/';
     const ld = document.createElement('script');
     ld.type = 'application/ld+json';
     ld.id = 'bmwa-structured-data';
     ld.textContent = JSON.stringify({
       '@context': 'https://schema.org', '@graph': [
-        { '@type': 'WebPage', '@id': 'https://brandmintai.io/whatsapp-automation-bangalore#webpage', url: 'https://brandmintai.io/whatsapp-automation-bangalore', name: title, description, inLanguage: 'en-IN' },
+        { '@type': 'WebPage', '@id': 'https://brandmintai.io/whatsapp-automation-bangalore/#webpage', url: 'https://brandmintai.io/whatsapp-automation-bangalore/', name: title, description, inLanguage: 'en-IN' },
         { '@type': 'FAQPage', mainEntity: faqs.map(({q,a}) => ({ '@type': 'Question', name: q, acceptedAnswer: {'@type': 'Answer', text: a} })) }
       ]
     });
@@ -93,29 +93,3 @@ export default function WhatsAppAutomationBangalore() {
           </div>
         </div>
       </section>
-
-      <section className="bmwa-strip" aria-label="Our focus"><div className="bmwa-wrap bmwa-strip-inner"><span>Less manual repetition.</span><span>Better lead visibility.</span><span>Clearer customer conversations.</span></div></section>
-
-      <section className="bmwa-section" id="solutions"><div className="bmwa-wrap">
-        <div className="bmwa-section-heading"><p className="bmwa-kicker">WHAT WE CAN BUILD</p><h2>WhatsApp automation built around <em>your workflow.</em></h2><p>From a first enquiry to a meaningful next step, the right system should simplify work for both customers and teams.</p></div>
-        <div className="bmwa-card-grid">{capabilities.map(x => <article className="bmwa-card" key={x.num}><span className="bmwa-card-num">{x.num}</span><h3>{x.title}</h3><p>{x.body}</p></article>)}</div>
-      </div></section>
-
-      <section className="bmwa-section bmwa-section-alt"><div className="bmwa-wrap bmwa-split">
-        <div><p className="bmwa-kicker">WHO IT'S FOR</p><h2>Built for businesses that cannot afford to lose context.</h2><p className="bmwa-muted">No one-size-fits-all bot. We start with the actual customer journey, the information your team needs and the next useful action.</p><ContactButton>Discuss your use case</ContactButton></div>
-        <div className="bmwa-usecases">
-          {['Retail & ecommerce — enquiries, product selection and order updates','Clinics & services — appointment requests and human escalation','Education & training — course enquiries and lead routing','B2B sales — qualification, reminders and CRM updates'].map(x => <div key={x}><span>✓</span>{x}</div>)}
-        </div>
-      </div></section>
-
-      <section className="bmwa-section" id="process"><div className="bmwa-wrap"><div className="bmwa-section-heading"><p className="bmwa-kicker">OUR IMPLEMENTATION PROCESS</p><h2>Simple for customers. <em>Thoughtful underneath.</em></h2></div><div className="bmwa-steps">{steps.map(x => <article key={x.n}><span>{x.n}</span><h3>{x.title}</h3><p>{x.body}</p></article>)}</div></div></section>
-
-      <section className="bmwa-banner"><div className="bmwa-wrap bmwa-banner-inner"><div><p className="bmwa-kicker">NOT SURE WHERE TO START?</p><h2>Start with one real business bottleneck.</h2><p>We can review your enquiry journey and identify a practical first automation.</p></div><ContactButton>Talk to BrandMint AI</ContactButton></div></section>
-
-      <section className="bmwa-section bmwa-faq" id="faq"><div className="bmwa-wrap"><div className="bmwa-section-heading"><p className="bmwa-kicker">FREQUENTLY ASKED QUESTIONS</p><h2>Answers before you automate.</h2></div><div className="bmwa-faq-list">{faqs.map(x => <details key={x.q}><summary>{x.q}<span aria-hidden="true">+</span></summary><p>{x.a}</p></details>)}</div></div></section>
-
-      <section className="bmwa-last"><div className="bmwa-wrap"><p className="bmwa-kicker">BRANDMINT AI · BENGALURU</p><h2>Make every enquiry easier to act on.</h2><p>Tell us what your team manages manually. We'll explore a practical WhatsApp automation workflow.</p><ContactButton>Book a WhatsApp automation demo</ContactButton><div className="bmwa-contact"><a href="tel:+919972965677">+91 99729 65677</a><a href="mailto:connect@brandmintai.io">connect@brandmintai.io</a></div></div></section>
-    </main>
-    <footer className="bmwa-footer"><div className="bmwa-wrap"><div><strong>BrandMint AI Pvt. Ltd.</strong><p>No. 3, Lingappa Layout, 1st Cross, Sri Sri Sri Shivakumara Swamiji Road, Bengaluru – 560090</p></div><div><a href="/">Home</a><a href="/solutions">Solutions</a><a href="/contact">Contact</a></div></div></footer>
-  </div>;
-}
