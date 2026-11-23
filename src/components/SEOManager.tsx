@@ -4,17 +4,18 @@ import { useLocation } from "react-router-dom";
 
 const SITE_URL = "https://brandmintai.io";
 
-const pages: Record<string, {
+type PageSEO = {
   title: string;
   description: string;
-}> = {
+};
+
+const pages: Record<string, PageSEO> = {
   "/": {
     title: "AI Automation Company in Bangalore | BrandMint AI",
     description:
       "BrandMint AI provides AI agents, WhatsApp automation, CRM integration and business process automation in Bangalore. Explore AI solutions for your business."
   },
 
-  // WhatsApp Automation Bangalore Landing Page
   "/whatsapp-automation-bangalore": {
     title:
       "WhatsApp Automation Company in Bangalore | BrandMint AI",
@@ -22,7 +23,6 @@ const pages: Record<string, {
       "WhatsApp automation services in Bangalore by BrandMint AI. Automate customer enquiries, lead qualification, CRM integrations and follow-ups."
   },
 
-  // NEW: AI Agents Bangalore Landing Page
   "/ai-agents-bangalore": {
     title:
       "AI Agents Company in Bangalore | BrandMint AI",
@@ -44,17 +44,20 @@ const pages: Record<string, {
 
   "/ventures": {
     title: "AI Ventures & Products | BrandMint AI",
-    description: "Explore ventures and AI-powered products developed by BrandMint AI, alongside business automation services and technology solutions."
+    description:
+      "Explore ventures and AI-powered products developed by BrandMint AI, alongside business automation services and technology solutions."
   },
 
   "/academy": {
     title: "AI & Digital Skills Training | BrandMint AI Academy",
-    description: "Explore BrandMint AI Academy programs and practical training in AI tools, digital marketing and business technology skills."
+    description:
+      "Explore BrandMint AI Academy programs and practical training in AI tools, digital marketing and business technology skills."
   },
 
   "/quantum-weave": {
     title: "Quantum Weave AI | BrandMint AI",
-    description: "Explore Quantum Weave AI, a BrandMint AI initiative focused on artificial intelligence, automation and business growth."
+    description:
+      "Explore Quantum Weave AI, a BrandMint AI initiative focused on artificial intelligence, automation and business growth."
   },
 
   "/blog": {
@@ -94,20 +97,79 @@ const pages: Record<string, {
   }
 };
 
+// Service-specific structured data.
+// The Organization schema already exists in index.html.
+
+const serviceSchemas: Record<
+  string,
+  Record<string, unknown>
+> = {
+  "/ai-agents-bangalore": {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id":
+      "https://brandmintai.io/ai-agents-bangalore#service",
+    name: "AI Agent Development Services in Bangalore",
+    serviceType:
+      "AI Agent Development and Business Automation",
+    description:
+      "BrandMint AI provides AI agent development in Bangalore for customer enquiries, lead qualification, customer support and business workflow automation.",
+    url:
+      "https://brandmintai.io/ai-agents-bangalore",
+    provider: {
+      "@id": "https://brandmintai.io/#organization"
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Bengaluru"
+    }
+  },
+
+  "/whatsapp-automation-bangalore": {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id":
+      "https://brandmintai.io/whatsapp-automation-bangalore#service",
+    name: "WhatsApp Automation Services in Bangalore",
+    serviceType: "WhatsApp Business Automation",
+    description:
+      "BrandMint AI provides WhatsApp automation in Bangalore for customer enquiries, lead qualification, automated follow-ups and CRM integration.",
+    url:
+      "https://brandmintai.io/whatsapp-automation-bangalore",
+    provider: {
+      "@id": "https://brandmintai.io/#organization"
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Bengaluru"
+    }
+  }
+};
+
 export default function SEOManager() {
   const { pathname } = useLocation();
 
   useEffect(() => {
     const path = pathname.replace(/\/+$/, "") || "/";
+
     const page = pages[path];
+
+    // Remove schema from the previously visited service page.
+    // This prevents incorrect structured data after navigation.
+    const schemaId = "brandmint-service-schema";
+
+    document.getElementById(schemaId)?.remove();
 
     if (!page) return;
 
+    // Update the page title.
     document.title = page.title;
 
-    let description = document.querySelector<HTMLMetaElement>(
-      'meta[name="description"]'
-    );
+    // Update the meta description.
+    let description =
+      document.querySelector<HTMLMetaElement>(
+        'meta[name="description"]'
+      );
 
     if (!description) {
       description = document.createElement("meta");
@@ -117,9 +179,12 @@ export default function SEOManager() {
 
     description.content = page.description;
 
-    let canonical = document.querySelector<HTMLLinkElement>(
-      'link[rel="canonical"]'
-    );
+    // Update the canonical URL.
+    // Keep the existing canonical format for now.
+    let canonical =
+      document.querySelector<HTMLLinkElement>(
+        'link[rel="canonical"]'
+      );
 
     if (!canonical) {
       canonical = document.createElement("link");
@@ -127,30 +192,74 @@ export default function SEOManager() {
       document.head.appendChild(canonical);
     }
 
-    canonical.href = SITE_URL + path;
+    canonical.href =
+      SITE_URL + (path === "/" ? "/" : path);
 
-    // Keep social metadata consistent after client-side navigation.
+    // Update social sharing metadata.
     const setSocialMeta = (
       attribute: "property" | "name",
       key: string,
       content: string
     ) => {
-      let meta = document.querySelector<HTMLMetaElement>(
-        'meta[' + attribute + '="' + key + '"]'
-      );
+      let meta =
+        document.querySelector<HTMLMetaElement>(
+          `meta[${attribute}="${key}"]`
+        );
+
       if (!meta) {
         meta = document.createElement("meta");
         meta.setAttribute(attribute, key);
         document.head.appendChild(meta);
       }
+
       meta.content = content;
     };
 
-    setSocialMeta("property", "og:title", page.title);
-    setSocialMeta("property", "og:description", page.description);
-    setSocialMeta("property", "og:url", canonical.href);
-    setSocialMeta("name", "twitter:title", page.title);
-    setSocialMeta("name", "twitter:description", page.description);
+    setSocialMeta(
+      "property",
+      "og:title",
+      page.title
+    );
+
+    setSocialMeta(
+      "property",
+      "og:description",
+      page.description
+    );
+
+    setSocialMeta(
+      "property",
+      "og:url",
+      canonical.href
+    );
+
+    setSocialMeta(
+      "name",
+      "twitter:title",
+      page.title
+    );
+
+    setSocialMeta(
+      "name",
+      "twitter:description",
+      page.description
+    );
+
+    // Add structured data for applicable service pages.
+    const serviceSchema = serviceSchemas[path];
+
+    if (serviceSchema) {
+      const schemaScript =
+        document.createElement("script");
+
+      schemaScript.id = schemaId;
+      schemaScript.type = "application/ld+json";
+      schemaScript.textContent =
+        JSON.stringify(serviceSchema);
+
+      document.head.appendChild(schemaScript);
+    }
+
   }, [pathname]);
 
   return null;
