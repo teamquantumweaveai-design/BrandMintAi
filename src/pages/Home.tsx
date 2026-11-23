@@ -344,6 +344,27 @@ export default function Home() {
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
+
+            {/* AI Agents Bangalore Internal SEO Link */}
+            <div className="mt-12 text-center">
+              <h3 className="text-2xl font-bold text-[#2E384D] mb-3">
+                AI Agent Development for Bangalore Businesses
+              </h3>
+
+              <p className="text-[#516F90] mb-6 max-w-2xl mx-auto">
+                Build AI agents for customer enquiries, lead
+                qualification, customer support and business
+                workflow automation.
+              </p>
+
+              <Link
+                to="/ai-agents-bangalore/"
+                className="inline-flex items-center gap-3 rounded-full bg-[#FF5C35] px-8 py-4 text-white font-semibold hover:bg-[#DF441F] transition-colors"
+              >
+                Explore AI Agent Development in Bangalore
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </section>
 
