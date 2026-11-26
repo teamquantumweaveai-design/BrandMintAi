@@ -4,8 +4,8 @@
 .bm-voice button { cursor: pointer; font: inherit; }
 .bm-voice button:disabled { opacity: .5; cursor: wait; }
 .bm-voice button:focus-visible, .bm-voice a:focus-visible { outline: 3px solid #ff5c35; outline-offset: 4px; }
-.bm-voice-launcher { display: flex; align-items: center; gap: 9px; border: 1px solid #284e4a; border-radius: 999px; padding: 13px 17px; background: #0d3330; color: #fff; box-shadow: 0 6px 24px #0d33302b; font-weight: 700 !important; font-size: 12px !important; }
-.bm-voice-launcher:hover { background: #174a45; }
+.bm-voice-launcher { display: flex; align-items: center; gap: 9px; border: 1px solid #ff5c35; border-radius: 999px; padding: 13px 17px; background: #ff5c35; color: #fff; box-shadow: 0 6px 24px #ff5c352b; font-weight: 700 !important; font-size: 12px !important; }
+.bm-voice-launcher:hover { background: #df441f; }
 .bm-voice-panel { position: absolute; bottom: 62px; left: 0; width: min(390px, calc(100vw - 32px)); max-height: calc(100dvh - 110px); overflow-y: auto; border: 1px solid #cbd6e2; border-radius: 22px; background: #fff; box-shadow: 0 18px 65px #24384d33; }
 .bm-voice-header { display: flex; align-items: center; gap: 11px; padding: 19px; border-bottom: 1px solid #e9edf1; }
 .bm-voice-header h2 { margin: 0; color: #2e384d; font-size: 16px; letter-spacing: -.3px; }
