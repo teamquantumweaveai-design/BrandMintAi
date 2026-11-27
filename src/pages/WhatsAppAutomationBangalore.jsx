@@ -175,6 +175,20 @@ export default function WhatsAppAutomationBangalore() {
         </div>
       </section>
 
+      <section className="bmwa-section" aria-labelledby="whatsapp-learning-heading">
+        <div className="bmwa-wrap">
+          <div className="bmwa-section-heading">
+            <p className="bmwa-kicker">LEARN MORE</p>
+            <h2 id="whatsapp-learning-heading">Choosing the right automation approach.</h2>
+            <p>See how AI agents and predictable workflows can support customer conversations and lead follow-ups.</p>
+          </div>
+          <p>
+            Read our <a href="/ai-agents-vs-workflow-automation/">comparison of AI agents and workflow automation</a>,
+            or explore <a href="/ai-voice-agents-small-business/">AI voice agents for small businesses</a> for telephone enquiry use cases.
+          </p>
+        </div>
+      </section>
+
       <section className="bmwa-section bmwa-faq" id="faq">
         <div className="bmwa-wrap">
           <div className="bmwa-section-heading">
