@@ -9,6 +9,11 @@ import { cn } from "@/lib/utils";
 // BrandMint AI published articles
 const blogArticles = [
   {
+    label: "AI Voice Agents for Small Businesses: Use Cases, Costs and Setup Checklist",
+    href: "/ai-voice-agents-small-business/",
+    isExternal: true,
+  },
+  {
     label: "AI Agents vs Workflow Automation: What Should a Small Business Choose?",
     href: "/ai-agents-vs-workflow-automation/",
     // Standalone HTML page: use a normal anchor so React Router does not intercept it.
