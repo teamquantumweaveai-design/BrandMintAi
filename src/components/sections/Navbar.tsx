@@ -9,6 +9,12 @@ import { cn } from "@/lib/utils";
 // BrandMint AI published articles
 const blogArticles = [
   {
+    label: "AI Agents vs Workflow Automation: What Should a Small Business Choose?",
+    href: "/ai-agents-vs-workflow-automation/",
+    // Standalone HTML page: use a normal anchor so React Router does not intercept it.
+    isExternal: true,
+  },
+  {
     label: "Small Business Automation Ideas",
     href: "/small-business-automation-ideas/",
   },
