@@ -311,6 +311,22 @@ export default function AIAgentsBangalore() {
         </div>
       </section>
 
+      {/* RELEVANT AI LEARNING RESOURCES */}
+      <section className="bg-[#0F172A] px-6 py-12" aria-labelledby="ai-learning-heading">
+        <div className="mx-auto max-w-6xl">
+          <h2 id="ai-learning-heading" className="mb-4 text-2xl font-bold">
+            Learn More About AI Agents
+          </h2>
+          <p className="mb-4 max-w-3xl leading-relaxed text-gray-300">
+            Compare different approaches before choosing an AI solution for your business.
+          </p>
+          <ul className="space-y-3 text-cyan-400">
+            <li><a className="hover:underline" href="/ai-voice-agents-small-business/">AI voice agents for small businesses: use cases and setup checklist</a></li>
+            <li><a className="hover:underline" href="/ai-agents-vs-workflow-automation/">AI agents vs workflow automation: how to choose</a></li>
+          </ul>
+        </div>
+      </section>
+
       {/* FAQ SECTION */}
       <section className="px-6 py-20">
         <div className="mx-auto max-w-4xl">
