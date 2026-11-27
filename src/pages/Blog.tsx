@@ -11,6 +11,13 @@ type Article = {
 
 const articles: Article[] = [
   {
+    title: "AI Voice Agents for Small Businesses: Use Cases, Costs and Setup Checklist",
+    description:
+      "Learn where AI voice agents help small businesses, what they cost, which safeguards matter and how to launch a practical pilot.",
+    category: "AI Solutions",
+    href: "/ai-voice-agents-small-business/",
+  },
+  {
     title: "AI Agents vs Workflow Automation: What Should a Small Business Choose?",
     description:
       "Compare AI agents and workflow automation, with practical examples and a simple way to choose the right approach for your business.",
