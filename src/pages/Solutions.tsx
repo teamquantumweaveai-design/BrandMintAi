@@ -261,6 +261,26 @@ export default function SolutionsPage() {
           </div>
         </section>
 
+        {/* RELATED AI AUTOMATION GUIDES */}
+        <section className="py-12 bg-white border-t border-[#CBD6E2]/60" aria-labelledby="solutions-reading-heading">
+          <div className="max-w-7xl mx-auto px-6">
+            <h2 id="solutions-reading-heading" className="text-2xl font-bold font-display text-[#2E384D] mb-4">
+              Helpful Guides for Choosing an AI Solution
+            </h2>
+            <p className="text-[#516F90] mb-4">
+              Explore practical examples before planning an AI or workflow automation project.
+            </p>
+            <div className="flex flex-col gap-3">
+              <a className="text-[#DF441F] font-semibold hover:underline" href="/ai-agents-vs-workflow-automation/">
+                AI agents vs workflow automation for small businesses
+              </a>
+              <a className="text-[#DF441F] font-semibold hover:underline" href="/ai-voice-agents-small-business/">
+                AI voice agents: use cases, costs and setup checklist
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* Business Model Division Section */}
         <section className="py-20 bg-[#F8F9FA] w-full relative z-10 border-t border-[#CBD6E2]/60">
           <div className="max-w-7xl mx-auto px-6">
