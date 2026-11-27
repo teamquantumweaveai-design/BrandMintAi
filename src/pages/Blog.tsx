@@ -11,6 +11,13 @@ type Article = {
 
 const articles: Article[] = [
   {
+    title: "AI Agents vs Workflow Automation: What Should a Small Business Choose?",
+    description:
+      "Compare AI agents and workflow automation, with practical examples and a simple way to choose the right approach for your business.",
+    category: "AI Solutions",
+    href: "/ai-agents-vs-workflow-automation/",
+  },
+  {
     title: "7 Small Business Automation Ideas That Save Time",
     description:
       "Discover practical automation ideas that help small businesses save time, reduce repetitive work and improve everyday operations.",
